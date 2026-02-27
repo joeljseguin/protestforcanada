@@ -3,7 +3,7 @@ import { Shield, Menu, X } from "lucide-react";
 import { useState } from "react";
 
 const navItems = [
-  { label: "Family Tree", href: "#family-tree" },
+  { label: "Public Oversight", href: "#public-oversight" },
   { label: "Missions", href: "#missions" },
   { label: "Take Action", href: "#action" },
   { label: "Topics", href: "#topics" },
@@ -14,7 +14,7 @@ export const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border backdrop-blur-md" style={{ background: "hsl(220 15% 8% / 0.9)" }}>
+    <header className="sticky top-0 z-50 border-b border-border backdrop-blur-md bg-background/90">
       <div className="container flex items-center justify-between h-14">
         <a href="#" className="flex items-center gap-2 font-heading font-bold text-lg tracking-tight">
           <Shield className="h-5 w-5 text-accent" />

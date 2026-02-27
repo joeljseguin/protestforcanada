@@ -3,7 +3,7 @@ import { ArrowDown, AlertTriangle } from "lucide-react";
 
 export const Hero = () => {
   return (
-    <section className="relative overflow-hidden scanline" style={{ background: "hsl(220 15% 6%)" }}>
+    <section className="relative overflow-hidden bg-secondary/50">
       <div className="container relative py-20 md:py-32">
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 border border-accent/40 bg-accent/10 text-accent px-3 py-1 rounded text-xs font-mono uppercase tracking-wider mb-6 animate-fade-in">

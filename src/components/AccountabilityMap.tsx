@@ -20,10 +20,10 @@ const nodeTypeIcons = {
 };
 
 const nodeTypeColors = {
-  government: { bg: "hsl(220 12% 16%)", border: "hsl(210 80% 55%)", text: "hsl(0 0% 95%)" },
-  instrument: { bg: "hsl(220 12% 14%)", border: "hsl(38 92% 50%)", text: "hsl(0 0% 90%)" },
-  corporation: { bg: "hsl(220 12% 12%)", border: "hsl(142 70% 45%)", text: "hsl(0 0% 95%)" },
-  lobbyist: { bg: "hsl(220 12% 10%)", border: "hsl(220 10% 55%)", text: "hsl(0 0% 80%)" },
+  government: { bg: "hsl(0 0% 100%)", border: "hsl(210 80% 50%)", text: "hsl(220 15% 12%)" },
+  instrument: { bg: "hsl(0 0% 100%)", border: "hsl(38 92% 50%)", text: "hsl(220 15% 12%)" },
+  corporation: { bg: "hsl(0 0% 100%)", border: "hsl(142 60% 38%)", text: "hsl(220 15% 12%)" },
+  lobbyist: { bg: "hsl(0 0% 100%)", border: "hsl(220 10% 55%)", text: "hsl(220 15% 25%)" },
 };
 
 function CustomNode({ data }: { data: any }) {
@@ -33,21 +33,21 @@ function CustomNode({ data }: { data: any }) {
 
   return (
     <div
-      className={`px-4 py-3 rounded-lg border-2 min-w-[200px] max-w-[260px] font-mono text-xs ${isAlert ? "animate-pulse-red" : ""}`}
+      className={`px-4 py-3 rounded-lg border-2 min-w-[200px] max-w-[260px] font-mono text-xs shadow-sm ${isAlert ? "animate-pulse-red" : ""}`}
       style={{
         backgroundColor: colors.bg,
-        borderColor: isAlert ? "hsl(0 85% 55%)" : colors.border,
+        borderColor: isAlert ? "hsl(0 75% 50%)" : colors.border,
         color: colors.text,
       }}
     >
       <div className="flex items-center gap-2 mb-1">
-        <Icon className="h-3.5 w-3.5 shrink-0" style={{ color: isAlert ? "hsl(0 85% 55%)" : colors.border }} />
+        <Icon className="h-3.5 w-3.5 shrink-0" style={{ color: isAlert ? "hsl(0 75% 50%)" : colors.border }} />
         <span className="font-semibold text-[11px] uppercase tracking-wider truncate">{data.label}</span>
-        {isAlert && <AlertTriangle className="h-3.5 w-3.5 shrink-0" style={{ color: "hsl(0 85% 55%)" }} />}
+        {isAlert && <AlertTriangle className="h-3.5 w-3.5 shrink-0" style={{ color: "hsl(0 75% 50%)" }} />}
       </div>
-      {data.detail && <p className="opacity-60 leading-tight text-[10px]">{data.detail}</p>}
+      {data.detail && <p className="opacity-50 leading-tight text-[10px]">{data.detail}</p>}
       {data.amount && (
-        <div className="mt-1.5 font-bold text-sm" style={{ color: isAlert ? "hsl(0 85% 65%)" : "hsl(142 70% 55%)" }}>
+        <div className="mt-1.5 font-bold text-sm" style={{ color: isAlert ? "hsl(0 75% 45%)" : "hsl(142 60% 35%)" }}>
           {data.amount}
         </div>
       )}
@@ -57,7 +57,7 @@ function CustomNode({ data }: { data: any }) {
           target="_blank"
           rel="noopener noreferrer"
           className="mt-1.5 inline-flex items-center gap-1 text-[10px] opacity-50 hover:opacity-100 transition-opacity"
-          style={{ color: "hsl(142 70% 55%)" }}
+          style={{ color: "hsl(142 60% 35%)" }}
         >
           <ExternalLink className="h-2.5 w-2.5" /> Verify Source
         </a>
@@ -110,15 +110,15 @@ export const AccountabilityMap = () => {
         label: e.label,
         type: "smoothstep",
         animated: accountabilityNodes.find((n) => n.id === e.target)?.alertRed,
-        markerEnd: { type: MarkerType.ArrowClosed, color: "hsl(142 70% 45%)" },
+        markerEnd: { type: MarkerType.ArrowClosed, color: "hsl(142 60% 38%)" },
         style: {
           stroke: accountabilityNodes.find((n) => n.id === e.target)?.alertRed
-            ? "hsl(0 85% 55%)"
-            : "hsl(142 70% 45% / 0.4)",
+            ? "hsl(0 75% 50%)"
+            : "hsl(142 60% 38% / 0.5)",
           strokeWidth: 2,
         },
-        labelStyle: { fill: "hsl(0 0% 60%)", fontSize: 10, fontFamily: "JetBrains Mono" },
-        labelBgStyle: { fill: "hsl(220 15% 8%)", fillOpacity: 0.9 },
+        labelStyle: { fill: "hsl(220 10% 46%)", fontSize: 10, fontFamily: "JetBrains Mono" },
+        labelBgStyle: { fill: "hsl(0 0% 98%)", fillOpacity: 0.95 },
       })),
     []
   );
@@ -143,7 +143,7 @@ export const AccountabilityMap = () => {
         </p>
       </div>
       <div className="container">
-        <div className="rounded-lg border border-border overflow-hidden" style={{ height: 700 }}>
+        <div className="rounded-lg border border-border overflow-hidden bg-card" style={{ height: 700 }}>
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -154,18 +154,16 @@ export const AccountabilityMap = () => {
             minZoom={0.3}
             maxZoom={1.5}
           >
-            <Background color="hsl(220 10% 15%)" gap={24} size={1} />
-            <Controls
-              style={{ background: "hsl(220 12% 14%)", borderColor: "hsl(220 12% 22%)" }}
-            />
+            <Background color="hsl(220 14% 88%)" gap={24} size={1} />
+            <Controls />
           </ReactFlow>
         </div>
         <div className="flex flex-wrap gap-6 mt-4 justify-center text-[11px] font-mono text-muted-foreground">
-          <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm" style={{ background: "hsl(210 80% 55%)" }} /> Government</span>
+          <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm" style={{ background: "hsl(210 80% 50%)" }} /> Government</span>
           <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm" style={{ background: "hsl(38 92% 50%)" }} /> Legislative Instrument</span>
-          <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm" style={{ background: "hsl(142 70% 45%)" }} /> Corporation</span>
+          <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm" style={{ background: "hsl(142 60% 38%)" }} /> Corporation</span>
           <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm" style={{ background: "hsl(220 10% 55%)" }} /> Lobbyist</span>
-          <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm animate-pulse-red" style={{ background: "hsl(0 85% 55%)" }} /> Crisis Alert</span>
+          <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm animate-pulse-red" style={{ background: "hsl(0 75% 50%)" }} /> Crisis Alert</span>
         </div>
       </div>
     </section>

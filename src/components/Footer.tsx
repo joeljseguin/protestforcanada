@@ -11,7 +11,7 @@ const sources = [
 
 export const Footer = () => {
   return (
-    <footer className="border-t border-border py-12" style={{ background: "hsl(220 15% 6%)" }}>
+    <footer className="border-t border-border py-12 bg-secondary/50">
       <div className="container">
         <div className="flex flex-col md:flex-row justify-between gap-8">
           <div>
