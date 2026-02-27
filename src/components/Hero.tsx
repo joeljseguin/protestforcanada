@@ -20,14 +20,14 @@ export const Hero = () => {
           </p>
           <div className="flex flex-wrap gap-3 animate-fade-in" style={{ animationDelay: "300ms" }}>
             <Button size="lg" className="font-mono uppercase tracking-wider text-xs h-11">
-              <a href="#family-tree">Explore the Family Tree</a>
+              <a href="#public-oversight">Explore Public Oversight</a>
             </Button>
             <Button size="lg" variant="outline" className="font-mono uppercase tracking-wider text-xs h-11 border-border hover:border-foreground/30">
               <a href="#missions">View Missions</a>
             </Button>
           </div>
         </div>
-        <a href="#family-tree" className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce opacity-40 hover:opacity-100 transition-opacity">
+        <a href="#public-oversight" className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce opacity-40 hover:opacity-100 transition-opacity">
           <ArrowDown className="h-5 w-5" />
         </a>
       </div>

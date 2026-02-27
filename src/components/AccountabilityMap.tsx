@@ -124,17 +124,17 @@ export const AccountabilityMap = () => {
   );
 
   return (
-    <section id="family-tree" className="py-16 md:py-24">
+    <section id="public-oversight" className="py-16 md:py-24">
       <div className="container mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="h-px flex-1 bg-border" />
           <span className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            // Accountability Map
+            // Public Oversight
           </span>
           <div className="h-px flex-1 bg-border" />
         </div>
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-center mb-2">
-          The Family Tree
+          Public Oversight for Government Accountability
         </h2>
         <p className="text-center text-muted-foreground max-w-2xl mx-auto text-sm">
           Interactive map connecting your tax dollars to government instruments, corporate entities,
