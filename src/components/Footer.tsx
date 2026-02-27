@@ -1,40 +1,39 @@
-import { dataSources } from "@/data/mockData";
 import { Shield } from "lucide-react";
+
+const sources = [
+  "GC InfoBase — Treasury Board of Canada Secretariat",
+  "Project Ploughshares — Military Export Reports",
+  "Indigenous Services Canada — Water Advisories",
+  "StatsCan — Food Insecurity Data",
+  "LEGISinfo — Parliament of Canada",
+  "Office of the Commissioner of Lobbying",
+];
 
 export const Footer = () => {
   return (
-    <footer className="bg-primary text-primary-foreground py-12">
+    <footer className="border-t border-border py-12" style={{ background: "hsl(220 15% 6%)" }}>
       <div className="container">
         <div className="flex flex-col md:flex-row justify-between gap-8">
           <div>
             <a href="#" className="flex items-center gap-2 font-heading font-bold text-lg mb-3">
-              <Shield className="h-5 w-5 text-civic-red" />
-              Protest
+              <Shield className="h-5 w-5 text-accent" />
+              PROTEST
             </a>
-            <p className="text-sm opacity-60 max-w-xs">
-              Canadian civic engagement platform. Powered by open data from the Government of Canada.
+            <p className="text-xs text-muted-foreground max-w-xs font-mono leading-relaxed">
+              Canadian civic accountability platform. All statistics verified against open government data sources.
             </p>
           </div>
           <div>
-            <h4 className="font-semibold text-sm mb-3 uppercase tracking-wider opacity-60">Data Sources</h4>
-            <ul className="space-y-1.5 text-sm opacity-70">
-              {Object.values(dataSources).map((source) => (
-                <li key={source}>{source}</li>
+            <h4 className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">Verified Data Sources</h4>
+            <ul className="space-y-1">
+              {sources.map((s) => (
+                <li key={s} className="text-xs text-muted-foreground">{s}</li>
               ))}
             </ul>
           </div>
-          <div>
-            <h4 className="font-semibold text-sm mb-3 uppercase tracking-wider opacity-60">Platform</h4>
-            <ul className="space-y-1.5 text-sm opacity-70">
-              <li>About</li>
-              <li>Privacy Policy</li>
-              <li>Terms of Service</li>
-              <li>Contact</li>
-            </ul>
-          </div>
         </div>
-        <div className="mt-10 pt-6 border-t border-primary-foreground/10 text-center text-xs opacity-50">
-          © 2026 Protest. Open source civic technology.
+        <div className="mt-10 pt-6 border-t border-border text-center text-[10px] font-mono text-muted-foreground">
+          © 2026 PROTEST · Open source civic technology · All data sourced from open.canada.ca, statcan.gc.ca, ploughshares.ca
         </div>
       </div>
     </footer>
