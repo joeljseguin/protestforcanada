@@ -6,23 +6,23 @@
 
 @layer base {
   :root {
-    --background: 220 15% 8%;
-    --foreground: 0 0% 95%;
+    --background: 0 0% 98%;
+    --foreground: 220 15% 12%;
 
-    --card: 220 15% 11%;
-    --card-foreground: 0 0% 95%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 12%;
 
-    --popover: 220 15% 11%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 12%;
 
-    --primary: 0 0% 95%;
-    --primary-foreground: 220 15% 8%;
+    --primary: 220 15% 12%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 220 12% 16%;
-    --secondary-foreground: 0 0% 90%;
+    --secondary: 220 14% 94%;
+    --secondary-foreground: 220 15% 20%;
 
-    --muted: 220 12% 16%;
-    --muted-foreground: 220 10% 55%;
+    --muted: 220 14% 94%;
+    --muted-foreground: 220 10% 46%;
 
     --accent: 0 72% 51%;
     --accent-foreground: 0 0% 100%;
@@ -30,35 +30,35 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 12% 18%;
-    --input: 220 12% 18%;
-    --ring: 142 70% 45%;
+    --border: 220 14% 88%;
+    --input: 220 14% 88%;
+    --ring: 142 60% 40%;
 
     --radius: 0.5rem;
 
-    --neon-green: 142 70% 45%;
-    --neon-green-glow: 142 80% 55%;
-    --crisis-red: 0 85% 55%;
-    --crisis-red-glow: 0 90% 65%;
+    --neon-green: 142 60% 38%;
+    --neon-green-glow: 142 55% 48%;
+    --crisis-red: 0 75% 50%;
+    --crisis-red-glow: 0 80% 60%;
     --tactical-amber: 38 92% 50%;
-    --tactical-blue: 210 80% 55%;
+    --tactical-blue: 210 80% 50%;
 
-    --navy-deep: 220 15% 6%;
-    --navy-medium: 220 12% 14%;
-    --navy-light: 220 10% 25%;
+    --navy-deep: 220 14% 96%;
+    --navy-medium: 220 14% 92%;
+    --navy-light: 220 10% 80%;
     --red-civic: 0 72% 51%;
-    --red-civic-muted: 0 30% 15%;
-    --green-pass: 142 70% 45%;
+    --red-civic-muted: 0 30% 92%;
+    --green-pass: 142 60% 38%;
     --amber-pending: 38 92% 50%;
 
-    --sidebar-background: 220 15% 6%;
-    --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 142 70% 45%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 15% 12%;
+    --sidebar-primary: 142 60% 38%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 12% 14%;
-    --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 220 12% 18%;
-    --sidebar-ring: 142 70% 45%;
+    --sidebar-accent: 220 14% 94%;
+    --sidebar-accent-foreground: 220 15% 12%;
+    --sidebar-border: 220 14% 88%;
+    --sidebar-ring: 142 60% 38%;
   }
 }
 
@@ -90,25 +90,19 @@
     @apply border-l-4 border-accent;
   }
   .glow-green {
-    box-shadow: 0 0 20px hsl(var(--neon-green) / 0.3), 0 0 40px hsl(var(--neon-green) / 0.1);
+    box-shadow: 0 0 12px hsl(var(--neon-green) / 0.2), 0 0 24px hsl(var(--neon-green) / 0.08);
   }
   .glow-red {
-    box-shadow: 0 0 20px hsl(var(--crisis-red) / 0.4), 0 0 40px hsl(var(--crisis-red) / 0.15);
+    box-shadow: 0 0 12px hsl(var(--crisis-red) / 0.25), 0 0 24px hsl(var(--crisis-red) / 0.1);
   }
   .scanline {
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      hsl(var(--neon-green) / 0.03) 2px,
-      hsl(var(--neon-green) / 0.03) 4px
-    );
+    /* disabled for light theme */
   }
 }
 
 @keyframes pulse-red {
-  0%, 100% { box-shadow: 0 0 8px hsl(var(--crisis-red) / 0.4); }
-  50% { box-shadow: 0 0 24px hsl(var(--crisis-red) / 0.7), 0 0 48px hsl(var(--crisis-red) / 0.3); }
+  0%, 100% { box-shadow: 0 0 6px hsl(var(--crisis-red) / 0.3); }
+  50% { box-shadow: 0 0 16px hsl(var(--crisis-red) / 0.5), 0 0 32px hsl(var(--crisis-red) / 0.2); }
 }
 
 @keyframes pulse-green {
@@ -129,7 +123,7 @@
   font-family: 'JetBrains Mono', monospace;
 }
 .react-flow__edge-path {
-  stroke: hsl(var(--neon-green) / 0.4);
+  stroke: hsl(var(--neon-green) / 0.5);
   stroke-width: 2;
 }
 .react-flow__background {

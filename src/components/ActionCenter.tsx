@@ -19,7 +19,6 @@ export const ActionCenter = () => {
     if (mp) {
       setFoundMP(mp);
     } else {
-      // Fallback demo MP
       setFoundMP({
         name: "Your Local MP",
         party: "—",
@@ -65,8 +64,7 @@ export const ActionCenter = () => {
           Enter your postal code to find your MP. Choose a mission. Get a ready-to-send email with verified sources.
         </p>
 
-        {/* Postal Code Lookup */}
-        <div className="rounded-lg border border-border p-6" style={{ background: "hsl(220 15% 10%)" }}>
+        <div className="rounded-lg border border-border p-6 bg-card">
           <div className="flex gap-3 mb-6">
             <div className="flex-1 relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -75,7 +73,7 @@ export const ActionCenter = () => {
                 value={postalCode}
                 onChange={(e) => setPostalCode(e.target.value.toUpperCase())}
                 onKeyDown={(e) => e.key === "Enter" && lookupMP()}
-                className="pl-10 font-mono bg-background border-border"
+                className="pl-10 font-mono"
                 maxLength={7}
               />
             </div>
@@ -86,9 +84,8 @@ export const ActionCenter = () => {
 
           {foundMP && (
             <div className="animate-fade-in">
-              {/* MP Card */}
-              <div className="rounded-md border border-border p-4 mb-6 flex items-center gap-4" style={{ background: "hsl(220 12% 8%)" }}>
-                <div className="h-12 w-12 rounded-full flex items-center justify-center" style={{ background: "hsl(220 12% 16%)" }}>
+              <div className="rounded-md border border-border p-4 mb-6 flex items-center gap-4 bg-secondary/50">
+                <div className="h-12 w-12 rounded-full flex items-center justify-center bg-secondary">
                   <User className="h-6 w-6 text-muted-foreground" />
                 </div>
                 <div>
@@ -98,7 +95,6 @@ export const ActionCenter = () => {
                 </div>
               </div>
 
-              {/* Mission selector */}
               <div className="flex gap-2 mb-4 flex-wrap">
                 {missions.map((m) => (
                   <button
@@ -115,22 +111,17 @@ export const ActionCenter = () => {
                 ))}
               </div>
 
-              {/* Generated script */}
               <div className="relative">
-                <pre
-                  className="rounded-md border border-border p-4 text-xs font-mono whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto"
-                  style={{ background: "hsl(220 12% 6%)", color: "hsl(0 0% 80%)" }}
-                >
+                <pre className="rounded-md border border-border p-4 text-xs font-mono whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto bg-secondary/50 text-foreground/80">
                   {getScript()}
                 </pre>
                 <div className="absolute top-3 right-3 flex gap-2">
-                  <Badge variant="outline" className="text-[9px] font-mono border-[hsl(142_70%_45%/0.4)] text-[hsl(142_70%_55%)]">
+                  <Badge variant="outline" className="text-[9px] font-mono border-civic-green/40 text-civic-green">
                     Sources: Verified ✓
                   </Badge>
                 </div>
               </div>
 
-              {/* Actions */}
               <div className="flex gap-3 mt-4">
                 <Button onClick={copyToClipboard} className="font-mono gap-2 flex-1">
                   {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
