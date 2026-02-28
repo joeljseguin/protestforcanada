@@ -1,35 +1,49 @@
 import { Button } from "@/components/ui/button";
-import { ArrowDown, AlertTriangle } from "lucide-react";
+import { ArrowDown, Swords, Zap } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const Hero = () => {
   return (
-    <section className="relative overflow-hidden bg-secondary/50">
-      <div className="container relative py-20 md:py-32">
+    <section className="relative overflow-hidden bg-background py-20 md:py-28">
+      <div className="container relative">
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 border border-accent/40 bg-accent/10 text-accent px-3 py-1 rounded text-xs font-mono uppercase tracking-wider mb-6 animate-fade-in">
-            <AlertTriangle className="h-3 w-3 animate-pulse" />
-            3 Active Crisis Missions
+          <div className="inline-flex items-center gap-2 neu-border px-4 py-2 text-sm font-mono uppercase tracking-wider mb-8 animate-fade-in bg-secondary font-bold">
+            <Swords className="h-4 w-4" />
+            10 Active Missions · Hero-Game Mode
           </div>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] mb-6 animate-fade-in" style={{ animationDelay: "100ms" }}>
-            Follow the money,
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[0.95] mb-6 animate-fade-in uppercase" style={{ animationDelay: "100ms" }}>
+            Follow the
             <br />
-            <span className="text-gradient-neon">hold power accountable.</span>
+            money, hold
+            <br />
+            <span className="inline-block neu-border px-4 py-1 bg-secondary -rotate-1">power</span>
+            {" "}accountable.
           </h1>
-          <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-xl leading-relaxed font-mono animate-fade-in" style={{ animationDelay: "200ms" }}>
-            Interactive accountability mapping. Verified data from StatsCan, Project Ploughshares, and Open Government Canada.
+          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-xl leading-relaxed font-mono animate-fade-in" style={{ animationDelay: "200ms" }}>
+            Complete missions. Earn XP. Change Canada.
           </p>
-          <div className="flex flex-wrap gap-3 animate-fade-in" style={{ animationDelay: "300ms" }}>
-            <Button size="lg" className="font-mono uppercase tracking-wider text-xs h-11">
-              <a href="#public-oversight">Explore Public Oversight</a>
+          <div className="flex flex-wrap gap-4 animate-fade-in" style={{ animationDelay: "300ms" }}>
+            <Button size="lg" className="font-mono uppercase tracking-wider text-sm h-12 neu-border neu-shadow text-lg px-8" asChild>
+              <Link to="/quest">
+                <Zap className="h-5 w-5 mr-2" />
+                Start Quest
+              </Link>
             </Button>
-            <Button size="lg" variant="outline" className="font-mono uppercase tracking-wider text-xs h-11 border-border hover:border-foreground/30">
-              <a href="#missions">View Missions</a>
+            <Button size="lg" variant="outline" className="font-mono uppercase tracking-wider text-sm h-12 neu-border neu-shadow text-lg px-8" asChild>
+              <Link to="/power-map">
+                Who Has The Power?
+              </Link>
             </Button>
           </div>
         </div>
-        <a href="#public-oversight" className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce opacity-40 hover:opacity-100 transition-opacity">
-          <ArrowDown className="h-5 w-5" />
-        </a>
+
+        {/* XP indicator */}
+        <div className="absolute top-0 right-0 hidden lg:block animate-float">
+          <div className="neu-border neu-shadow-lg p-6 bg-secondary">
+            <div className="text-5xl font-extrabold font-heading">+500</div>
+            <div className="text-sm font-mono uppercase tracking-wider mt-1">XP per mission</div>
+          </div>
+        </div>
       </div>
     </section>
   );

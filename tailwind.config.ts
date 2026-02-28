@@ -52,6 +52,19 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        xp: {
+          gold: "hsl(var(--xp-gold))",
+          "gold-glow": "hsl(var(--xp-gold-glow))",
+        },
+        threat: {
+          red: "hsl(var(--threat-red))",
+          orange: "hsl(var(--threat-orange))",
+          yellow: "hsl(var(--threat-yellow))",
+        },
+        mission: {
+          green: "hsl(var(--mission-green))",
+          blue: "hsl(var(--mission-blue))",
+        },
         navy: {
           deep: "hsl(var(--navy-deep))",
           medium: "hsl(var(--navy-medium))",
