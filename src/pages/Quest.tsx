@@ -1,19 +1,17 @@
 import { Header } from "@/components/Header";
-import { Hero } from "@/components/Hero";
-import { MissionHub } from "@/components/MissionHub";
+import { MissionQuest } from "@/components/MissionQuest";
 import { Footer } from "@/components/Footer";
 
-const Index = () => {
+const Quest = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <Hero />
-        <MissionHub />
+        <MissionQuest />
       </main>
       <Footer />
     </div>
   );
 };
 
-export default Index;
+export default Quest;

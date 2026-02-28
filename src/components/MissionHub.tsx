@@ -1,130 +1,69 @@
-import { missions } from "@/data/accountabilityData";
-import { ExternalLink, CheckCircle2, Circle, AlertTriangle, Crosshair } from "lucide-react";
+import { missions, threatColors } from "@/data/gameData";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-
-const MissionProgress = ({ stages, progress, crisis }: { stages: { label: string; complete: boolean }[]; progress: number; crisis: boolean }) => (
-  <div className="space-y-3">
-    <div className="flex items-center gap-1">
-      {stages.map((stage, i) => (
-        <div key={stage.label} className="flex items-center flex-1">
-          <div className="flex items-center gap-1.5 flex-1">
-            {stage.complete ? (
-              <CheckCircle2 className="h-4 w-4 shrink-0 text-civic-green" />
-            ) : (
-              <Circle className="h-4 w-4 shrink-0 text-muted-foreground" />
-            )}
-            <span className={`text-[10px] font-mono uppercase tracking-wider ${stage.complete ? "text-foreground" : "text-muted-foreground"}`}>
-              {stage.label}
-            </span>
-          </div>
-          {i < stages.length - 1 && (
-            <div className="h-px w-4 mx-1 bg-border" style={stage.complete ? { background: "hsl(142 60% 38%)" } : undefined} />
-          )}
-        </div>
-      ))}
-    </div>
-    <div className="relative h-3 rounded-full overflow-hidden bg-secondary">
-      <div
-        className={`h-full rounded-full transition-all duration-1000 ${crisis ? "animate-pulse-red" : "glow-green"}`}
-        style={{
-          width: `${progress}%`,
-          background: crisis
-            ? "linear-gradient(90deg, hsl(0 75% 45%), hsl(0 75% 55%))"
-            : "linear-gradient(90deg, hsl(142 60% 32%), hsl(142 60% 45%))",
-        }}
-      />
-      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-mono font-bold text-foreground">
-        {progress}%
-      </span>
-    </div>
-  </div>
-);
+import { ExternalLink, Zap, Trophy, Target } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const MissionHub = () => {
   return (
     <section id="missions" className="py-16 md:py-24">
       <div className="container">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="h-px flex-1 bg-border" />
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            // Mission Control
-          </span>
-          <div className="h-px flex-1 bg-border" />
+        <div className="flex items-center gap-3 mb-8">
+          <Trophy className="h-6 w-6" />
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight uppercase">
+            Top 10 Critical Missions
+          </h2>
         </div>
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-center mb-2">
-          Humanitarian Mission Hub
-        </h2>
-        <p className="text-center text-muted-foreground max-w-2xl mx-auto text-sm mb-12">
-          Active operations tracking. Every statistic carries a{" "}
-          <Badge variant="outline" className="text-[10px] font-mono border-civic-green text-civic-green px-1.5 py-0 mx-1">
-            Source: Verified
-          </Badge>{" "}
-          badge linked to its origin.
+        <p className="text-muted-foreground font-mono text-sm mb-10 max-w-2xl">
+          Complete missions to earn XP. Each mission is backed by verified data from open government sources.
         </p>
 
-        <div className="space-y-8">
+        <div className="space-y-4">
           {missions.map((mission, idx) => (
-            <div
+            <Link
               key={mission.id}
-              className={`rounded-lg border overflow-hidden animate-fade-in bg-card ${mission.crisis ? "border-accent/40" : "border-border"}`}
-              style={{ animationDelay: `${idx * 150}ms` }}
+              to={`/quest?mission=${mission.id}`}
+              className="block neu-border p-5 bg-card card-hover animate-fade-in hover:neu-shadow-lg transition-all"
+              style={{ animationDelay: `${idx * 80}ms` }}
             >
-              <div className="p-6 pb-4 flex items-start justify-between gap-4">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <Crosshair className="h-4 w-4" style={{ color: mission.crisis ? "hsl(0 75% 50%)" : "hsl(142 60% 38%)" }} />
-                    <h3 className="font-mono text-sm font-bold uppercase tracking-wider">{mission.title}</h3>
-                    {mission.crisis && (
-                      <Badge className="bg-accent/20 text-accent border-accent/40 text-[10px] font-mono">
-                        <AlertTriangle className="h-3 w-3 mr-1" /> CRISIS
-                      </Badge>
-                    )}
+              <div className="flex items-center gap-4 md:gap-6">
+                {/* Rank */}
+                <div className="shrink-0 w-12 h-12 neu-border flex items-center justify-center font-extrabold text-xl font-heading bg-foreground text-background">
+                  #{mission.rank}
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap mb-1">
+                    <h3 className="font-heading font-bold text-lg uppercase tracking-wide truncate">
+                      {mission.name}
+                    </h3>
+                    <Badge className={`${threatColors[mission.threatLevel]} neu-border text-[10px] font-mono uppercase tracking-wider`}>
+                      {mission.threatLevel}
+                    </Badge>
                   </div>
-                  <p className="text-muted-foreground text-xs font-mono">{mission.subtitle}</p>
+                  <p className="text-muted-foreground text-xs font-mono truncate">{mission.subtitle}</p>
+                </div>
+
+                {/* Progress */}
+                <div className="hidden md:flex items-center gap-4 shrink-0">
+                  <div className="w-32">
+                    <div className="h-4 neu-border overflow-hidden bg-muted">
+                      <div
+                        className="h-full bg-foreground transition-all duration-1000"
+                        style={{ width: `${mission.progress}%` }}
+                      />
+                    </div>
+                    <div className="text-[10px] font-mono text-muted-foreground mt-1">{mission.progress}% complete</div>
+                  </div>
+                </div>
+
+                {/* XP */}
+                <div className="shrink-0 neu-border px-3 py-2 bg-secondary font-mono font-bold text-sm flex items-center gap-1.5">
+                  <Zap className="h-3.5 w-3.5" />
+                  +{mission.xpBounty} XP
                 </div>
               </div>
-
-              <div className="px-6 pb-4">
-                <MissionProgress stages={mission.stages} progress={mission.progress} crisis={mission.crisis} />
-              </div>
-
-              <div className="px-6 pb-4">
-                <p className="text-sm text-muted-foreground leading-relaxed">{mission.description}</p>
-              </div>
-
-              <div className="px-6 pb-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-                {mission.stats.map((stat) => (
-                  <div key={stat.label} className="rounded-md p-3 border border-border bg-secondary/50">
-                    <div className="text-2xl font-bold font-heading" style={{ color: mission.crisis ? "hsl(0 75% 45%)" : "hsl(142 60% 35%)" }}>
-                      {stat.value}
-                    </div>
-                    <div className="text-[11px] text-muted-foreground mt-0.5">{stat.label}</div>
-                    <a
-                      href={stat.sourceUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 mt-2"
-                    >
-                      <Badge variant="outline" className="text-[9px] font-mono border-civic-green/40 text-civic-green hover:bg-civic-green/10 cursor-pointer px-1.5 py-0">
-                        <ExternalLink className="h-2 w-2 mr-0.5" /> Source: {stat.source}
-                      </Badge>
-                    </a>
-                  </div>
-                ))}
-              </div>
-
-              <div className="px-6 pb-6 flex flex-wrap gap-2">
-                {mission.links.map((link) => (
-                  <Button key={link.url} variant="outline" size="sm" asChild className="font-mono text-xs h-8 border-border hover:border-foreground/30">
-                    <a href={link.url} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="h-3 w-3 mr-1.5" />
-                      {link.label}
-                    </a>
-                  </Button>
-                ))}
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

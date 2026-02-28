@@ -1,19 +1,17 @@
 import { Header } from "@/components/Header";
-import { Hero } from "@/components/Hero";
-import { MissionHub } from "@/components/MissionHub";
+import { InfluenceNetwork } from "@/components/InfluenceNetwork";
 import { Footer } from "@/components/Footer";
 
-const Index = () => {
+const PowerMap = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <Hero />
-        <MissionHub />
+        <InfluenceNetwork />
       </main>
       <Footer />
     </div>
   );
 };
 
-export default Index;
+export default PowerMap;

@@ -1,19 +1,17 @@
 import { Header } from "@/components/Header";
-import { Hero } from "@/components/Hero";
-import { MissionHub } from "@/components/MissionHub";
+import { TruthVault } from "@/components/TruthVault";
 import { Footer } from "@/components/Footer";
 
-const Index = () => {
+const TruthVaultPage = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <Hero />
-        <MissionHub />
+        <TruthVault />
       </main>
       <Footer />
     </div>
   );
 };
 
-export default Index;
+export default TruthVaultPage;

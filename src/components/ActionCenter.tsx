@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { mpDatabase, emailTemplates, missions } from "@/data/accountabilityData";
-import { Mail, Copy, Check, MapPin, User, Search } from "lucide-react";
+import { mpDatabase, emailTemplates } from "@/data/accountabilityData";
+import { missions } from "@/data/gameData";
+import { Mail, Copy, Check, MapPin, User, Search, Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export const ActionCenter = () => {
@@ -50,21 +51,14 @@ export const ActionCenter = () => {
   return (
     <section id="action" className="py-16 md:py-24">
       <div className="container max-w-3xl">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="h-px flex-1 bg-border" />
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            // Take Action
-          </span>
-          <div className="h-px flex-1 bg-border" />
-        </div>
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-center mb-2">
-          One-Click Action Center
+        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight uppercase text-center mb-2">
+          Email Your MP
         </h2>
-        <p className="text-center text-muted-foreground max-w-xl mx-auto text-sm mb-10">
-          Enter your postal code to find your MP. Choose a mission. Get a ready-to-send email with verified sources.
+        <p className="text-center text-muted-foreground font-mono text-sm mb-10">
+          Enter postal code → Find MP → Get verified email script → <span className="font-bold">+100 XP</span>
         </p>
 
-        <div className="rounded-lg border border-border p-6 bg-card">
+        <div className="neu-border neu-shadow p-6 bg-card">
           <div className="flex gap-3 mb-6">
             <div className="flex-1 relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -73,61 +67,64 @@ export const ActionCenter = () => {
                 value={postalCode}
                 onChange={(e) => setPostalCode(e.target.value.toUpperCase())}
                 onKeyDown={(e) => e.key === "Enter" && lookupMP()}
-                className="pl-10 font-mono"
+                className="pl-10 font-mono neu-border h-12"
                 maxLength={7}
               />
             </div>
-            <Button onClick={lookupMP} className="font-mono gap-2">
+            <Button onClick={lookupMP} className="font-mono gap-2 neu-border neu-shadow-sm uppercase tracking-wider">
               <Search className="h-4 w-4" /> Find MP
             </Button>
           </div>
 
           {foundMP && (
             <div className="animate-fade-in">
-              <div className="rounded-md border border-border p-4 mb-6 flex items-center gap-4 bg-secondary/50">
-                <div className="h-12 w-12 rounded-full flex items-center justify-center bg-secondary">
-                  <User className="h-6 w-6 text-muted-foreground" />
+              <div className="neu-border p-4 mb-6 flex items-center gap-4 bg-secondary">
+                <div className="h-12 w-12 neu-border rounded-full flex items-center justify-center bg-foreground text-background">
+                  <User className="h-6 w-6" />
                 </div>
                 <div>
-                  <div className="font-bold">{foundMP.name}</div>
-                  <div className="text-sm text-muted-foreground">{foundMP.riding} · {foundMP.party}</div>
+                  <div className="font-bold font-heading uppercase">{foundMP.name}</div>
+                  <div className="text-sm text-muted-foreground font-mono">{foundMP.riding} · {foundMP.party}</div>
                   <div className="text-xs font-mono text-muted-foreground">{foundMP.email}</div>
+                </div>
+                <div className="ml-auto neu-border px-3 py-1.5 bg-card font-mono text-xs font-bold flex items-center gap-1">
+                  <Zap className="h-3 w-3" /> +100 XP
                 </div>
               </div>
 
               <div className="flex gap-2 mb-4 flex-wrap">
-                {missions.map((m) => (
+                {["gaza", "water", "food"].map((id) => (
                   <button
-                    key={m.id}
-                    onClick={() => setSelectedMission(m.id)}
-                    className={`px-3 py-1.5 rounded-md text-xs font-mono transition-all border ${
-                      selectedMission === m.id
-                        ? "border-foreground/40 bg-secondary text-foreground"
-                        : "border-border text-muted-foreground hover:border-foreground/20"
+                    key={id}
+                    onClick={() => setSelectedMission(id)}
+                    className={`px-3 py-1.5 neu-border text-xs font-mono uppercase tracking-wider transition-all ${
+                      selectedMission === id
+                        ? "bg-foreground text-background"
+                        : "bg-card hover:bg-secondary"
                     }`}
                   >
-                    {m.id === "gaza" ? "🇵🇸 Gaza" : m.id === "water" ? "💧 Water" : "🍞 Food"}
+                    {id === "gaza" ? "🇵🇸 Gaza" : id === "water" ? "💧 Water" : "🍞 Food"}
                   </button>
                 ))}
               </div>
 
               <div className="relative">
-                <pre className="rounded-md border border-border p-4 text-xs font-mono whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto bg-secondary/50 text-foreground/80">
+                <pre className="neu-border p-4 text-xs font-mono whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto bg-muted">
                   {getScript()}
                 </pre>
-                <div className="absolute top-3 right-3 flex gap-2">
-                  <Badge variant="outline" className="text-[9px] font-mono border-civic-green/40 text-civic-green">
+                <div className="absolute top-3 right-3">
+                  <Badge className="text-[9px] font-mono neu-border bg-secondary text-foreground">
                     Sources: Verified ✓
                   </Badge>
                 </div>
               </div>
 
               <div className="flex gap-3 mt-4">
-                <Button onClick={copyToClipboard} className="font-mono gap-2 flex-1">
+                <Button onClick={copyToClipboard} className="font-mono gap-2 flex-1 neu-border neu-shadow-sm uppercase tracking-wider">
                   {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                   {copied ? "Copied!" : "Copy to Clipboard"}
                 </Button>
-                <Button variant="outline" asChild className="font-mono gap-2">
+                <Button variant="outline" asChild className="font-mono gap-2 neu-border">
                   <a href={`mailto:${foundMP.email}?subject=Constituent Concern&body=${encodeURIComponent(getScript())}`}>
                     <Mail className="h-4 w-4" /> Open Email
                   </a>
