@@ -12,6 +12,8 @@ import { getStageActions } from "@/data/stageActions";
 import type { StageConfig } from "@/data/stageActions";
 import { useAuth } from "@/hooks/useAuth";
 import { characterMap, getSelectedCharacter } from "@/data/characters";
+import { PetitionRedirectDialog } from "./PetitionRedirectDialog";
+import { PetitionTicker } from "./PetitionTicker";
 
 export const MissionQuest = () => {
   const [searchParams] = useSearchParams();
@@ -21,6 +23,9 @@ export const MissionQuest = () => {
   const [activeTab, setActiveTab] = useState<"overview" | "truth">("overview");
   const [stageDialogOpen, setStageDialogOpen] = useState(false);
   const [activeStageConfig, setActiveStageConfig] = useState<StageConfig | null>(null);
+  const [petitionDialog, setPetitionDialog] = useState<{
+    url: string; missionId: string; missionName: string; petitionLabel: string; xp: number;
+  } | null>(null);
   const { profile } = useAuth();
 
   // Resolve character: DB profile > localStorage fallback
@@ -229,7 +234,10 @@ export const MissionQuest = () => {
                   <h4 className="font-heading text-[9px] uppercase mb-6 text-accent">⚔ Surgical Strike — Take Action</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     {mission.id === "tax" ? (
-                      <a href="https://petitions.ourcommons.ca" target="_blank" rel="noopener noreferrer" className="md:col-span-3 block">
+                      <button
+                        onClick={() => { playSfx(); setPetitionDialog({ url: "https://petitions.ourcommons.ca", missionId: mission.id, missionName: mission.name, petitionLabel: "Petition e-6806 — 1% Wealth Tax", xp: 500 }); }}
+                        className="md:col-span-3 block w-full"
+                      >
                         <div className="ff-panel p-6 animate-pulse-gold text-center cursor-pointer hover:scale-[1.02] transition-transform" style={{ borderColor: "hsl(45 100% 60%)" }}>
                           <Pen className="h-8 w-8 mx-auto mb-2 text-accent" />
                           <div className="font-heading text-[9px] uppercase text-accent">Sign Petition e-6806</div>
@@ -238,15 +246,18 @@ export const MissionQuest = () => {
                             <Zap className="h-4 w-4" /> +500 XP
                           </div>
                         </div>
-                      </a>
+                      </button>
                     ) : (
                       <>
-                        <a href="https://petitions.ourcommons.ca" target="_blank" rel="noopener noreferrer" className="ff-panel p-4 text-center hover:border-accent transition-colors">
+                        <button
+                          onClick={() => { playSfx(); setPetitionDialog({ url: "https://petitions.ourcommons.ca", missionId: mission.id, missionName: mission.name, petitionLabel: `${mission.name} Petition`, xp: 500 }); }}
+                          className="ff-panel p-4 text-center hover:border-accent transition-colors"
+                        >
                           <Pen className="h-6 w-6 mx-auto mb-2 text-primary" />
-                          <div className="font-bold text-sm uppercase font-body text-foreground">Link to Petition</div>
+                          <div className="font-bold text-sm uppercase font-body text-foreground">Sign Petition</div>
                           <div className="text-xs text-muted-foreground font-body mt-1">ourcommons.ca</div>
                           <div className="mt-2 font-body text-xs font-bold flex items-center justify-center gap-1 text-accent"><Zap className="h-3 w-3" /> +500 XP</div>
-                        </a>
+                        </button>
                         <div className="ff-panel p-4 text-center">
                           <Phone className="h-6 w-6 mx-auto mb-2 text-primary" />
                           <div className="font-bold text-sm uppercase font-body text-foreground">Send Dossier to MP</div>
@@ -264,7 +275,9 @@ export const MissionQuest = () => {
                   </div>
                 </div>
 
-                {/* Calendar + Map */}
+                {/* Live Petition Ticker */}
+                <PetitionTicker missionId={mission.id} />
+
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="ff-panel p-6">
                     <h4 className="font-heading text-[9px] uppercase mb-6 flex items-center gap-2 text-primary">
@@ -357,6 +370,18 @@ export const MissionQuest = () => {
           onOpenChange={setStageDialogOpen}
           stageConfig={activeStageConfig}
           missionId={mission?.id || "water"}
+        />
+      )}
+
+      {petitionDialog && (
+        <PetitionRedirectDialog
+          open={!!petitionDialog}
+          onOpenChange={(open) => { if (!open) setPetitionDialog(null); }}
+          url={petitionDialog.url}
+          missionId={petitionDialog.missionId}
+          missionName={petitionDialog.missionName}
+          petitionLabel={petitionDialog.petitionLabel}
+          xp={petitionDialog.xp}
         />
       )}
     </div>
