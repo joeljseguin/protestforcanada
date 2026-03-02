@@ -21,59 +21,60 @@ export const MissionQuest = () => {
   const mission = missions.find((m) => m.id === expandedMission) || missions[0];
 
   return (
-    <div className="py-16 md:py-24">
+    <div className="py-12 md:py-20">
       <div className="container">
-        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight uppercase mb-2">
-          Mission Quest
+        <h2 className="font-heading text-sm md:text-base uppercase tracking-tight text-primary mb-2">
+          📜 Mission Quest
         </h2>
-        <p className="text-muted-foreground font-mono text-sm mb-10 max-w-2xl">
+        <p className="text-muted-foreground font-body text-sm mb-8 max-w-2xl">
           Select a mission. See the human cost. Read the truth. Take action. Earn XP.
         </p>
 
-        {/* Mission Selector */}
+        {/* Mission Selector — FF4 command menu */}
         <div className="flex flex-wrap gap-2 mb-8">
           {missions.slice(0, 5).map((m) => (
             <button
               key={m.id}
               onClick={() => { setExpandedMission(m.id); setActiveTab("overview"); }}
-              className={`neu-border px-4 py-2 font-mono text-xs uppercase tracking-wider transition-all ${
-                expandedMission === m.id ? "bg-foreground text-background" : "bg-card hover:bg-secondary"
+              className={`ff-panel px-4 py-2 font-body text-xs uppercase tracking-wider transition-all ${
+                expandedMission === m.id ? "text-accent border-accent" : "text-muted-foreground hover:text-foreground"
               }`}
+              style={expandedMission === m.id ? { borderColor: "hsl(45 100% 60%)" } : {}}
             >
-              #{m.rank} {m.name}
+              {expandedMission === m.id && "▶ "}#{m.rank} {m.name}
             </button>
           ))}
         </div>
 
         {mission && (
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-6 animate-fade-in">
             {/* Mission Header */}
-            <div className="neu-border neu-shadow p-6 bg-card">
+            <div className="ff-panel p-6">
               <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div>
                   <div className="flex items-center gap-3 mb-2">
-                    <Badge className={`${threatColors[mission.threatLevel]} neu-border text-xs font-mono`}>
+                    <Badge className={`${threatColors[mission.threatLevel]} text-[10px] font-body border border-border`}>
                       {mission.threatLevel}
                     </Badge>
-                    <span className="font-mono text-xs text-muted-foreground">RANK #{mission.rank}</span>
+                    <span className="font-body text-xs text-muted-foreground">RANK #{mission.rank}</span>
                   </div>
-                  <h3 className="font-heading font-extrabold text-2xl md:text-3xl uppercase">{mission.name}</h3>
-                  <p className="font-mono text-sm text-muted-foreground mt-1">{mission.subtitle}</p>
+                  <h3 className="font-heading text-[10px] md:text-xs uppercase text-foreground">{mission.name}</h3>
+                  <p className="font-body text-sm text-muted-foreground mt-1">{mission.subtitle}</p>
                 </div>
-                <div className="neu-border px-4 py-3 bg-secondary text-center">
-                  <div className="font-extrabold text-2xl font-heading">+{mission.xpBounty}</div>
-                  <div className="font-mono text-xs uppercase">XP Bounty</div>
+                <div className="ff-panel px-4 py-3 text-center">
+                  <div className="font-heading text-sm text-accent">+{mission.xpBounty}</div>
+                  <div className="font-body text-xs uppercase text-muted-foreground">XP Bounty</div>
                 </div>
               </div>
 
-              {/* Progress */}
+              {/* Progress — HP bar style */}
               <div className="mt-6">
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-center gap-2 mb-3 flex-wrap">
                   {mission.stages.map((stage, i) => {
                     const stageActions = getStageActions(mission.id, stage.label);
                     const isClickable = !!stageActions && stageActions.actions.length > 0;
                     return (
-                      <div key={stage.label} className="flex items-center flex-1">
+                      <div key={stage.label} className="flex items-center">
                         <button
                           onClick={() => {
                             if (isClickable && stageActions) {
@@ -81,23 +82,22 @@ export const MissionQuest = () => {
                               setStageDialogOpen(true);
                             }
                           }}
-                          className={`flex items-center gap-1.5 flex-1 ${isClickable ? "cursor-pointer hover:opacity-80 transition-opacity" : "cursor-default"}`}
+                          className={`flex items-center gap-1.5 ${isClickable ? "cursor-pointer hover:text-accent transition-colors" : "cursor-default"}`}
                         >
-                          {stage.complete ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : <Circle className="h-4 w-4 shrink-0 text-muted-foreground" />}
-                          <span className={`text-[10px] font-mono uppercase tracking-wider ${stage.complete ? "text-foreground font-bold" : "text-muted-foreground"} ${isClickable ? "underline decoration-dotted underline-offset-2" : ""}`}>
+                          {stage.complete ? <CheckCircle2 className="h-3.5 w-3.5 text-mission-green" /> : <Circle className="h-3.5 w-3.5 text-muted-foreground" />}
+                          <span className={`text-[10px] font-body uppercase tracking-wider ${stage.complete ? "text-mission-green" : "text-muted-foreground"}`}>
                             {stage.label}
                           </span>
-                          {isClickable && <Zap className="h-2.5 w-2.5 text-muted-foreground" />}
                         </button>
-                        {i < mission.stages.length - 1 && <div className="h-px w-4 mx-1 bg-foreground/30" />}
+                        {i < mission.stages.length - 1 && <div className="h-px w-3 mx-1 bg-border/40" />}
                       </div>
                     );
                   })}
                 </div>
-                <div className="h-5 neu-border overflow-hidden bg-muted">
-                  <div className="h-full bg-foreground transition-all duration-1000" style={{ width: `${mission.progress}%` }} />
+                <div className="h-4 bg-muted rounded-sm overflow-hidden">
+                  <div className="h-full hp-bar rounded-sm transition-all duration-1000" style={{ width: `${mission.progress}%` }} />
                 </div>
-                <div className="text-xs font-mono text-muted-foreground mt-1">{mission.progress}% complete</div>
+                <div className="text-xs font-body text-muted-foreground mt-1">{mission.progress}% complete</div>
               </div>
             </div>
 
@@ -105,31 +105,33 @@ export const MissionQuest = () => {
             <div className="flex gap-2">
               <button
                 onClick={() => setActiveTab("overview")}
-                className={`neu-border px-5 py-2.5 font-mono text-xs uppercase tracking-wider transition-all ${activeTab === "overview" ? "bg-foreground text-background" : "bg-card hover:bg-secondary"}`}
+                className={`ff-panel px-5 py-2.5 font-body text-xs uppercase tracking-wider transition-all ${activeTab === "overview" ? "text-accent" : "text-muted-foreground hover:text-foreground"}`}
+                style={activeTab === "overview" ? { borderColor: "hsl(45 100% 60%)" } : {}}
               >
-                <AlertTriangle className="h-3 w-3 inline mr-1.5" /> Overview & Action
+                {activeTab === "overview" && "▶ "}<AlertTriangle className="h-3 w-3 inline mr-1.5" /> Overview
               </button>
               {mission.truthTab && (
                 <button
                   onClick={() => setActiveTab("truth")}
-                  className={`neu-border px-5 py-2.5 font-mono text-xs uppercase tracking-wider transition-all ${activeTab === "truth" ? "bg-foreground text-background" : "bg-card hover:bg-secondary"}`}
+                  className={`ff-panel px-5 py-2.5 font-body text-xs uppercase tracking-wider transition-all ${activeTab === "truth" ? "text-accent" : "text-muted-foreground hover:text-foreground"}`}
+                  style={activeTab === "truth" ? { borderColor: "hsl(45 100% 60%)" } : {}}
                 >
-                  <FileText className="h-3 w-3 inline mr-1.5" /> The Truth
+                  {activeTab === "truth" && "▶ "}<FileText className="h-3 w-3 inline mr-1.5" /> The Truth
                 </button>
               )}
             </div>
 
             {activeTab === "overview" ? (
               <>
-                {/* The Human Cost */}
-                <div className="neu-border neu-shadow p-6 bg-card">
-                  <h4 className="font-heading font-extrabold text-xl uppercase mb-4 flex items-center gap-2">
-                    <AlertTriangle className="h-5 w-5" /> The Human Cost
+                {/* Human Cost */}
+                <div className="ff-panel p-6">
+                  <h4 className="font-heading text-[9px] uppercase mb-4 flex items-center gap-2 text-destructive">
+                    <AlertTriangle className="h-4 w-4" /> The Human Cost
                   </h4>
                   <ul className="space-y-3">
                     {mission.humanCost.map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 font-mono text-sm">
-                        <span className="shrink-0 w-6 h-6 neu-border flex items-center justify-center text-xs font-bold bg-secondary">{i + 1}</span>
+                      <li key={i} className="flex items-start gap-3 font-body text-sm text-foreground">
+                        <span className="shrink-0 w-6 h-6 ff-panel flex items-center justify-center text-[10px] font-bold text-accent">{i + 1}</span>
                         <span>{item}</span>
                       </li>
                     ))}
@@ -139,50 +141,50 @@ export const MissionQuest = () => {
                 {/* Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {mission.stats.map((stat) => (
-                    <div key={stat.label} className="neu-border neu-shadow p-4 bg-card">
-                      <div className="text-3xl font-extrabold font-heading">{stat.value}</div>
-                      <div className="text-xs text-muted-foreground mt-1 font-mono">{stat.label}</div>
-                      <a href={stat.sourceUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 mt-3 text-[10px] font-mono text-muted-foreground hover:text-foreground neu-border px-2 py-0.5">
+                    <div key={stat.label} className="ff-panel p-4">
+                      <div className="text-xl font-heading text-accent">{stat.value}</div>
+                      <div className="text-xs text-muted-foreground mt-1 font-body">{stat.label}</div>
+                      <a href={stat.sourceUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 mt-3 text-[10px] font-body text-muted-foreground hover:text-primary ff-panel px-2 py-0.5">
                         <ExternalLink className="h-2.5 w-2.5" /> {stat.source}
                       </a>
                     </div>
                   ))}
                 </div>
 
-                {/* Action Center — Surgical Strike */}
-                <div className="neu-border neu-shadow p-6 bg-card">
-                  <h4 className="font-heading font-extrabold text-xl uppercase mb-6">Surgical Strike — Take Action</h4>
+                {/* Action Center */}
+                <div className="ff-panel p-6">
+                  <h4 className="font-heading text-[9px] uppercase mb-6 text-accent">⚔ Surgical Strike — Take Action</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     {mission.id === "tax" ? (
                       <a href="https://petitions.ourcommons.ca" target="_blank" rel="noopener noreferrer" className="md:col-span-3 block">
-                        <div className="neu-border p-6 bg-secondary animate-pulse-gold text-center cursor-pointer hover:scale-[1.02] transition-transform">
-                          <Pen className="h-8 w-8 mx-auto mb-2" />
-                          <div className="font-heading font-extrabold text-xl uppercase">Sign Petition e-6806</div>
-                          <div className="font-mono text-sm text-muted-foreground mt-1">Tax the Rich — 1% Wealth Tax</div>
-                          <div className="mt-3 inline-flex items-center gap-2 neu-border px-4 py-2 bg-foreground text-background font-mono text-sm font-bold">
+                        <div className="ff-panel p-6 animate-pulse-gold text-center cursor-pointer hover:scale-[1.02] transition-transform" style={{ borderColor: "hsl(45 100% 60%)" }}>
+                          <Pen className="h-8 w-8 mx-auto mb-2 text-accent" />
+                          <div className="font-heading text-[9px] uppercase text-accent">Sign Petition e-6806</div>
+                          <div className="font-body text-sm text-muted-foreground mt-1">Tax the Rich — 1% Wealth Tax</div>
+                          <div className="mt-3 inline-flex items-center gap-2 ff-panel px-4 py-2 font-body text-sm font-bold text-accent">
                             <Zap className="h-4 w-4" /> +500 XP
                           </div>
                         </div>
                       </a>
                     ) : (
                       <>
-                        <a href="https://petitions.ourcommons.ca" target="_blank" rel="noopener noreferrer" className="neu-border p-4 bg-card text-center hover:bg-secondary transition-colors">
-                          <Pen className="h-6 w-6 mx-auto mb-2" />
-                          <div className="font-bold text-sm uppercase font-heading">Link to Petition</div>
-                          <div className="text-xs text-muted-foreground font-mono mt-1">ourcommons.ca</div>
-                          <div className="mt-2 font-mono text-xs font-bold flex items-center justify-center gap-1"><Zap className="h-3 w-3" /> +500 XP</div>
+                        <a href="https://petitions.ourcommons.ca" target="_blank" rel="noopener noreferrer" className="ff-panel p-4 text-center hover:border-accent transition-colors">
+                          <Pen className="h-6 w-6 mx-auto mb-2 text-primary" />
+                          <div className="font-bold text-sm uppercase font-body text-foreground">Link to Petition</div>
+                          <div className="text-xs text-muted-foreground font-body mt-1">ourcommons.ca</div>
+                          <div className="mt-2 font-body text-xs font-bold flex items-center justify-center gap-1 text-accent"><Zap className="h-3 w-3" /> +500 XP</div>
                         </a>
-                        <div className="neu-border p-4 bg-card text-center">
-                          <Phone className="h-6 w-6 mx-auto mb-2" />
-                          <div className="font-bold text-sm uppercase font-heading">Send Dossier to MP</div>
-                          <div className="text-xs text-muted-foreground font-mono mt-1">Use Action Center below</div>
-                          <div className="mt-2 font-mono text-xs font-bold flex items-center justify-center gap-1"><Zap className="h-3 w-3" /> +100 XP</div>
+                        <div className="ff-panel p-4 text-center">
+                          <Phone className="h-6 w-6 mx-auto mb-2 text-primary" />
+                          <div className="font-bold text-sm uppercase font-body text-foreground">Send Dossier to MP</div>
+                          <div className="text-xs text-muted-foreground font-body mt-1">Use Action Center</div>
+                          <div className="mt-2 font-body text-xs font-bold flex items-center justify-center gap-1 text-accent"><Zap className="h-3 w-3" /> +100 XP</div>
                         </div>
-                        <div className="neu-border p-4 bg-card text-center">
-                          <Users className="h-6 w-6 mx-auto mb-2" />
-                          <div className="font-bold text-sm uppercase font-heading">Join Protest</div>
-                          <div className="text-xs text-muted-foreground font-mono mt-1">See calendar below</div>
-                          <div className="mt-2 font-mono text-xs font-bold flex items-center justify-center gap-1"><Zap className="h-3 w-3" /> +200 XP</div>
+                        <div className="ff-panel p-4 text-center">
+                          <Users className="h-6 w-6 mx-auto mb-2 text-primary" />
+                          <div className="font-bold text-sm uppercase font-body text-foreground">Join Protest</div>
+                          <div className="text-xs text-muted-foreground font-body mt-1">See calendar below</div>
+                          <div className="mt-2 font-body text-xs font-bold flex items-center justify-center gap-1 text-accent"><Zap className="h-3 w-3" /> +200 XP</div>
                         </div>
                       </>
                     )}
@@ -191,43 +193,34 @@ export const MissionQuest = () => {
 
                 {/* Calendar + Map */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Calendar */}
-                  <div className="neu-border neu-shadow p-6 bg-card">
-                    <h4 className="font-heading font-extrabold text-xl uppercase mb-6 flex items-center gap-2">
-                      <Calendar className="h-5 w-5" /> Protest Calendar
+                  <div className="ff-panel p-6">
+                    <h4 className="font-heading text-[9px] uppercase mb-6 flex items-center gap-2 text-primary">
+                      <Calendar className="h-4 w-4" /> Protest Calendar
                     </h4>
                     <div className="space-y-3 max-h-[400px] overflow-y-auto">
                       {calendarEvents.map((event) => (
-                        <div key={event.id} className="neu-border p-4 flex items-center gap-4 bg-card hover:bg-secondary transition-colors">
-                          <div className="shrink-0 text-center neu-border px-3 py-2 bg-muted">
-                            <div className="font-mono text-xs text-muted-foreground">{new Date(event.date).toLocaleDateString("en-CA", { month: "short" })}</div>
-                            <div className="font-extrabold text-lg font-heading">{new Date(event.date).getDate()}</div>
+                        <div key={event.id} className="ff-panel p-4 flex items-center gap-4">
+                          <div className="shrink-0 text-center ff-panel px-3 py-2">
+                            <div className="font-body text-xs text-muted-foreground">{new Date(event.date).toLocaleDateString("en-CA", { month: "short" })}</div>
+                            <div className="font-heading text-sm text-accent">{new Date(event.date).getDate()}</div>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="font-bold text-sm uppercase font-heading truncate">{event.title}</div>
-                            <div className="flex items-center gap-3 text-xs text-muted-foreground font-mono mt-1 flex-wrap">
+                            <div className="font-bold text-sm uppercase font-body truncate text-foreground">{event.title}</div>
+                            <div className="flex items-center gap-3 text-xs text-muted-foreground font-body mt-1 flex-wrap">
                               <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {event.location}</span>
                               <span>{event.time}</span>
                             </div>
-                            {event.verified && (
-                              <div className="flex items-center gap-1 mt-1 text-[10px] font-mono text-green-600">
-                                <CheckCircle2 className="h-2.5 w-2.5" /> Verified · {event.source}
-                              </div>
-                            )}
                           </div>
-                          <div className="shrink-0 flex flex-col items-end gap-1">
-                            <span className="text-xs font-mono text-muted-foreground flex items-center gap-1"><Users className="h-3 w-3" /> {event.attendees.toLocaleString()}</span>
-                            <div className="neu-border px-2 py-1 bg-secondary font-mono text-xs font-bold flex items-center gap-1"><Zap className="h-3 w-3" /> +{event.xpReward}</div>
+                          <div className="shrink-0 ff-panel px-2 py-1 font-body text-xs font-bold text-accent flex items-center gap-1">
+                            <Zap className="h-3 w-3" /> +{event.xpReward}
                           </div>
                         </div>
                       ))}
                     </div>
-                    <Button variant="outline" className="w-full mt-4 neu-border font-mono uppercase tracking-wider text-xs">
+                    <Button variant="outline" className="w-full mt-4 font-body uppercase tracking-wider text-xs">
                       + Propose New Event
                     </Button>
                   </div>
-
-                  {/* Map */}
                   <ProtestMap />
                 </div>
 
@@ -235,7 +228,7 @@ export const MissionQuest = () => {
                 {mission.links.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {mission.links.map((link) => (
-                      <Button key={link.url} variant="outline" size="sm" asChild className="neu-border font-mono text-xs uppercase tracking-wider">
+                      <Button key={link.url} variant="outline" size="sm" asChild className="font-body text-xs uppercase tracking-wider">
                         <a href={link.url} target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="h-3 w-3 mr-1.5" /> {link.label}
                         </a>
@@ -245,39 +238,32 @@ export const MissionQuest = () => {
                 )}
               </>
             ) : mission.truthTab ? (
-              /* THE TRUTH TAB */
               <div className="space-y-6 animate-fade-in">
-                <div className="neu-border neu-shadow p-6 bg-card">
-                  <h4 className="font-heading font-extrabold text-xl uppercase mb-4 flex items-center gap-2">
-                    <FileText className="h-5 w-5" /> {mission.truthTab.title}
+                <div className="ff-panel p-6">
+                  <h4 className="font-heading text-[9px] uppercase mb-4 flex items-center gap-2 text-primary">
+                    <FileText className="h-4 w-4" /> {mission.truthTab.title}
                   </h4>
-
-                  {/* Timeline */}
                   {mission.truthTab.timeline && (
                     <div className="mb-6">
-                      <h5 className="font-mono text-xs uppercase tracking-wider text-muted-foreground mb-3 font-bold">Timeline of Events</h5>
+                      <h5 className="font-body text-xs uppercase tracking-wider text-muted-foreground mb-3 font-bold">Timeline</h5>
                       <div className="space-y-2">
                         {mission.truthTab.timeline.map((item, i) => (
                           <div key={i} className="flex gap-3 items-start">
-                            <div className="shrink-0 w-16 neu-border px-2 py-1 text-center bg-secondary">
-                              <span className="font-mono text-xs font-bold">{item.year}</span>
+                            <div className="shrink-0 w-16 ff-panel px-2 py-1 text-center">
+                              <span className="font-body text-xs font-bold text-accent">{item.year}</span>
                             </div>
-                            <div className="flex-1 neu-border p-2 text-xs font-mono">
-                              {item.event}
-                            </div>
+                            <div className="flex-1 ff-panel p-2 text-xs font-body text-foreground">{item.event}</div>
                           </div>
                         ))}
                       </div>
                     </div>
                   )}
-
-                  {/* Dense Details */}
                   <div>
-                    <h5 className="font-mono text-xs uppercase tracking-wider text-muted-foreground mb-3 font-bold">Key Findings</h5>
+                    <h5 className="font-body text-xs uppercase tracking-wider text-muted-foreground mb-3 font-bold">Key Findings</h5>
                     <ul className="space-y-2">
                       {mission.truthTab.details.map((detail, i) => (
-                        <li key={i} className="flex items-start gap-3 font-mono text-sm neu-border p-3 bg-muted">
-                          <span className="shrink-0 w-5 h-5 neu-border flex items-center justify-center text-[10px] font-bold bg-background">{i + 1}</span>
+                        <li key={i} className="flex items-start gap-3 font-body text-sm ff-panel p-3 text-foreground">
+                          <span className="shrink-0 w-5 h-5 ff-panel flex items-center justify-center text-[10px] font-bold text-accent">{i + 1}</span>
                           {detail}
                         </li>
                       ))}

@@ -9,7 +9,7 @@ const Index = () => {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col scanline-overlay">
       <Header />
       <main className="flex-1">
         <Hero />

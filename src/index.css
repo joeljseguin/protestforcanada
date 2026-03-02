@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,60 +6,69 @@
 
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 220 25% 10%;
+    --background: 228 40% 10%;
+    --foreground: 210 40% 96%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 25% 10%;
+    --card: 228 35% 16%;
+    --card-foreground: 210 40% 96%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 10%;
+    --popover: 228 35% 16%;
+    --popover-foreground: 210 40% 96%;
 
-    --primary: 0 78% 55%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 210 100% 65%;
+    --primary-foreground: 228 40% 10%;
 
-    --secondary: 45 100% 92%;
-    --secondary-foreground: 220 25% 10%;
+    --secondary: 228 30% 22%;
+    --secondary-foreground: 210 40% 96%;
 
-    --muted: 220 14% 92%;
-    --muted-foreground: 220 10% 46%;
+    --muted: 228 25% 20%;
+    --muted-foreground: 210 20% 60%;
 
-    --accent: 262 70% 58%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 45 100% 60%;
+    --accent-foreground: 228 40% 10%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 20% 18%;
-    --input: 220 20% 18%;
-    --ring: 0 78% 55%;
+    --border: 210 60% 50%;
+    --input: 228 30% 25%;
+    --ring: 210 100% 65%;
 
-    --radius: 0px;
+    --radius: 8px;
 
-    --xp-gold: 45 100% 51%;
-    --xp-gold-glow: 45 100% 60%;
-    --threat-red: 0 78% 50%;
-    --threat-orange: 25 95% 53%;
-    --threat-yellow: 45 93% 47%;
-    --mission-green: 152 60% 42%;
-    --mission-blue: 210 100% 56%;
+    /* RPG palette */
+    --xp-gold: 45 100% 60%;
+    --xp-gold-glow: 45 100% 72%;
+    --threat-red: 0 72% 50%;
+    --threat-orange: 25 90% 55%;
+    --threat-yellow: 45 90% 55%;
+    --mission-green: 140 55% 45%;
+    --mission-blue: 210 100% 65%;
 
-    --navy-deep: 220 20% 97%;
-    --navy-medium: 220 14% 92%;
-    --navy-light: 220 12% 82%;
-    --red-civic: 0 78% 50%;
-    --red-civic-muted: 0 40% 93%;
-    --green-pass: 152 60% 42%;
-    --amber-pending: 45 93% 47%;
+    --hp-green: 120 60% 45%;
+    --mp-blue: 220 80% 55%;
+    --ff-panel: 228 35% 16%;
+    --ff-border-outer: 210 50% 70%;
+    --ff-border-inner: 228 40% 10%;
+    --ff-highlight: 210 100% 80%;
+    --ff-cursor: 0 0% 100%;
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 25% 10%;
-    --sidebar-primary: 0 78% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 14% 92%;
-    --sidebar-accent-foreground: 220 25% 10%;
-    --sidebar-border: 220 20% 18%;
-    --sidebar-ring: 0 78% 55%;
+    --navy-deep: 228 40% 10%;
+    --navy-medium: 228 35% 16%;
+    --navy-light: 228 25% 24%;
+    --red-civic: 0 72% 50%;
+    --red-civic-muted: 0 40% 25%;
+    --green-pass: 140 55% 45%;
+    --amber-pending: 45 90% 55%;
+
+    --sidebar-background: 228 35% 14%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 210 100% 65%;
+    --sidebar-primary-foreground: 228 40% 10%;
+    --sidebar-accent: 228 30% 22%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 210 60% 50%;
+    --sidebar-ring: 210 100% 65%;
   }
 }
 
@@ -69,6 +78,7 @@
   }
   body {
     @apply bg-background text-foreground font-body antialiased;
+    image-rendering: auto;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
@@ -76,46 +86,90 @@
 }
 
 @layer utilities {
-  .neu-border {
-    border: 4px solid hsl(var(--foreground));
+  /* FF4 panel: rounded dark blue box with double-border effect */
+  .ff-panel {
+    background: hsl(var(--ff-panel));
+    border: 3px solid hsl(var(--ff-border-outer));
+    border-radius: 12px;
+    box-shadow:
+      inset 0 0 0 2px hsl(var(--ff-border-inner)),
+      0 4px 20px hsl(228 40% 5% / 0.6);
+    position: relative;
   }
-  .neu-shadow {
-    box-shadow: 4px 4px 0px hsl(var(--foreground));
+  .ff-panel::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border: 1px solid hsl(var(--ff-border-outer) / 0.3);
+    border-radius: 9px;
+    pointer-events: none;
   }
-  .neu-shadow-sm {
-    box-shadow: 2px 2px 0px hsl(var(--foreground));
+
+  /* Pixel cursor arrow indicator */
+  .ff-cursor::before {
+    content: '▶';
+    color: hsl(var(--ff-cursor));
+    margin-right: 8px;
+    font-size: 10px;
+    animation: cursor-blink 0.8s step-end infinite;
   }
-  .neu-shadow-lg {
-    box-shadow: 6px 6px 0px hsl(var(--foreground));
+
+  /* HP/MP bar styling */
+  .hp-bar {
+    background: hsl(var(--hp-green));
+    box-shadow: 0 0 6px hsl(var(--hp-green) / 0.5);
   }
-  .neu-card {
-    @apply neu-border neu-shadow bg-card;
+  .mp-bar {
+    background: hsl(var(--mp-blue));
+    box-shadow: 0 0 6px hsl(var(--mp-blue) / 0.5);
   }
-  .neu-card:hover {
-    box-shadow: 6px 6px 0px hsl(var(--foreground));
-    transform: translate(-2px, -2px);
+  .xp-bar {
+    background: linear-gradient(90deg, hsl(var(--xp-gold)), hsl(var(--xp-gold-glow)));
+    box-shadow: 0 0 8px hsl(var(--xp-gold) / 0.5);
   }
+
   .xp-glow {
     background: linear-gradient(135deg, hsl(var(--xp-gold)), hsl(var(--xp-gold-glow)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+
   .card-hover {
     @apply transition-all duration-200;
+  }
+  .card-hover:hover {
+    box-shadow: 0 0 12px hsl(var(--ff-border-outer) / 0.4);
+    transform: translateY(-2px);
+  }
+
+  /* Legacy compat */
+  .neu-border {
+    @apply ff-panel;
+  }
+  .neu-shadow, .neu-shadow-sm, .neu-shadow-lg {
+    /* absorbed into ff-panel */
+  }
+  .neu-card {
+    @apply ff-panel;
   }
   .civic-border-l {
     border-left: 4px solid hsl(var(--threat-red));
   }
 }
 
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 @keyframes pulse-gold {
-  0%, 100% { box-shadow: 4px 4px 0px hsl(var(--foreground)), 0 0 0px hsl(var(--xp-gold) / 0.4); }
-  50% { box-shadow: 4px 4px 0px hsl(var(--foreground)), 0 0 20px hsl(var(--xp-gold) / 0.6); }
+  0%, 100% { box-shadow: 0 0 4px hsl(var(--xp-gold) / 0.3); }
+  50% { box-shadow: 0 0 16px hsl(var(--xp-gold) / 0.6); }
 }
 
 @keyframes pulse-red {
-  0%, 100% { box-shadow: 4px 4px 0px hsl(var(--foreground)), 0 0 0px hsl(var(--threat-red) / 0.3); }
-  50% { box-shadow: 4px 4px 0px hsl(var(--foreground)), 0 0 16px hsl(var(--threat-red) / 0.5); }
+  0%, 100% { box-shadow: 0 0 4px hsl(var(--threat-red) / 0.2); }
+  50% { box-shadow: 0 0 12px hsl(var(--threat-red) / 0.5); }
 }
 
 @keyframes pulse-green {
@@ -125,7 +179,12 @@
 
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-4px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
 }
 
 .animate-pulse-gold {
@@ -144,9 +203,9 @@
   animation: float 3s ease-in-out infinite;
 }
 
-/* React Flow custom styles */
+/* React Flow custom styles - FF4 themed */
 .react-flow__node {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Silkscreen', cursive;
 }
 .react-flow__edge-path {
   stroke: hsl(var(--threat-red));
@@ -154,4 +213,29 @@
 }
 .react-flow__background {
   background-color: hsl(var(--background));
+}
+.react-flow__controls button {
+  background: hsl(var(--ff-panel)) !important;
+  border: 2px solid hsl(var(--ff-border-outer)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-radius: 4px !important;
+}
+
+/* Pixel scanline overlay for extra retro feel */
+.scanline-overlay::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    hsl(0 0% 0% / 0.03) 2px,
+    hsl(0 0% 0% / 0.03) 4px
+  );
+  z-index: 9999;
 }
