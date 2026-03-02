@@ -16,6 +16,7 @@ import {
   Users,
   BookOpen,
   Vote,
+  Heart,
   Zap,
   CheckCircle2,
   ExternalLink,
@@ -34,6 +35,7 @@ const iconMap = {
   protest: Users,
   research: BookOpen,
   vote: Vote,
+  donate: Heart,
 };
 
 const platformColors: Record<string, string> = {
@@ -147,6 +149,7 @@ export const StageActionDialog = ({ open, onOpenChange, stageConfig, missionId }
             const Icon = iconMap[action.icon];
             const done = completedActions.has(action.id);
             const isLoading = loading === action.id;
+            const isDonate = action.icon === "donate";
             const platformClass = action.platform ? platformColors[action.platform] : "";
 
             return (
@@ -157,14 +160,16 @@ export const StageActionDialog = ({ open, onOpenChange, stageConfig, missionId }
                 className={`w-full text-left neu-border p-4 transition-all ${
                   done
                     ? "bg-secondary opacity-70"
+                    : isDonate
+                    ? "bg-mission-green/10 hover:bg-mission-green/20 hover:scale-[1.01] cursor-pointer ring-2 ring-mission-green/40"
                     : "bg-card hover:bg-secondary hover:scale-[1.01] cursor-pointer"
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <div
                     className={`shrink-0 w-10 h-10 neu-border flex items-center justify-center ${
-                      platformClass || "bg-muted"
-                    } ${platformClass ? "text-white" : ""}`}
+                      isDonate ? "bg-mission-green text-white" : platformClass || "bg-muted"
+                    } ${platformClass && !isDonate ? "text-white" : ""}`}
                   >
                     {done ? (
                       <CheckCircle2 className="h-5 w-5 text-mission-green" />
