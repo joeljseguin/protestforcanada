@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { missions, calendarEvents, threatColors } from "@/data/gameData";
+import type { SideQuest } from "@/data/gameData";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Zap, Phone, Pen, Calendar, MapPin, Users, AlertTriangle, CheckCircle2, Circle, FileText, Clock, Gamepad2, Mail, Share2, Megaphone, Copy } from "lucide-react";
+import { ExternalLink, Zap, Phone, Pen, Calendar, MapPin, Users, AlertTriangle, CheckCircle2, Circle, FileText, Clock, Gamepad2, Mail, Share2, Megaphone, Copy, Search, BookOpen, Heart, Calculator, UserCheck, Target } from "lucide-react";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { getCharacterSfx, menuSelect } from "@/lib/retroSfx";
@@ -42,6 +43,20 @@ export const MissionQuest = () => {
 
   const mission = missions.find((m) => m.id === expandedMission) || missions[0];
 
+  const [completedQuests, setCompletedQuests] = useState<Set<string>>(new Set());
+
+  const sideQuestIcons: Record<SideQuest["icon"], React.ReactNode> = {
+    search: <Search className="h-5 w-5" />,
+    share: <Share2 className="h-5 w-5" />,
+    write: <Pen className="h-5 w-5" />,
+    volunteer: <UserCheck className="h-5 w-5" />,
+    calculate: <Calculator className="h-5 w-5" />,
+    attend: <Users className="h-5 w-5" />,
+    donate: <Heart className="h-5 w-5" />,
+    read: <BookOpen className="h-5 w-5" />,
+    track: <Target className="h-5 w-5" />,
+  };
+
   const handleStatXP = async (statLabel: string) => {
     if (!user) {
       toast({ title: "Sign in required", description: "Join the Resistance to earn XP.", variant: "destructive" });
@@ -49,6 +64,20 @@ export const MissionQuest = () => {
     }
     await addXP("view_stat", `stat-${mission.id}-${statLabel}`, 15);
     toast({ title: "+15 XP Earned!", description: `Reviewed: ${statLabel}` });
+  };
+
+  const handleSideQuestXP = async (quest: SideQuest) => {
+    if (completedQuests.has(quest.id)) {
+      toast({ title: "Already completed!", description: "You've already earned XP for this side quest." });
+      return;
+    }
+    if (!user) {
+      toast({ title: "Sign in required", description: "Join the Resistance to earn XP.", variant: "destructive" });
+      return;
+    }
+    await addXP("side_quest", `sidequest-${quest.id}`, quest.xp);
+    setCompletedQuests((prev) => new Set(prev).add(quest.id));
+    toast({ title: `+${quest.xp} XP Earned!`, description: `Side Quest Complete: ${quest.title}` });
   };
 
   if (!charId) return null;
@@ -264,6 +293,35 @@ export const MissionQuest = () => {
                       </a>
                     </button>
                   ))}
+                </div>
+
+                {/* Side Quests */}
+                <div className="ff-panel p-6">
+                  <h4 className="font-heading text-[9px] uppercase mb-4 flex items-center gap-2 text-accent">
+                    <Gamepad2 className="h-4 w-4" /> Side Quests — Earn XP by Taking Action
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {mission.sideQuests.map((quest) => {
+                      const done = completedQuests.has(quest.id);
+                      return (
+                        <button
+                          key={quest.id}
+                          onClick={() => { playSfx(); handleSideQuestXP(quest); }}
+                          className={`ff-panel p-4 text-left transition-all group ${done ? "border-accent/50 opacity-60" : "hover:border-accent cursor-pointer"}`}
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <span className={`${done ? "text-accent" : "text-primary"}`}>{sideQuestIcons[quest.icon]}</span>
+                            <span className={`flex items-center gap-1 text-[10px] font-bold ${done ? "text-accent" : "text-accent opacity-0 group-hover:opacity-100 transition-opacity"}`}>
+                              {done ? <CheckCircle2 className="h-3 w-3" /> : <Zap className="h-3 w-3" />}
+                              {done ? "DONE" : `+${quest.xp} XP`}
+                            </span>
+                          </div>
+                          <div className="font-heading text-[9px] uppercase text-foreground mb-1">{quest.title}</div>
+                          <p className="text-[11px] text-muted-foreground font-body leading-relaxed">{quest.task}</p>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 {/* Action Center */}

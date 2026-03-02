@@ -1,5 +1,13 @@
 export type ThreatLevel = "CRITICAL" | "HIGH" | "ELEVATED" | "MODERATE";
 
+export type SideQuest = {
+  id: string;
+  title: string;
+  task: string;
+  xp: number;
+  icon: "search" | "share" | "write" | "volunteer" | "calculate" | "attend" | "donate" | "read" | "track";
+};
+
 export type Mission = {
   rank: number;
   id: string;
@@ -14,6 +22,7 @@ export type Mission = {
   progress: number;
   stages: { label: string; complete: boolean }[];
   stats: { label: string; value: string; description: string; source: string; sourceUrl: string }[];
+  sideQuests: SideQuest[];
   links: { label: string; url: string }[];
   truthTab?: {
     title: string;
@@ -60,6 +69,11 @@ export const missions: Mission[] = [
       { label: "Long-Term Advisories", value: "28", description: "First Nations communities under long-term drinking water advisories with no safe tap water", source: "ISC", sourceUrl: "https://www.sac-isc.gc.ca" },
       { label: "Communities Affected", value: "34", description: "Indigenous communities still waiting for clean water despite federal promises since 2015", source: "ISC Feb 2026", sourceUrl: "https://www.sac-isc.gc.ca" },
       { label: "Delayed Grants", value: "$890M", description: "Federal infrastructure funding promised but delayed or unspent for water treatment projects", source: "Budget 2024/25", sourceUrl: "https://open.canada.ca" },
+    ],
+    sideQuests: [
+      { id: "water-research", title: "Investigate Your Water", task: "Look up your municipality's water quality report and compare it to First Nations advisories", xp: 20, icon: "search" },
+      { id: "water-share", title: "Spread the Word", task: "Share the water crisis stats on your social media — tag your MP", xp: 25, icon: "share" },
+      { id: "water-donate", title: "Support Clean Water", task: "Donate to Water First or a clean water charity serving Indigenous communities", xp: 50, icon: "donate" },
     ],
     links: [
       { label: "ISC Water Dashboard", url: "https://www.sac-isc.gc.ca/eng/1506514143353/1533317130660" },
@@ -116,6 +130,11 @@ export const missions: Mission[] = [
       { label: "Grocery Inflation", value: "5.8%", description: "annual grocery price increase while corporate grocery profits hit record highs", source: "Food Price Report", sourceUrl: "https://www.dal.ca/sites/agri-food/research/canada-s-food-price-report.html" },
       { label: "Lobbyist Meetings", value: "67", description: "registered lobbying meetings by grocery corporations with MPs in the last year", source: "Commissioner of Lobbying", sourceUrl: "https://lobbycanada.gc.ca" },
     ],
+    sideQuests: [
+      { id: "food-volunteer", title: "Volunteer at a Food Bank", task: "Find your local food bank and sign up for a volunteer shift this week", xp: 50, icon: "volunteer" },
+      { id: "food-track", title: "Track Grocery Prices", task: "Compare prices at 3 stores for 10 staple items and document the markup", xp: 20, icon: "track" },
+      { id: "food-write", title: "Write Your MP", task: "Send a letter to your MP demanding the Grocery Code of Conduct be passed", xp: 40, icon: "write" },
+    ],
     links: [
       { label: "Food Price Report 2026", url: "https://www.dal.ca/sites/agri-food/research/canada-s-food-price-report.html" },
       { label: "Competition Bureau", url: "https://www.competitionbureau.gc.ca" },
@@ -163,6 +182,11 @@ export const missions: Mission[] = [
       { label: "Estimated Revenue", value: "$5.6B/yr", description: "projected annual revenue from a 1% tax on wealth over $20M — enough to fund housing", source: "PBO", sourceUrl: "https://www.pbo-dpb.ca" },
       { label: "Billionaires in Canada", value: "87", description: "Canadian billionaires whose combined wealth exceeds the bottom 12 million Canadians", source: "Forbes 2025", sourceUrl: "https://www.forbes.com" },
     ],
+    sideQuests: [
+      { id: "tax-calculate", title: "Calculate the Gap", task: "Use the PBO wealth tax calculator to see how much revenue a 1% tax would generate", xp: 20, icon: "calculate" },
+      { id: "tax-share", title: "Share the Petition", task: "Post the e-6806 petition link on 3 social platforms and tag your MP", xp: 30, icon: "share" },
+      { id: "tax-write", title: "Letter to Finance Minister", task: "Write a letter to the Finance Minister demanding a wealth tax debate", xp: 50, icon: "write" },
+    ],
     links: [
       { label: "Sign Petition e-6806", url: "https://petitions.ourcommons.ca" },
     ],
@@ -207,6 +231,11 @@ export const missions: Mission[] = [
       { label: "Military Exports", value: "$18.9M", description: "in Canadian military components exported via the US loophole bypassing the arms embargo", source: "Ploughshares", sourceUrl: "https://ploughshares.ca" },
       { label: "Active Legacy Permits", value: "12", description: "pre-existing export permits still active, allowing continued arms shipments through the US", source: "Global Affairs", sourceUrl: "https://open.canada.ca" },
       { label: "Companies Flagged", value: "3", description: "Canadian defence companies identified as routing arms through US intermediaries", source: "CBC 2026", sourceUrl: "https://www.cbc.ca" },
+    ],
+    sideQuests: [
+      { id: "gaza-research", title: "Research Arms Exports", task: "Read the Project Ploughshares report and identify Canadian companies involved", xp: 25, icon: "read" },
+      { id: "gaza-write", title: "Write Global Affairs", task: "Email Global Affairs Canada demanding full cancellation of legacy export permits", xp: 50, icon: "write" },
+      { id: "gaza-attend", title: "Attend a Solidarity Event", task: "Find and attend a local solidarity event or vigil in your community", xp: 50, icon: "attend" },
     ],
     links: [
       { label: "Project Ploughshares Report", url: "https://ploughshares.ca" },
@@ -256,6 +285,11 @@ export const missions: Mission[] = [
       { label: "Core Housing Need", value: "1.87M", description: "Canadian households in core housing need — spending over 30% of income on inadequate housing", source: "StatsCan", sourceUrl: "https://www.statcan.gc.ca" },
       { label: "Vacancy Rate", value: "1.5%", description: "national rental vacancy rate — anything below 3% indicates a severe housing supply crisis", source: "CMHC 2025", sourceUrl: "https://www.cmhc-schl.gc.ca" },
     ],
+    sideQuests: [
+      { id: "housing-calculate", title: "Calculate Your Ratio", task: "Divide your local average home price by your household income — is it over 5x?", xp: 20, icon: "calculate" },
+      { id: "housing-attend", title: "Attend a Council Meeting", task: "Go to your city council's next zoning or housing meeting and speak up", xp: 50, icon: "attend" },
+      { id: "housing-share", title: "Share Housing Data", task: "Post your income-to-housing ratio on social media with #HousingCrisis", xp: 25, icon: "share" },
+    ],
     links: [{ label: "CMHC Housing Data", url: "https://www.cmhc-schl.gc.ca" }],
   },
   {
@@ -288,6 +322,11 @@ export const missions: Mission[] = [
       { label: "Without Family Doctor", value: "6.5M", description: "Canadians without a family doctor — forced to rely on overcrowded ERs for basic care", source: "CIHI", sourceUrl: "https://www.cihi.ca" },
       { label: "Canada Health Transfer", value: "$49.4B", description: "federal health transfer — increased but still not enough to address crumbling provincial systems", source: "Dept of Finance", sourceUrl: "https://www.canada.ca/en/department-finance.html" },
       { label: "Nursing Vacancies", value: "14K+", description: "unfilled nursing positions nationwide — driving burnout and record ER wait times of 4.1 hours", source: "StatsCan", sourceUrl: "https://www.statcan.gc.ca" },
+    ],
+    sideQuests: [
+      { id: "health-search", title: "Find Walk-In Clinics", task: "Map all walk-in clinics within 30 min of your home — share the list with neighbours", xp: 20, icon: "search" },
+      { id: "health-write", title: "Write Your MLA", task: "Send a letter to your provincial MLA demanding increased healthcare funding", xp: 50, icon: "write" },
+      { id: "health-share", title: "Share Wait Time Data", task: "Check your local ER wait times online and post them with #FixHealthcare", xp: 25, icon: "share" },
     ],
     links: [{ label: "CIHI Health Data", url: "https://www.cihi.ca" }],
   },
@@ -322,6 +361,11 @@ export const missions: Mission[] = [
       { label: "Affected Workers", value: "150K+", description: "federal employees underpaid, overpaid, or not paid at all — some for years at a time", source: "PSAC", sourceUrl: "https://psacunion.ca" },
       { label: "Years Broken", value: "10", description: "years the Phoenix system has been failing with no replacement plan announced by government", source: "CBC", sourceUrl: "https://www.cbc.ca" },
     ],
+    sideQuests: [
+      { id: "phoenix-read", title: "Read the AG Report", task: "Read the Auditor General's Phoenix report and note 3 key failures", xp: 25, icon: "read" },
+      { id: "phoenix-share", title: "Share the Scandal", task: "Post the Phoenix pay system story on social media — $2.4B wasted", xp: 20, icon: "share" },
+      { id: "phoenix-write", title: "Write Treasury Board", task: "Email the Treasury Board President demanding a replacement timeline", xp: 50, icon: "write" },
+    ],
     links: [],
   },
   {
@@ -354,6 +398,11 @@ export const missions: Mission[] = [
       { label: "Fossil Fuel Subsidies", value: "$18.5B", description: "annual public subsidies to oil and gas companies while Canada misses every climate target", source: "IISD", sourceUrl: "https://www.iisd.org" },
       { label: "Emissions Gap", value: "-22%", description: "below the reduction needed to meet 2030 Paris Agreement commitments — falling further behind", source: "ECCC", sourceUrl: "https://www.canada.ca/en/environment-climate-change.html" },
       { label: "Wildfire Displaced", value: "230K+", description: "Canadians displaced by wildfires in 2024-25 — climate impacts accelerating faster than policy", source: "Red Cross", sourceUrl: "https://www.redcross.ca" },
+    ],
+    sideQuests: [
+      { id: "climate-calculate", title: "Calculate Your Footprint", task: "Use an online calculator to measure your carbon footprint and find 3 ways to reduce it", xp: 20, icon: "calculate" },
+      { id: "climate-attend", title: "Join a Climate Rally", task: "Attend a local Fridays for Future or climate rally in your city", xp: 50, icon: "attend" },
+      { id: "climate-write", title: "Write Environment Minister", task: "Email the Environment Minister demanding fossil fuel subsidy phase-out", xp: 40, icon: "write" },
     ],
     links: [],
   },
@@ -388,6 +437,11 @@ export const missions: Mission[] = [
       { label: "Budget", value: "$210M", description: "proposed budget for the new Digital Safety Commission with broad censorship powers", source: "PBO", sourceUrl: "https://www.pbo-dpb.ca" },
       { label: "Public Comments", value: "12K+", description: "public submissions opposing key provisions — most expressing free expression concerns", source: "Parl Canada", sourceUrl: "https://www.parl.ca" },
     ],
+    sideQuests: [
+      { id: "digital-read", title: "Read Bill C-63", task: "Read the summary of Bill C-63 on LEGISinfo and note provisions that concern you", xp: 25, icon: "read" },
+      { id: "digital-write", title: "Submit a Comment", task: "Submit a public comment to the Parliamentary committee on Bill C-63", xp: 50, icon: "write" },
+      { id: "digital-share", title: "Raise Awareness", task: "Share a breakdown of Bill C-63 on social media explaining what it means", xp: 20, icon: "share" },
+    ],
     links: [],
   },
   {
@@ -420,6 +474,11 @@ export const missions: Mission[] = [
       { label: "Cost Overrun", value: "$59.5M", description: "final cost of an app originally budgeted at $80K — a 74,000% cost overrun with no accountability", source: "AG Report", sourceUrl: "https://www.oag-bvg.gc.ca" },
       { label: "Subcontractors", value: "76", description: "subcontractors involved in a single app project — many with no clear deliverables or oversight", source: "OGGO", sourceUrl: "https://www.parl.ca" },
       { label: "RCMP Status", value: "Active", description: "RCMP criminal investigation still ongoing — but no charges filed despite Auditor General findings", source: "CBC", sourceUrl: "https://www.cbc.ca" },
+    ],
+    sideQuests: [
+      { id: "arrivecan-read", title: "Read the AG Audit", task: "Read the Auditor General's ArriveCAN audit and list 3 red flags", xp: 25, icon: "read" },
+      { id: "arrivecan-share", title: "Share the Numbers", task: "Post the $80K → $59.5M cost overrun story on social media", xp: 20, icon: "share" },
+      { id: "arrivecan-write", title: "Demand Accountability", task: "Write your MP demanding criminal charges for those responsible", xp: 50, icon: "write" },
     ],
     links: [],
   },
