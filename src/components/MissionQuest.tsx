@@ -182,6 +182,21 @@ export const MissionQuest = () => {
                   {activeTab === "truth" && "▶ "}<FileText className="h-3 w-3 inline mr-1.5" /> The Truth
                 </button>
               )}
+              <button
+                onClick={() => {
+                  playSfx();
+                  setPetitionDialog({
+                    url: "https://petitions.ourcommons.ca",
+                    missionId: mission.id,
+                    missionName: mission.name,
+                    petitionLabel: `${mission.name} Petition`,
+                    xp: 500,
+                  });
+                }}
+                className="ff-panel px-5 py-2.5 font-body text-xs uppercase tracking-wider transition-all text-muted-foreground hover:text-foreground hover:border-accent"
+              >
+                <Pen className="h-3 w-3 inline mr-1.5" /> Add Your Voice
+              </button>
             </div>
 
             {activeTab === "overview" ? (
