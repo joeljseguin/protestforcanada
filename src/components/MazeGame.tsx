@@ -39,9 +39,9 @@ type Enemy = {
 };
 
 const ENEMY_CONFIG = {
-  lobbyist:    { emoji: "🧑‍💼", label: "Lobbyist",    color: "hsl(25 90% 55%)" },
+  lobbyist:    { emoji: "🐷", label: "Lobbyist",    color: "hsl(25 90% 55%)" },
   bureaucrat:  { emoji: "👨‍⚖️", label: "Bureaucrat",  color: "hsl(0 72% 50%)" },
-  billionaire: { emoji: "🎩",  label: "Billionaire", color: "hsl(280 60% 50%)" },
+  billionaire: { emoji: "🍕",  label: "Billionaire", color: "hsl(280 60% 50%)" },
 };
 const ENEMY_TYPES: Array<"lobbyist" | "bureaucrat" | "billionaire"> = ["lobbyist", "bureaucrat", "billionaire"];
 
