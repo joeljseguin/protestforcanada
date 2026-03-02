@@ -14,9 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
-        body: ['"Inter"', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        heading: ['"Press Start 2P"', 'cursive'],
+        body: ['"Silkscreen"', 'cursive'],
+        mono: ['"VT323"', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -64,6 +64,19 @@ export default {
         mission: {
           green: "hsl(var(--mission-green))",
           blue: "hsl(var(--mission-blue))",
+        },
+        hp: {
+          green: "hsl(var(--hp-green))",
+        },
+        mp: {
+          blue: "hsl(var(--mp-blue))",
+        },
+        ff: {
+          panel: "hsl(var(--ff-panel))",
+          "border-outer": "hsl(var(--ff-border-outer))",
+          "border-inner": "hsl(var(--ff-border-inner))",
+          highlight: "hsl(var(--ff-highlight))",
+          cursor: "hsl(var(--ff-cursor))",
         },
         navy: {
           deep: "hsl(var(--navy-deep))",
