@@ -1,4 +1,4 @@
-import { AlertTriangle, Crown, Briefcase, Landmark, Users, Building2, Factory, ArrowRightLeft, CheckCircle2, FileSignature } from "lucide-react";
+import { AlertTriangle, Crown, Briefcase, Landmark, Users, Building2, Factory, ArrowRightLeft, CheckCircle2, FileSignature, MapPin } from "lucide-react";
 
 const cardBase =
   "cursor-pointer font-body transition-all hover:shadow-[0_0_12px_hsl(210_60%_50%/0.4)]";
@@ -25,6 +25,16 @@ function CrisisBadges({ crisisLinks }: { crisisLinks?: string[] }) {
   );
 }
 
+function LocationBadge({ location }: { location?: string }) {
+  if (!location) return null;
+  return (
+    <div className="flex items-center gap-1 mt-1">
+      <MapPin className="h-2.5 w-2.5 shrink-0 text-muted-foreground" />
+      <span className="text-[9px] text-muted-foreground uppercase tracking-wider">{location}</span>
+    </div>
+  );
+}
+
 /* All nodes styled as FF4 world map location markers */
 const ffNode = "ff-panel w-[200px] p-3";
 
@@ -42,6 +52,7 @@ export function PMONode({ data }: { data: any }) {
           {data.role}
         </div>
       )}
+      <LocationBadge location={data.location} />
     </div>
   );
 }
@@ -64,6 +75,7 @@ export function MinisterNode({ data }: { data: any }) {
           {data.role}
         </div>
       )}
+      <LocationBadge location={data.location} />
       <CrisisBadges crisisLinks={data.crisisLinks} />
     </div>
   );
@@ -86,6 +98,7 @@ export function CorporationNode({ data }: { data: any }) {
       {data.detail && (
         <p className="text-[10px] text-muted-foreground leading-tight">{data.detail}</p>
       )}
+      <LocationBadge location={data.location} />
     </div>
   );
 }
@@ -102,6 +115,7 @@ export function BankNode({ data }: { data: any }) {
       {data.detail && (
         <p className="text-[10px] text-muted-foreground leading-tight">{data.detail}</p>
       )}
+      <LocationBadge location={data.location} />
     </div>
   );
 }
@@ -118,6 +132,7 @@ export function LobbyistNode({ data }: { data: any }) {
       {data.detail && (
         <p className="text-[10px] text-muted-foreground leading-tight">{data.detail}</p>
       )}
+      <LocationBadge location={data.location} />
     </div>
   );
 }
@@ -167,6 +182,7 @@ export function IntermediaryNode({ data }: { data: any }) {
           {data.detail}
         </p>
       )}
+      <LocationBadge location={data.location} />
     </div>
   );
 }
@@ -194,6 +210,7 @@ export function SolutionNode({ data }: { data: any }) {
       {data.detail && (
         <p className="text-[9px] text-muted-foreground leading-tight">{data.detail}</p>
       )}
+      <LocationBadge location={data.location} />
     </div>
   );
 }
