@@ -27,14 +27,14 @@ export const Header = () => {
               <Swords className="h-4 w-4 text-background" />
             </div>
             <span>PROTEST</span>
-            <span className="text-[9px] font-mono text-muted-foreground ml-1 tracking-widest neu-border px-1.5 py-0.5">v3.5</span>
           </Link>
+          <span className="text-[9px] font-mono text-muted-foreground tracking-widest neu-border px-1.5 py-0.5">v3.5</span>
           <nav className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
-                className={`px-4 py-2 text-xs font-mono uppercase tracking-wider neu-border transition-all hover:bg-foreground hover:text-background ${
+                className={`px-4 py-2 text-xs font-mono uppercase tracking-wider neu-border transition-all hover:bg-foreground hover:text-background min-w-[120px] text-center ${
                   location.pathname === item.href ? "bg-foreground text-background" : ""
                 }`}
               >
