@@ -13,6 +13,33 @@ type Profile = {
   selected_character: string | null;
 };
 
+type PendingXP = { actionType: string; missionId: string; xp: number };
+
+const PENDING_XP_KEY = "pendingXP";
+
+function getPendingXP(): PendingXP[] {
+  try {
+    return JSON.parse(localStorage.getItem(PENDING_XP_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function addPendingXP(entry: PendingXP) {
+  const queue = getPendingXP();
+  queue.push(entry);
+  localStorage.setItem(PENDING_XP_KEY, JSON.stringify(queue));
+}
+
+function clearPendingXP() {
+  localStorage.removeItem(PENDING_XP_KEY);
+}
+
+/** Returns total queued XP for anonymous display purposes */
+export function getLocalXP(): number {
+  return getPendingXP().reduce((sum, e) => sum + e.xp, 0);
+}
+
 type AuthContextType = {
   user: User | null;
   session: Session | null;
@@ -43,13 +70,45 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (data) setProfile(data as Profile);
   };
 
+  // Flush queued anonymous XP to DB
+  const syncPendingXP = async (userId: string) => {
+    const queue = getPendingXP();
+    if (queue.length === 0) return;
+
+    // Insert all queued actions
+    const rows = queue.map((e) => ({
+      user_id: userId,
+      action_type: e.actionType,
+      mission_id: e.missionId,
+      xp_earned: e.xp,
+    }));
+    await supabase.from("xp_actions").insert(rows);
+
+    // Sum and add to profile total
+    const totalQueued = queue.reduce((s, e) => s + e.xp, 0);
+    const { data: current } = await supabase
+      .from("profiles")
+      .select("total_xp")
+      .eq("id", userId)
+      .single();
+    await supabase
+      .from("profiles")
+      .update({ total_xp: (current?.total_xp ?? 0) + totalQueued })
+      .eq("id", userId);
+
+    clearPendingXP();
+  };
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         if (session?.user) {
-          setTimeout(() => fetchProfile(session.user.id), 0);
+          setTimeout(async () => {
+            await syncPendingXP(session.user.id);
+            await fetchProfile(session.user.id);
+          }, 0);
         } else {
           setProfile(null);
         }
@@ -60,7 +119,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      if (session?.user) fetchProfile(session.user.id);
+      if (session?.user) {
+        syncPendingXP(session.user.id).then(() => fetchProfile(session.user.id));
+      }
       setLoading(false);
     });
 
@@ -89,7 +150,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const addXP = async (actionType: string, missionId: string, xp: number) => {
-    if (!user) return;
+    if (!user) {
+      // Queue for later sync
+      addPendingXP({ actionType, missionId, xp });
+      return;
+    }
     await supabase.from("xp_actions").insert({
       user_id: user.id,
       action_type: actionType,
