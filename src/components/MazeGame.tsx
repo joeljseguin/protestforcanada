@@ -1,62 +1,96 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { characterMap } from "@/data/characters";
 import { stepSound, collectKey, hitEnemy, questComplete, getCharacterSfx } from "@/lib/retroSfx";
+import { Sword, Wand2, Target, Rocket } from "lucide-react";
 
-// ── Maze map (20×15) ──
-// 0=floor, 1=wall, 2=key, 3=bureaucrat(enemy), 4=start, 5=exit
-const COLS = 20;
-const ROWS = 15;
-const TILE = 32;
+// ── Maze map (16×12 for fullscreen feel) ──
+// 0=grass, 1=tree, 2=key, 3=enemy, 4=start, 5=path-dirt
+const COLS = 16;
+const ROWS = 12;
 
 const BASE_MAP: number[][] = [
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-  [1,4,0,0,1,0,0,0,1,0,0,3,0,0,1,0,0,0,0,1],
-  [1,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,1,0,1],
-  [1,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,1],
-  [1,0,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,0,1],
-  [1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
-  [1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,1,0,1,1,1],
-  [1,0,0,0,0,3,1,0,0,0,0,0,1,0,3,0,0,0,0,1],
-  [1,0,1,1,1,0,1,0,1,1,1,0,1,0,1,1,1,1,0,1],
-  [1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1],
-  [1,1,1,0,1,1,1,0,1,0,1,1,1,1,0,1,0,1,0,1],
-  [1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,1],
-  [1,0,1,1,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,4,5,0,1,0,0,5,1,0,5,0,0,1,0,1],
+  [1,0,1,0,1,0,1,0,0,0,1,1,0,1,5,1],
+  [1,5,1,0,5,0,1,5,1,0,0,0,5,0,0,1],
+  [1,0,1,1,1,0,1,0,1,1,0,1,1,1,0,1],
+  [1,0,0,3,0,0,0,0,0,1,0,0,3,0,0,1],
+  [1,1,1,0,1,1,1,5,1,1,1,0,1,1,0,1],
+  [1,0,5,0,0,0,1,0,0,0,5,0,1,0,5,1],
+  [1,0,1,1,1,0,1,0,1,1,1,0,0,0,1,1],
+  [1,0,0,0,1,0,5,0,0,3,1,0,1,0,0,1],
+  [1,5,1,0,0,0,1,1,1,0,0,0,1,5,2,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 ];
 
-// Enemy types that wander
-type Enemy = { x: number; y: number; dir: number };
+// Enemy data
+type Enemy = {
+  x: number;
+  y: number;
+  dir: number;
+  type: "lobbyist" | "bureaucrat" | "billionaire";
+  hp: number;
+  stunned: number; // ticks remaining stunned
+};
 
-const ENEMY_NAMES = ["Lobbyist", "Bureaucrat", "Billionaire"];
+const ENEMY_CONFIG = {
+  lobbyist:    { emoji: "🧑‍💼", label: "Lobbyist",    color: "hsl(25 90% 55%)" },
+  bureaucrat:  { emoji: "👨‍⚖️", label: "Bureaucrat",  color: "hsl(0 72% 50%)" },
+  billionaire: { emoji: "🎩",  label: "Billionaire", color: "hsl(280 60% 50%)" },
+};
+const ENEMY_TYPES: Array<"lobbyist" | "bureaucrat" | "billionaire"> = ["lobbyist", "bureaucrat", "billionaire"];
+
+// Pixel tree variations for visual interest
+const TREE_VARIANTS = ["🌲", "🌳", "🌲"];
 
 interface MazeGameProps {
   characterId: string;
   onComplete: () => void;
 }
 
+const ATTACK_ICONS: Record<string, React.ReactNode> = {
+  swordsmaster: <Sword className="h-5 w-5" />,
+  wizard: <Wand2 className="h-5 w-5" />,
+  archer: <Target className="h-5 w-5" />,
+  astronaut: <Rocket className="h-5 w-5" />,
+};
+
+const ATTACK_LABELS: Record<string, string> = {
+  swordsmaster: "SLASH",
+  wizard: "SPELL",
+  archer: "SHOOT",
+  astronaut: "BLAST",
+};
+
 export const MazeGame = ({ characterId, onComplete }: MazeGameProps) => {
   const character = characterMap[characterId];
   const charSfx = getCharacterSfx(characterId);
-  
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const [playerPos, setPlayerPos] = useState({ x: 1, y: 1 });
+  const [playerDir, setPlayerDir] = useState<"up" | "down" | "left" | "right">("down");
   const [hasKey, setHasKey] = useState(false);
   const [gameMap, setGameMap] = useState(() => BASE_MAP.map(r => [...r]));
   const [enemies, setEnemies] = useState<Enemy[]>([]);
   const [gameOver, setGameOver] = useState(false);
   const [won, setWon] = useState(false);
-  const [hp, setHp] = useState(3);
+  const [hp, setHp] = useState(5);
   const [flash, setFlash] = useState(false);
-  const [message, setMessage] = useState("Find the 🔑 KEY to unlock the petition!");
-  const animFrame = useRef<number>(0);
-  const lastEnemyMove = useRef(0);
+  const [attacking, setAttacking] = useState(false);
+  const [attackPos, setAttackPos] = useState<{ x: number; y: number } | null>(null);
+  const [message, setMessage] = useState("Find the 🔑 KEY in the forest!");
+  const [score, setScore] = useState(0);
+
+  // Auto-focus
+  useEffect(() => {
+    containerRef.current?.focus();
+  }, []);
 
   // Init enemies from map
   useEffect(() => {
     const e: Enemy[] = [];
     BASE_MAP.forEach((row, y) => row.forEach((cell, x) => {
-      if (cell === 3) e.push({ x, y, dir: Math.floor(Math.random() * 4) });
+      if (cell === 3) e.push({ x, y, dir: Math.floor(Math.random() * 4), type: ENEMY_TYPES[e.length % 3], hp: 2, stunned: 0 });
     }));
     setEnemies(e);
   }, []);
@@ -66,29 +100,31 @@ export const MazeGame = ({ characterId, onComplete }: MazeGameProps) => {
     if (gameOver || won) return;
     const interval = setInterval(() => {
       setEnemies(prev => prev.map(e => {
-        const dirs = [[0,-1],[0,1],[-1,0],[1,0]];
-        // Try current direction, random on wall
+        if (e.stunned > 0) return { ...e, stunned: e.stunned - 1 };
+        const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
         let attempts = 0;
         let dir = e.dir;
+        // 30% chance to change direction randomly
+        if (Math.random() < 0.3) dir = Math.floor(Math.random() * 4);
         while (attempts < 4) {
           const nx = e.x + dirs[dir][0];
           const ny = e.y + dirs[dir][1];
           if (nx >= 0 && nx < COLS && ny >= 0 && ny < ROWS && gameMap[ny][nx] !== 1) {
-            return { x: nx, y: ny, dir };
+            return { ...e, x: nx, y: ny, dir };
           }
           dir = Math.floor(Math.random() * 4);
           attempts++;
         }
         return e;
       }));
-    }, 500);
+    }, 600);
     return () => clearInterval(interval);
   }, [gameOver, won, gameMap]);
 
   // Check enemy collision
   useEffect(() => {
     if (gameOver || won) return;
-    const hit = enemies.some(e => e.x === playerPos.x && e.y === playerPos.y);
+    const hit = enemies.find(e => e.x === playerPos.x && e.y === playerPos.y && e.stunned === 0);
     if (hit) {
       hitEnemy();
       setFlash(true);
@@ -97,9 +133,9 @@ export const MazeGame = ({ characterId, onComplete }: MazeGameProps) => {
         const next = prev - 1;
         if (next <= 0) {
           setGameOver(true);
-          setMessage("💀 GAME OVER — The bureaucrats got you!");
+          setMessage(`💀 GAME OVER — The ${hit.type} got you!`);
         } else {
-          setMessage(`⚠️ Hit! ${next} HP remaining`);
+          setMessage(`⚠️ ${ENEMY_CONFIG[hit.type].label} attacks! ${next} HP left`);
         }
         return next;
       });
@@ -108,31 +144,70 @@ export const MazeGame = ({ characterId, onComplete }: MazeGameProps) => {
 
   const move = useCallback((dx: number, dy: number) => {
     if (gameOver || won) return;
+    const dirMap: Record<string, "up" | "down" | "left" | "right"> = {
+      "0,-1": "up", "0,1": "down", "-1,0": "left", "1,0": "right",
+    };
+    setPlayerDir(dirMap[`${dx},${dy}`] || "down");
+
     const nx = playerPos.x + dx;
     const ny = playerPos.y + dy;
     if (nx < 0 || nx >= COLS || ny < 0 || ny >= ROWS) return;
     if (gameMap[ny][nx] === 1) return;
 
     stepSound();
-    
+
     if (gameMap[ny][nx] === 2) {
       collectKey();
       setHasKey(true);
-      setMessage("🔑 KEY FOUND! Now find the exit... wait, there's no exit — the KEY IS the victory!");
+      setMessage("🔑 KEY FOUND! Quest complete!");
       const newMap = gameMap.map(r => [...r]);
-      newMap[ny][nx] = 0;
+      newMap[ny][nx] = 5;
       setGameMap(newMap);
-      
-      // Won!
       setTimeout(() => {
         questComplete();
         setWon(true);
         setMessage("🏆 QUEST COMPLETE! You unlocked the petition!");
       }, 600);
     }
-    
+
     setPlayerPos({ x: nx, y: ny });
   }, [playerPos, gameMap, gameOver, won]);
+
+  // Attack action
+  const attack = useCallback(() => {
+    if (gameOver || won || attacking) return;
+    charSfx();
+    setAttacking(true);
+
+    const dirOffsets: Record<string, [number, number]> = {
+      up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0],
+    };
+    const [dx, dy] = dirOffsets[playerDir];
+    const ax = playerPos.x + dx;
+    const ay = playerPos.y + dy;
+    setAttackPos({ x: ax, y: ay });
+
+    // Hit enemies in attack range
+    setEnemies(prev => prev.map(e => {
+      if (e.x === ax && e.y === ay) {
+        hitEnemy();
+        const newHp = e.hp - 1;
+        if (newHp <= 0) {
+          setScore(s => s + 50);
+          setMessage(`⚔️ ${ENEMY_CONFIG[e.type].label} defeated! +50 pts`);
+          return { ...e, hp: 0, stunned: 999 }; // effectively dead
+        }
+        setMessage(`💥 Hit the ${ENEMY_CONFIG[e.type].label}!`);
+        return { ...e, hp: newHp, stunned: 3 };
+      }
+      return e;
+    }).filter(e => e.hp > 0));
+
+    setTimeout(() => {
+      setAttacking(false);
+      setAttackPos(null);
+    }, 200);
+  }, [playerPos, playerDir, gameOver, won, attacking, charSfx]);
 
   // Keyboard controls
   useEffect(() => {
@@ -142,182 +217,297 @@ export const MazeGame = ({ characterId, onComplete }: MazeGameProps) => {
         case "ArrowDown": case "s": case "S": e.preventDefault(); move(0, 1); break;
         case "ArrowLeft": case "a": case "A": e.preventDefault(); move(-1, 0); break;
         case "ArrowRight": case "d": case "D": e.preventDefault(); move(1, 0); break;
+        case " ": case "Enter": e.preventDefault(); attack(); break;
       }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [move]);
+  }, [move, attack]);
 
   const restart = () => {
     setPlayerPos({ x: 1, y: 1 });
+    setPlayerDir("down");
     setHasKey(false);
     setGameMap(BASE_MAP.map(r => [...r]));
     setGameOver(false);
     setWon(false);
-    setHp(3);
-    setMessage("Find the 🔑 KEY to unlock the petition!");
+    setHp(5);
+    setAttacking(false);
+    setAttackPos(null);
+    setScore(0);
+    setMessage("Find the 🔑 KEY in the forest!");
     const e: Enemy[] = [];
     BASE_MAP.forEach((row, y) => row.forEach((cell, x) => {
-      if (cell === 3) e.push({ x, y, dir: Math.floor(Math.random() * 4) });
+      if (cell === 3) e.push({ x, y, dir: Math.floor(Math.random() * 4), type: ENEMY_TYPES[e.length % 3], hp: 2, stunned: 0 });
     }));
     setEnemies(e);
   };
 
-  // Tile colors
-  const getTileColor = (cell: number) => {
-    switch (cell) {
-      case 1: return "hsl(228 35% 22%)";
-      case 2: return "hsl(45 100% 60%)";
-      default: return "hsl(228 40% 12%)";
-    }
-  };
+  // Calc tile size to fill viewport
+  const [tileSize, setTileSize] = useState(32);
+  useEffect(() => {
+    const calc = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight - 140; // HUD + controls
+      const ts = Math.floor(Math.min(w / COLS, h / ROWS));
+      setTileSize(Math.max(24, Math.min(ts, 56)));
+    };
+    calc();
+    window.addEventListener("resize", calc);
+    return () => window.removeEventListener("resize", calc);
+  }, []);
+
+  // Direction arrow for player sprite
+  const dirArrow: Record<string, string> = { up: "↑", down: "↓", left: "←", right: "→" };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center py-8 scanline-overlay">
-      <div className="container max-w-3xl">
-        {/* HUD */}
-        <div className="ff-panel p-4 mb-4 flex items-center justify-between flex-wrap gap-3">
-          <div className="flex items-center gap-3">
-            {character && (
-              <img src={character.image} alt={character.title} className="w-8 h-8 object-contain" style={{ imageRendering: "pixelated" }} />
-            )}
-            <div>
-              <div className="font-heading text-[8px] uppercase text-foreground">{character?.name ?? "Hero"}</div>
-              <div className="font-body text-[10px] text-primary uppercase">{character?.title ?? "Adventurer"}</div>
-            </div>
+    <div
+      ref={containerRef}
+      tabIndex={0}
+      className="flex flex-col h-[100dvh] bg-background outline-none"
+      style={{ imageRendering: "pixelated" }}
+    >
+      {/* HUD Bar */}
+      <div className="shrink-0 ff-panel rounded-none border-x-0 border-t-0 px-3 py-2 flex items-center justify-between gap-2 z-20">
+        <div className="flex items-center gap-2">
+          {character && (
+            <img src={character.image} alt={character.title} className="w-7 h-7 object-contain" style={{ imageRendering: "pixelated" }} />
+          )}
+          <span className="font-heading text-[7px] uppercase text-foreground">{character?.name}</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1">
+            <span className="font-body text-[9px] uppercase text-muted-foreground">HP</span>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <span key={i} className={`text-xs ${i < hp ? "" : "opacity-20"}`}>{i < hp ? "❤️" : "🖤"}</span>
+            ))}
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <span className="font-body text-[10px] uppercase text-muted-foreground">HP</span>
-              <div className="flex gap-0.5">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className={`w-4 h-2 rounded-sm ${i < hp ? "hp-bar" : "bg-muted"}`} />
-                ))}
-              </div>
-            </div>
-            <div className="ff-panel px-2 py-1 font-body text-[10px] uppercase text-accent">
-              {hasKey ? "🔑 KEY" : "🔒 NO KEY"}
-            </div>
+          <div className="ff-panel px-2 py-0.5 font-body text-[9px] uppercase text-accent">
+            {hasKey ? "🔑" : "🔒"}
+          </div>
+          <div className="font-body text-[9px] text-accent uppercase">
+            {score} pts
           </div>
         </div>
+      </div>
 
-        {/* Message */}
-        <div className={`ff-panel p-3 mb-4 text-center font-body text-xs ${won ? "text-accent" : gameOver ? "text-destructive" : "text-muted-foreground"}`}>
-          {message}
-        </div>
+      {/* Message Bar */}
+      <div className={`shrink-0 px-3 py-1.5 text-center font-body text-[10px] border-b border-border ${won ? "text-accent bg-accent/10" : gameOver ? "text-destructive bg-destructive/10" : "text-muted-foreground bg-muted/30"}`}>
+        {message}
+      </div>
 
-        {/* Game Canvas */}
+      {/* Game World — fills remaining space */}
+      <div className={`flex-1 flex items-center justify-center overflow-hidden transition-all ${flash ? "bg-destructive/20" : "bg-[hsl(140_25%_12%)]"}`}>
         <div
-          className={`ff-panel p-2 mx-auto overflow-auto transition-all ${flash ? "border-destructive" : ""}`}
-          style={{ maxWidth: COLS * TILE + 16 }}
+          className="relative"
+          style={{
+            width: COLS * tileSize,
+            height: ROWS * tileSize,
+          }}
         >
-          <div
-            className="relative"
-            style={{
-              width: COLS * TILE,
-              height: ROWS * TILE,
-              imageRendering: "pixelated",
-            }}
-          >
-            {/* Tiles */}
-            {gameMap.map((row, y) =>
-              row.map((cell, x) => (
+          {/* Tiles */}
+          {gameMap.map((row, y) =>
+            row.map((cell, x) => {
+              const isGrass = cell === 0 || cell === 3 || cell === 4;
+              const isDirt = cell === 5;
+              const isTree = cell === 1;
+              const isKey = cell === 2;
+              // Checkerboard grass
+              const grassShade = (x + y) % 2 === 0 ? "hsl(120 30% 18%)" : "hsl(120 25% 15%)";
+              const dirtShade = (x + y) % 2 === 0 ? "hsl(35 30% 22%)" : "hsl(35 25% 19%)";
+
+              return (
                 <div
                   key={`${x}-${y}`}
-                  className="absolute"
+                  className="absolute flex items-center justify-center select-none"
                   style={{
-                    left: x * TILE,
-                    top: y * TILE,
-                    width: TILE,
-                    height: TILE,
-                    backgroundColor: getTileColor(cell),
-                    border: cell === 1 ? "1px solid hsl(210 50% 30%)" : "1px solid hsl(228 30% 15%)",
+                    left: x * tileSize,
+                    top: y * tileSize,
+                    width: tileSize,
+                    height: tileSize,
+                    backgroundColor: isTree ? "hsl(120 20% 12%)" : isDirt ? dirtShade : isGrass ? grassShade : grassShade,
+                    fontSize: tileSize * 0.7,
+                    lineHeight: 1,
                   }}
                 >
-                  {cell === 2 && (
-                    <span className="absolute inset-0 flex items-center justify-center text-sm animate-pulse-gold">🔑</span>
-                  )}
+                  {isTree && TREE_VARIANTS[(x * 3 + y * 7) % TREE_VARIANTS.length]}
+                  {isKey && <span className="animate-pulse-gold">🔑</span>}
                 </div>
-              ))
-            )}
+              );
+            })
+          )}
 
-            {/* Enemies */}
-            {enemies.map((e, i) => (
-              <div
-                key={`enemy-${i}`}
-                className="absolute flex items-center justify-center transition-all duration-400"
-                style={{
-                  left: e.x * TILE,
-                  top: e.y * TILE,
-                  width: TILE,
-                  height: TILE,
-                  fontSize: 18,
-                }}
-                title={ENEMY_NAMES[i % ENEMY_NAMES.length]}
-              >
-                👔
-              </div>
-            ))}
-
-            {/* Player */}
+          {/* Attack effect */}
+          {attackPos && (
             <div
-              className="absolute transition-all duration-100 flex items-center justify-center"
+              className="absolute flex items-center justify-center z-20 pointer-events-none animate-scale-in"
               style={{
-                left: playerPos.x * TILE,
-                top: playerPos.y * TILE,
-                width: TILE,
-                height: TILE,
-                zIndex: 10,
+                left: attackPos.x * tileSize,
+                top: attackPos.y * tileSize,
+                width: tileSize,
+                height: tileSize,
+                fontSize: tileSize * 0.6,
               }}
             >
-              {character ? (
-                <img
-                  src={character.image}
-                  alt={character.title}
-                  className="w-7 h-7 object-contain drop-shadow-[0_0_4px_hsl(var(--accent)/0.6)]"
-                  style={{ imageRendering: "pixelated" }}
-                />
-              ) : (
-                <span className="text-lg">⚔️</span>
-              )}
+              {characterId === "swordsmaster" && "⚔️"}
+              {characterId === "wizard" && "✨"}
+              {characterId === "archer" && "🏹"}
+              {characterId === "astronaut" && "💫"}
             </div>
+          )}
+
+          {/* Enemies */}
+          {enemies.map((e, i) => {
+            const cfg = ENEMY_CONFIG[e.type];
+            return (
+              <div
+                key={`enemy-${i}`}
+                className={`absolute flex flex-col items-center justify-center transition-all duration-300 ${e.stunned > 0 ? "opacity-40" : ""}`}
+                style={{
+                  left: e.x * tileSize,
+                  top: e.y * tileSize,
+                  width: tileSize,
+                  height: tileSize,
+                  zIndex: 5,
+                }}
+              >
+                <span style={{ fontSize: tileSize * 0.55 }}>{cfg.emoji}</span>
+                {/* HP pips */}
+                <div className="flex gap-px mt-px">
+                  {Array.from({ length: 2 }).map((_, j) => (
+                    <div
+                      key={j}
+                      className="rounded-full"
+                      style={{
+                        width: Math.max(3, tileSize * 0.1),
+                        height: Math.max(3, tileSize * 0.1),
+                        backgroundColor: j < e.hp ? cfg.color : "hsl(0 0% 30%)",
+                      }}
+                    />
+                  ))}
+                </div>
+                {/* Name plate */}
+                <span
+                  className="font-heading uppercase leading-none text-center"
+                  style={{
+                    fontSize: Math.max(5, tileSize * 0.16),
+                    color: cfg.color,
+                    textShadow: "0 1px 2px hsl(0 0% 0% / 0.8)",
+                  }}
+                >
+                  {cfg.label}
+                </span>
+              </div>
+            );
+          })}
+
+          {/* Player */}
+          <div
+            className="absolute flex flex-col items-center justify-center transition-all duration-100"
+            style={{
+              left: playerPos.x * tileSize,
+              top: playerPos.y * tileSize,
+              width: tileSize,
+              height: tileSize,
+              zIndex: 10,
+            }}
+          >
+            {character ? (
+              <img
+                src={character.image}
+                alt={character.title}
+                className="object-contain drop-shadow-[0_0_6px_hsl(var(--accent)/0.7)]"
+                style={{
+                  imageRendering: "pixelated",
+                  width: tileSize * 0.8,
+                  height: tileSize * 0.8,
+                  transform: playerDir === "left" ? "scaleX(-1)" : undefined,
+                }}
+              />
+            ) : (
+              <span style={{ fontSize: tileSize * 0.6 }}>⚔️</span>
+            )}
           </div>
         </div>
+      </div>
 
-        {/* Mobile controls */}
-        <div className="mt-4 flex flex-col items-center gap-1 md:hidden">
-          <button onClick={() => move(0, -1)} className="ff-panel w-12 h-12 font-heading text-xs text-foreground active:text-accent">▲</button>
-          <div className="flex gap-1">
-            <button onClick={() => move(-1, 0)} className="ff-panel w-12 h-12 font-heading text-xs text-foreground active:text-accent">◄</button>
-            <button onClick={() => move(0, 1)} className="ff-panel w-12 h-12 font-heading text-xs text-foreground active:text-accent">▼</button>
-            <button onClick={() => move(1, 0)} className="ff-panel w-12 h-12 font-heading text-xs text-foreground active:text-accent">►</button>
-          </div>
-        </div>
-
-        {/* Controls hint */}
-        <div className="text-center mt-3 font-body text-[10px] uppercase text-muted-foreground hidden md:block">
-          Use Arrow Keys or WASD to move — Avoid the 👔 bureaucrats!
-        </div>
-
-        {/* Win / Game Over buttons */}
-        {(won || gameOver) && (
-          <div className="mt-6 flex justify-center gap-4 animate-fade-in">
+      {/* Controls — always visible */}
+      <div className="shrink-0 bg-background border-t border-border px-4 py-3">
+        {(won || gameOver) ? (
+          <div className="flex justify-center gap-3">
             {gameOver && (
-              <button onClick={restart} className="ff-panel px-6 py-3 font-heading text-[10px] uppercase text-foreground hover:text-accent hover:border-accent transition-colors">
+              <button onClick={restart} className="ff-panel px-5 py-3 font-heading text-[9px] uppercase text-foreground hover:text-accent hover:border-accent transition-colors">
                 ▶ Try Again
               </button>
             )}
             {won && (
               <button
                 onClick={() => { charSfx(); onComplete(); }}
-                className="ff-panel px-6 py-3 font-heading text-[10px] uppercase text-accent animate-pulse-gold"
+                className="ff-panel px-5 py-3 font-heading text-[9px] uppercase text-accent animate-pulse-gold"
                 style={{ borderColor: "hsl(var(--accent))" }}
               >
                 ▶ Claim Reward — Sign the Petition
               </button>
             )}
           </div>
+        ) : (
+          <div className="flex items-center justify-center gap-6">
+            {/* D-Pad */}
+            <div className="flex flex-col items-center gap-0.5">
+              <button
+                onClick={() => move(0, -1)}
+                className="ff-panel w-11 h-11 flex items-center justify-center font-heading text-base text-foreground active:text-accent active:border-accent transition-colors"
+              >
+                ▲
+              </button>
+              <div className="flex gap-0.5">
+                <button
+                  onClick={() => move(-1, 0)}
+                  className="ff-panel w-11 h-11 flex items-center justify-center font-heading text-base text-foreground active:text-accent active:border-accent transition-colors"
+                >
+                  ◄
+                </button>
+                <div className="w-11 h-11 flex items-center justify-center text-[8px] font-body text-muted-foreground uppercase">
+                  move
+                </div>
+                <button
+                  onClick={() => move(1, 0)}
+                  className="ff-panel w-11 h-11 flex items-center justify-center font-heading text-base text-foreground active:text-accent active:border-accent transition-colors"
+                >
+                  ►
+                </button>
+              </div>
+              <button
+                onClick={() => move(0, 1)}
+                className="ff-panel w-11 h-11 flex items-center justify-center font-heading text-base text-foreground active:text-accent active:border-accent transition-colors"
+              >
+                ▼
+              </button>
+            </div>
+
+            {/* Attack Button */}
+            <button
+              onClick={attack}
+              disabled={attacking}
+              className={`ff-panel w-16 h-16 flex flex-col items-center justify-center gap-1 transition-all ${
+                attacking
+                  ? "text-accent border-accent scale-95"
+                  : "text-primary hover:text-accent hover:border-accent active:scale-95"
+              }`}
+              style={attacking ? { borderColor: "hsl(var(--accent))" } : {}}
+            >
+              {ATTACK_ICONS[characterId] || <Sword className="h-5 w-5" />}
+              <span className="font-heading text-[7px] uppercase">
+                {ATTACK_LABELS[characterId] || "ATK"}
+              </span>
+            </button>
+          </div>
         )}
+
+        {/* Keyboard hint on desktop */}
+        <div className="text-center mt-2 font-body text-[8px] uppercase text-muted-foreground hidden md:block">
+          Arrow Keys / WASD to move — Space / Enter to attack
+        </div>
       </div>
     </div>
   );
