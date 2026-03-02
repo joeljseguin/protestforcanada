@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { characterMap } from "@/data/characters";
 import { stepSound, collectKey, hitEnemy, questComplete, getCharacterSfx } from "@/lib/retroSfx";
-import { Sword, Wand2, Target, Rocket, ArrowLeft } from "lucide-react";
+import { Sword, Wand2, Target, Rocket, ArrowLeft, Volume2, VolumeX } from "lucide-react";
+import { startGameMusic, stopGameMusic, setMusicMood, isMusicPlaying } from "@/lib/gameMusicEngine";
 import { Link } from "react-router-dom";
 import { PixelCharacter } from "@/components/maze/PixelCharacter";
 import { PixelTree } from "@/components/maze/PixelTree";
@@ -87,6 +88,34 @@ export const MazeGame = ({ characterId, onComplete, onXP }: MazeGameProps) => {
   const [score, setScore] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
   const moveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [musicOn, setMusicOn] = useState(false);
+
+  // Music lifecycle
+  useEffect(() => {
+    return () => { stopGameMusic(); };
+  }, []);
+
+  // Enemy proximity → mood change
+  useEffect(() => {
+    if (!musicOn || gameOver || won) return;
+    const DANGER_DIST = 4;
+    const nearEnemy = enemies.some(e => {
+      if (e.stunned > 0 || e.hp <= 0) return false;
+      const dist = Math.abs(e.x - playerPos.x) + Math.abs(e.y - playerPos.y);
+      return dist <= DANGER_DIST;
+    });
+    setMusicMood(nearEnemy ? "tense" : "peaceful");
+  }, [playerPos, enemies, musicOn, gameOver, won]);
+
+  const toggleMusic = () => {
+    if (isMusicPlaying()) {
+      stopGameMusic();
+      setMusicOn(false);
+    } else {
+      startGameMusic();
+      setMusicOn(true);
+    }
+  };
 
   // Auto-focus
   useEffect(() => {
@@ -312,6 +341,13 @@ export const MazeGame = ({ characterId, onComplete, onXP }: MazeGameProps) => {
           <div className="font-body text-[9px] text-accent uppercase">
             {score} pts
           </div>
+          <button
+            onClick={toggleMusic}
+            className="ff-panel px-2 py-0.5 flex items-center gap-1 font-heading text-[7px] uppercase text-muted-foreground hover:text-accent hover:border-accent transition-colors"
+            title={musicOn ? "Mute music" : "Play music"}
+          >
+            {musicOn ? <Volume2 className="h-3 w-3" /> : <VolumeX className="h-3 w-3" />}
+          </button>
         </div>
       </div>
 
