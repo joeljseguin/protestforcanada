@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Zap, Phone, Pen, Calendar, MapPin, Users, AlertTriangle, CheckCircle2, Circle, FileText, Clock, Gamepad2 } from "lucide-react";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 import { getCharacterSfx, menuSelect } from "@/lib/retroSfx";
 import { ActionCenter } from "./ActionCenter";
 import { ProtestMap } from "./ProtestMap";
@@ -26,7 +27,8 @@ export const MissionQuest = () => {
   const [petitionDialog, setPetitionDialog] = useState<{
     url: string; missionId: string; missionName: string; petitionLabel: string; xp: number;
   } | null>(null);
-  const { profile } = useAuth();
+  const { profile, user, addXP } = useAuth();
+  const { toast } = useToast();
 
   // Resolve character: DB profile > localStorage fallback
   const charId = profile?.selected_character || localStorage.getItem("selectedCharacter");
@@ -39,6 +41,15 @@ export const MissionQuest = () => {
   }, [charId, navigate]);
 
   const mission = missions.find((m) => m.id === expandedMission) || missions[0];
+
+  const handleStatXP = async (statLabel: string) => {
+    if (!user) {
+      toast({ title: "Sign in required", description: "Join the Resistance to earn XP.", variant: "destructive" });
+      return;
+    }
+    await addXP("view_stat", `stat-${mission.id}-${statLabel}`, 15);
+    toast({ title: "+15 XP Earned!", description: `Reviewed: ${statLabel}` });
+  };
 
   if (!charId) return null;
 
@@ -234,13 +245,32 @@ export const MissionQuest = () => {
                 {/* Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {mission.stats.map((stat) => (
-                    <div key={stat.label} className="ff-panel p-4">
-                      <div className="text-4xl md:text-5xl font-heading text-accent">{stat.value}</div>
-                      <div className="text-xs text-muted-foreground mt-1 font-body">{stat.label}</div>
-                      <a href={stat.sourceUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 mt-3 text-[10px] font-body text-muted-foreground hover:text-primary ff-panel px-2 py-0.5">
+                    <button
+                      key={stat.label}
+                      onClick={() => {
+                        playSfx();
+                        handleStatXP(stat.label);
+                      }}
+                      className="ff-panel p-4 text-left hover:border-accent transition-colors cursor-pointer group"
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="text-xl md:text-2xl font-heading text-accent">{stat.value}</div>
+                        <span className="flex items-center gap-1 text-[9px] font-bold text-accent opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Zap className="h-3 w-3" />+15 XP
+                        </span>
+                      </div>
+                      <div className="text-xs font-bold text-foreground font-body uppercase mb-1">{stat.label}</div>
+                      <p className="text-[11px] text-muted-foreground font-body leading-relaxed">{stat.description}</p>
+                      <a
+                        href={stat.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1 mt-3 text-[10px] font-body text-muted-foreground hover:text-primary ff-panel px-2 py-0.5"
+                      >
                         <ExternalLink className="h-2.5 w-2.5" /> {stat.source}
                       </a>
-                    </div>
+                    </button>
                   ))}
                 </div>
 
