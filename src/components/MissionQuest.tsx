@@ -126,7 +126,7 @@ export const MissionQuest = () => {
                 {/* Human Cost */}
                 <div className="ff-panel p-6">
                   <h4 className="font-heading text-[9px] uppercase mb-4 flex items-center gap-2 text-destructive">
-                    <AlertTriangle className="h-4 w-4" /> The Human Cost
+                    <AlertTriangle className="h-4 w-4" /> Level Up Your XP
                   </h4>
                   <ul className="space-y-3">
                     {mission.humanCost.map((item, i) => (
