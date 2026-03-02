@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { missions, calendarEvents, threatColors } from "@/data/gameData";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Zap, Phone, Pen, Calendar, MapPin, Users, AlertTriangle, CheckCircle2, Circle, FileText, Clock } from "lucide-react";
-import { useSearchParams, Link } from "react-router-dom";
+import { ExternalLink, Zap, Phone, Pen, Calendar, MapPin, Users, AlertTriangle, CheckCircle2, Circle, FileText, Clock, Gamepad2 } from "lucide-react";
+import { useSearchParams, Link, useNavigate } from "react-router-dom";
+import { getCharacterSfx, menuSelect } from "@/lib/retroSfx";
 import { ActionCenter } from "./ActionCenter";
 import { ProtestMap } from "./ProtestMap";
 import { StageActionDialog } from "./StageActionDialog";
@@ -14,6 +15,7 @@ import { characterMap, getSelectedCharacter } from "@/data/characters";
 
 export const MissionQuest = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const activeMissionId = searchParams.get("mission") || missions[0].id;
   const [expandedMission, setExpandedMission] = useState<string | null>(activeMissionId);
   const [activeTab, setActiveTab] = useState<"overview" | "truth">("overview");
@@ -24,8 +26,16 @@ export const MissionQuest = () => {
   // Resolve character: DB profile > localStorage fallback
   const charId = profile?.selected_character || localStorage.getItem("selectedCharacter");
   const character = charId ? characterMap[charId] ?? null : null;
+  const playSfx = getCharacterSfx(charId);
+
+  // Gate: no hero selected → redirect
+  useEffect(() => {
+    if (!charId) navigate("/select-character");
+  }, [charId, navigate]);
 
   const mission = missions.find((m) => m.id === expandedMission) || missions[0];
+
+  if (!charId) return null;
 
   return (
     <div className="py-12 md:py-20">
@@ -67,7 +77,7 @@ export const MissionQuest = () => {
           {missions.slice(0, 5).map((m) => (
             <button
               key={m.id}
-              onClick={() => { setExpandedMission(m.id); setActiveTab("overview"); }}
+              onClick={() => { playSfx(); setExpandedMission(m.id); setActiveTab("overview"); }}
               className={`ff-panel px-4 py-2 font-body text-xs uppercase tracking-wider transition-all ${
                 expandedMission === m.id ? "text-accent border-accent" : "text-muted-foreground hover:text-foreground"
               }`}
@@ -99,7 +109,22 @@ export const MissionQuest = () => {
                 </div>
               </div>
 
-              {/* Progress — HP bar style */}
+              {/* Play Quest Button — Water mission */}
+              {mission.id === "water" && (
+                <div className="mt-4">
+                  <Link
+                    to="/maze-quest"
+                    onClick={() => playSfx()}
+                    className="ff-panel px-6 py-4 flex items-center justify-center gap-3 animate-pulse-gold hover:scale-[1.02] transition-transform"
+                    style={{ borderColor: "hsl(var(--accent))" }}
+                  >
+                    <Gamepad2 className="h-5 w-5 text-accent" />
+                    <span className="font-heading text-[10px] uppercase text-accent">▶ Play Quest — Navigate the Maze of Bureaucracy</span>
+                    <span className="ff-panel px-2 py-1 font-body text-[10px] font-bold text-accent">+200 XP</span>
+                  </Link>
+                </div>
+              )}
+
               <div className="mt-6">
                 <div className="flex items-center gap-2 mb-3 flex-wrap">
                   {mission.stages.map((stage, i) => {
@@ -110,6 +135,7 @@ export const MissionQuest = () => {
                         <button
                           onClick={() => {
                             if (isClickable && stageActions) {
+                              playSfx();
                               setActiveStageConfig(stageActions);
                               setStageDialogOpen(true);
                             }
@@ -136,7 +162,7 @@ export const MissionQuest = () => {
             {/* Tab Switcher */}
             <div className="flex gap-2">
               <button
-                onClick={() => setActiveTab("overview")}
+                onClick={() => { playSfx(); setActiveTab("overview"); }}
                 className={`ff-panel px-5 py-2.5 font-body text-xs uppercase tracking-wider transition-all ${activeTab === "overview" ? "text-accent" : "text-muted-foreground hover:text-foreground"}`}
                 style={activeTab === "overview" ? { borderColor: "hsl(45 100% 60%)" } : {}}
               >
@@ -144,7 +170,7 @@ export const MissionQuest = () => {
               </button>
               {mission.truthTab && (
                 <button
-                  onClick={() => setActiveTab("truth")}
+                  onClick={() => { playSfx(); setActiveTab("truth"); }}
                   className={`ff-panel px-5 py-2.5 font-body text-xs uppercase tracking-wider transition-all ${activeTab === "truth" ? "text-accent" : "text-muted-foreground hover:text-foreground"}`}
                   style={activeTab === "truth" ? { borderColor: "hsl(45 100% 60%)" } : {}}
                 >
