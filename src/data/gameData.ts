@@ -402,6 +402,7 @@ export type InfluenceNode = {
   alertRed?: boolean;
   sourceUrl?: string;
   dossier?: PersonDossier;
+  crisisLinks?: string[];
 };
 
 export type InfluenceEdge = {
@@ -453,6 +454,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Anita Anand",
     role: "Foreign Affairs",
     avatarInitials: "AA",
+    crisisLinks: ["Gaza Arms Exports"],
     dossier: {
       name: "Anita Anand",
       title: "Minister of Foreign Affairs",
@@ -470,6 +472,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Patty Hajdu",
     role: "Indigenous Services",
     avatarInitials: "PH",
+    crisisLinks: ["Water Crisis"],
     dossier: {
       name: "Patty Hajdu",
       title: "Minister of Indigenous Services",
@@ -487,6 +490,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "François-Philippe Champagne",
     role: "Innovation & Industry",
     avatarInitials: "FC",
+    crisisLinks: ["Food Crisis"],
     dossier: {
       name: "François-Philippe Champagne",
       title: "Minister of Innovation, Science & Economic Development",
@@ -504,6 +508,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Chrystia Freeland",
     role: "Finance",
     avatarInitials: "CF",
+    crisisLinks: ["Wealth Tax Block"],
     dossier: {
       name: "Chrystia Freeland",
       title: "Minister of Finance",
@@ -521,6 +526,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Marc Miller",
     role: "Immigration",
     avatarInitials: "MM",
+    crisisLinks: ["Housing Crisis"],
     dossier: {
       name: "Marc Miller",
       title: "Minister of Immigration, Refugees and Citizenship",
@@ -555,6 +561,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Bill Blair",
     role: "Defence",
     avatarInitials: "BB",
+    crisisLinks: ["Gaza Arms Exports"],
     dossier: {
       name: "Bill Blair",
       title: "Minister of National Defence",
@@ -907,6 +914,17 @@ export const influenceEdges: InfluenceEdge[] = [
   { id: "e-bmo-lob", source: "bmo", target: "lob-mcmillan", label: "Retains", lobbyingFrequency: "Banking regulation lobbying" },
   { id: "e-irving-lob", source: "irving", target: "lob-prospectus", label: "Retains", lobbyingFrequency: "20 comms with DND and PSPC" },
   { id: "e-snc-lob", source: "snc", target: "lob-earnscliffe", label: "Retains", lobbyingFrequency: "25 comms across Finance, Innovation, DND" },
+
+  // Lobbyist → Minister (Influence flowing UP)
+  { id: "e-lob-gdls-anand", source: "lob-gdls", target: "anand", label: "42 Comms → Foreign Affairs", lobbyingFrequency: "Hill+Knowlton lobbying for GDLS arms exports" },
+  { id: "e-lob-gdls-blair", source: "lob-gdls", target: "blair", label: "42 Comms → Defence", lobbyingFrequency: "Hill+Knowlton lobbying for defence procurement" },
+  { id: "e-lob-elbit-anand", source: "lob-elbit", target: "anand", label: "15 Comms → Foreign Affairs", lobbyingFrequency: "GCI Group lobbying for Elbit defence contracts" },
+  { id: "e-lob-loblaws-champ", source: "lob-loblaws", target: "champagne", label: "28 Meetings → Innovation", lobbyingFrequency: "Counsel PA blocking Grocery Code" },
+  { id: "e-lob-fleish-champ", source: "lob-fleishman", target: "champagne", label: "12 Meetings → Innovation", lobbyingFrequency: "Fleishman-Hillard grocery lobbying" },
+  { id: "e-lob-banks-freeland", source: "lob-banks", target: "freeland", label: "34 Meetings → Finance", lobbyingFrequency: "CBA opposing wealth tax provisions" },
+  { id: "e-lob-mcm-freeland", source: "lob-mcmillan", target: "freeland", label: "18 Comms → Finance", lobbyingFrequency: "McMillan Vantage banking regulation lobbying" },
+  { id: "e-lob-prosp-blair", source: "lob-prospectus", target: "blair", label: "20 Comms → Defence", lobbyingFrequency: "Prospectus Associates for Irving" },
+  { id: "e-lob-earn-champ", source: "lob-earnscliffe", target: "champagne", label: "25 Comms → Innovation", lobbyingFrequency: "Earnscliffe cross-sector lobbying" },
 ];
 
 // ============================
