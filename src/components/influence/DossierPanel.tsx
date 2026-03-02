@@ -1,4 +1,4 @@
-import { Phone, Mail, Globe, X, Zap, Share2 } from "lucide-react";
+import { Phone, Mail, Globe, X, Zap, Share2, MapPin } from "lucide-react";
 import { type PersonDossier } from "@/data/gameData";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -96,6 +96,17 @@ export function DossierPanel({ dossier, label, nodeId, onClose }: DossierPanelPr
             <a href={dossier.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 neu-border p-2 hover:bg-secondary transition-colors">
               <Globe className="h-3 w-3 shrink-0" /> Website
             </a>
+          )}
+          {dossier.riding && (
+            <div className="neu-border p-2">
+              <span className="text-muted-foreground">Riding:</span> {dossier.riding}
+            </div>
+          )}
+          {dossier.constituency && (
+            <div className="neu-border p-2 flex items-center gap-2">
+              <MapPin className="h-3 w-3 shrink-0 text-primary" />
+              <span>{dossier.constituency}</span>
+            </div>
           )}
           {dossier.assistant && (
             <div className="neu-border p-2"><span className="text-muted-foreground">Assistant:</span> {dossier.assistant}</div>

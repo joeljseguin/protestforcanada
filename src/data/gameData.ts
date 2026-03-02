@@ -441,6 +441,8 @@ export type PersonDossier = {
   lobbyingActivity?: string;
   netWorth?: string;
   salary?: string;
+  riding?: string;
+  constituency?: string;
 };
 
 export type InfluenceNode = {
@@ -475,6 +477,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Prime Minister's Office",
     role: "Executive Power Center",
     avatarInitials: "PMO",
+    location: "Ottawa, Ontario",
     dossier: {
       name: "Prime Minister Mark Carney",
       title: "Prime Minister of Canada",
@@ -483,6 +486,8 @@ export const influenceNodes: InfluenceNode[] = [
       assistant: "Katie Telford (Chief of Staff)",
       assistantEmail: "katie.telford@pmo-bpm.gc.ca",
       website: "https://pm.gc.ca",
+      riding: "Ottawa Centre",
+      constituency: "Ottawa, Ontario",
     },
   },
   {
@@ -491,6 +496,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Treasury Board",
     role: "Federal Spending Authority",
     avatarInitials: "TB",
+    location: "Ottawa, Ontario",
     dossier: {
       name: "Treasury Board Secretariat",
       title: "Government Spending Oversight",
@@ -507,6 +513,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Anita Anand",
     role: "Foreign Affairs",
     avatarInitials: "AA",
+    location: "Oakville, Ontario",
     crisisLinks: ["Gaza Arms Exports"],
     dossier: {
       name: "Anita Anand",
@@ -517,6 +524,8 @@ export const influenceNodes: InfluenceNode[] = [
       reportsTo: "Prime Minister (PMO)",
       website: "https://www.ourcommons.ca/Members/en/anita-anand(105689)",
       lobbyingActivity: "Met with GDLS CEO Danny Deep 4x in Q4 2025. Met with Elbit reps 3x re: defence procurement.",
+      riding: "Oakville",
+      constituency: "Oakville, Ontario",
     },
   },
   {
@@ -525,6 +534,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Patty Hajdu",
     role: "Indigenous Services",
     avatarInitials: "PH",
+    location: "Thunder Bay, Ontario",
     crisisLinks: ["Water Crisis"],
     dossier: {
       name: "Patty Hajdu",
@@ -535,6 +545,8 @@ export const influenceNodes: InfluenceNode[] = [
       reportsTo: "Prime Minister (PMO)",
       website: "https://www.ourcommons.ca/Members/en/patty-hajdu(72029)",
       lobbyingActivity: "Budget delays: $890M infrastructure grants pending for water systems.",
+      riding: "Thunder Bay—Superior North",
+      constituency: "Thunder Bay, Ontario",
     },
   },
   {
@@ -543,6 +555,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "François-Philippe Champagne",
     role: "Innovation & Industry",
     avatarInitials: "FC",
+    location: "Saint-Maurice, Québec",
     crisisLinks: ["Food Crisis"],
     dossier: {
       name: "François-Philippe Champagne",
@@ -553,6 +566,8 @@ export const influenceNodes: InfluenceNode[] = [
       reportsTo: "Prime Minister (PMO)",
       website: "https://www.ourcommons.ca/Members/en/francois-philippe-champagne(88633)",
       lobbyingActivity: "67 meetings with grocery lobbyists in 2025. Overseeing Grocery Code of Conduct delays.",
+      riding: "Saint-Maurice—Champlain",
+      constituency: "Saint-Maurice, Québec",
     },
   },
   {
@@ -561,6 +576,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Chrystia Freeland",
     role: "Finance",
     avatarInitials: "CF",
+    location: "Toronto, Ontario",
     crisisLinks: ["Wealth Tax Block"],
     dossier: {
       name: "Chrystia Freeland",
@@ -571,6 +587,8 @@ export const influenceNodes: InfluenceNode[] = [
       reportsTo: "Prime Minister (PMO)",
       website: "https://www.ourcommons.ca/Members/en/chrystia-freeland(84665)",
       lobbyingActivity: "Controls federal budget allocations. Banking lobby met 34x re: wealth tax opposition.",
+      riding: "University—Rosedale",
+      constituency: "Toronto, Ontario",
     },
   },
   {
@@ -579,6 +597,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Marc Miller",
     role: "Immigration",
     avatarInitials: "MM",
+    location: "Montréal, Québec",
     crisisLinks: ["Housing Crisis"],
     dossier: {
       name: "Marc Miller",
@@ -589,6 +608,8 @@ export const influenceNodes: InfluenceNode[] = [
       reportsTo: "Prime Minister (PMO)",
       website: "https://www.ourcommons.ca/Members/en/marc-miller(88660)",
       lobbyingActivity: "Linked to housing crisis — immigration targets vs housing supply gap.",
+      riding: "Ville-Marie—Le Sud-Ouest—Île-des-Sœurs",
+      constituency: "Montréal, Québec",
     },
   },
   {
@@ -597,6 +618,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Dominic LeBlanc",
     role: "Public Safety",
     avatarInitials: "DL",
+    location: "Beauséjour, New Brunswick",
     dossier: {
       name: "Dominic LeBlanc",
       title: "Minister of Public Safety",
@@ -606,6 +628,8 @@ export const influenceNodes: InfluenceNode[] = [
       reportsTo: "Prime Minister (PMO)",
       website: "https://www.ourcommons.ca/Members/en/dominic-leblanc(2080)",
       lobbyingActivity: "Oversight of national security procurement and border agencies.",
+      riding: "Beauséjour",
+      constituency: "Beauséjour, New Brunswick",
     },
   },
   {
@@ -614,6 +638,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Bill Blair",
     role: "Defence",
     avatarInitials: "BB",
+    location: "Scarborough, Ontario",
     crisisLinks: ["Gaza Arms Exports"],
     dossier: {
       name: "Bill Blair",
@@ -624,6 +649,8 @@ export const influenceNodes: InfluenceNode[] = [
       reportsTo: "Prime Minister (PMO)",
       website: "https://www.ourcommons.ca/Members/en/bill-blair(88961)",
       lobbyingActivity: "Arms export oversight. Met with Irving Shipbuilding 6x in 2025 re: $80B shipbuilding contracts.",
+      riding: "Scarborough Southwest",
+      constituency: "Scarborough, Ontario",
     },
   },
 
@@ -634,6 +661,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "General Dynamics / CCC",
     detail: "$30M Legacy Arms Permits",
     alertRed: true,
+    location: "London, Ontario",
     dossier: {
       name: "Danny Deep",
       title: "CEO, General Dynamics Land Systems Canada",
@@ -651,6 +679,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Elbit Systems",
     detail: "Defence electronics & UAVs",
     alertRed: true,
+    location: "Kanata, Ontario",
     dossier: {
       name: "Bezhalel Machlis",
       title: "CEO, Elbit Systems Ltd",
@@ -666,6 +695,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Water Infrastructure Backlogs",
     detail: "28 LTDWAs Active · $890M delayed",
     alertRed: true,
+    location: "Nationwide — Remote & Northern Communities",
   },
   {
     id: "loblaws",
@@ -673,6 +703,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Loblaws / Weston",
     detail: "$1.2B profits · 30% market share",
     alertRed: false,
+    location: "Brampton, Ontario",
     dossier: {
       name: "Per Bank",
       title: "President, Loblaw Companies Ltd",
@@ -691,6 +722,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Metro Inc.",
     detail: "$920M profits · 15% dividend hike",
     alertRed: false,
+    location: "Montréal, Québec",
     dossier: {
       name: "Eric La Flèche",
       title: "President & CEO, Metro Inc.",
@@ -708,6 +740,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Empire / Sobeys",
     detail: "$780M profits · Sobeys chain",
     alertRed: false,
+    location: "Stellarton, Nova Scotia",
     dossier: {
       name: "Michael Medline",
       title: "President & CEO, Empire Company Ltd",
@@ -725,6 +758,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "SNC-Lavalin / AtkinsRéalis",
     detail: "$7.4B revenue · Infrastructure",
     alertRed: false,
+    location: "Montréal, Québec",
     dossier: {
       name: "Ian Edwards",
       title: "President & CEO, AtkinsRéalis",
@@ -742,6 +776,7 @@ export const influenceNodes: InfluenceNode[] = [
     label: "Irving Shipbuilding",
     detail: "$80B shipbuilding contracts",
     alertRed: false,
+    location: "Halifax, Nova Scotia",
     dossier: {
       name: "Kevin McCoy",
       title: "President, Irving Shipbuilding",
@@ -757,6 +792,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "bank",
     label: "TD Bank",
     detail: "Revenue: $10.4B",
+    location: "Toronto, Ontario",
     dossier: {
       name: "Bharat Masrani",
       title: "Group President & CEO, TD Bank Group",
@@ -773,6 +809,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "bank",
     label: "RBC",
     detail: "Revenue: $12.1B",
+    location: "Toronto, Ontario",
     dossier: {
       name: "Dave McKay",
       title: "President & CEO, Royal Bank of Canada",
@@ -789,6 +826,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "bank",
     label: "CIBC",
     detail: "Revenue: $6.2B",
+    location: "Toronto, Ontario",
     dossier: {
       name: "Victor Dodig",
       title: "President & CEO, CIBC",
@@ -805,6 +843,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "bank",
     label: "BMO",
     detail: "Revenue: $7.8B",
+    location: "Montréal, Québec",
     dossier: {
       name: "Darryl White",
       title: "CEO, BMO Financial Group",
@@ -823,6 +862,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "lobbyist",
     label: "Hill+Knowlton Strategies",
     detail: "Lobbying for GDLS — 42 comms",
+    location: "Ottawa, Ontario",
     dossier: {
       name: "Hill+Knowlton Strategies",
       title: "Government Relations Firm",
@@ -837,6 +877,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "lobbyist",
     label: "GCI Group",
     detail: "Lobbying for Elbit — 15 comms",
+    location: "Ottawa, Ontario",
     dossier: {
       name: "GCI Group",
       title: "Public Affairs & Communications",
@@ -848,6 +889,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "lobbyist",
     label: "Counsel Public Affairs",
     detail: "Lobbying for Loblaws — 28 meetings",
+    location: "Ottawa, Ontario",
     dossier: {
       name: "Counsel Public Affairs",
       title: "Government Relations & Advocacy",
@@ -862,6 +904,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "lobbyist",
     label: "Canadian Bankers Association",
     detail: "Lobbying against Wealth Tax",
+    location: "Toronto, Ontario",
     dossier: {
       name: "Canadian Bankers Association",
       title: "Industry Association",
@@ -876,6 +919,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "lobbyist",
     label: "McMillan Vantage",
     detail: "Banking lobby — 18 comms",
+    location: "Ottawa, Ontario",
     dossier: {
       name: "McMillan Vantage",
       title: "Government Relations & Public Policy",
@@ -890,6 +934,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "lobbyist",
     label: "Fleishman-Hillard",
     detail: "Grocery lobby — 12 meetings",
+    location: "Toronto, Ontario",
     dossier: {
       name: "Fleishman-Hillard",
       title: "Global Communications & Public Affairs",
@@ -904,6 +949,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "lobbyist",
     label: "Prospectus Associates",
     detail: "Defence lobby — 20 comms",
+    location: "Ottawa, Ontario",
     dossier: {
       name: "Prospectus Associates",
       title: "Government Relations — Defence & Aerospace",
@@ -918,6 +964,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "lobbyist",
     label: "Earnscliffe Strategies",
     detail: "Cross-sector — 25 comms",
+    location: "Ottawa, Ontario",
     dossier: {
       name: "Earnscliffe Strategies",
       title: "Government Relations & Strategic Communications",
@@ -964,6 +1011,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "intermediary",
     label: "Canadian Commercial Corp",
     detail: "Crown Corp · Govt-to-Govt exports",
+    location: "Ottawa, Ontario",
     dossier: {
       name: "Canadian Commercial Corporation",
       title: "Crown Corporation — Defence Export Intermediary",
@@ -978,6 +1026,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "intermediary",
     label: "Global Affairs — Export Controls",
     detail: "Permit processing division",
+    location: "Ottawa, Ontario",
     dossier: {
       name: "Export Controls Division, Global Affairs Canada",
       title: "Processes Military Export Permits under EIPA",
@@ -992,6 +1041,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "intermediary",
     label: "US Dept of Defense",
     detail: "Re-integrates Canadian components",
+    location: "Arlington, Virginia, USA",
     alertRed: true,
     dossier: {
       name: "United States Department of Defense",
@@ -1005,6 +1055,7 @@ export const influenceNodes: InfluenceNode[] = [
     type: "intermediary",
     label: "CONFLICT ZONE",
     detail: "438 documented shipments · $18.9M",
+    location: "Gaza, West Bank, Yemen",
     alertRed: true,
     dossier: {
       name: "End-Use: Active Conflict Zones",
