@@ -46,7 +46,7 @@ const MazeQuest = () => {
     );
   }
 
-  return <MazeGame characterId={charId} onComplete={handleComplete} />;
+  return <MazeGame characterId={charId} onComplete={handleComplete} onXP={(xp) => { if (user) addXP("treasure_chest", "water", xp); }} />;
 };
 
 export default MazeQuest;
