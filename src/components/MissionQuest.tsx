@@ -5,12 +5,17 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Zap, Phone, Pen, Calendar, MapPin, Users, AlertTriangle, CheckCircle2, Circle, FileText, Clock } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import { ActionCenter } from "./ActionCenter";
+import { StageActionDialog } from "./StageActionDialog";
+import { getStageActions } from "@/data/stageActions";
+import type { StageConfig } from "@/data/stageActions";
 
 export const MissionQuest = () => {
   const [searchParams] = useSearchParams();
   const activeMissionId = searchParams.get("mission") || missions[0].id;
   const [expandedMission, setExpandedMission] = useState<string | null>(activeMissionId);
   const [activeTab, setActiveTab] = useState<"overview" | "truth">("overview");
+  const [stageDialogOpen, setStageDialogOpen] = useState(false);
+  const [activeStageConfig, setActiveStageConfig] = useState<StageConfig | null>(null);
 
   const mission = missions.find((m) => m.id === expandedMission) || missions[0];
 
@@ -63,17 +68,30 @@ export const MissionQuest = () => {
               {/* Progress */}
               <div className="mt-6">
                 <div className="flex items-center gap-2 mb-3">
-                  {mission.stages.map((stage, i) => (
-                    <div key={stage.label} className="flex items-center flex-1">
-                      <div className="flex items-center gap-1.5 flex-1">
-                        {stage.complete ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : <Circle className="h-4 w-4 shrink-0 text-muted-foreground" />}
-                        <span className={`text-[10px] font-mono uppercase tracking-wider ${stage.complete ? "text-foreground font-bold" : "text-muted-foreground"}`}>
-                          {stage.label}
-                        </span>
+                  {mission.stages.map((stage, i) => {
+                    const stageActions = getStageActions(mission.id, stage.label);
+                    const isClickable = !!stageActions && stageActions.actions.length > 0;
+                    return (
+                      <div key={stage.label} className="flex items-center flex-1">
+                        <button
+                          onClick={() => {
+                            if (isClickable && stageActions) {
+                              setActiveStageConfig(stageActions);
+                              setStageDialogOpen(true);
+                            }
+                          }}
+                          className={`flex items-center gap-1.5 flex-1 ${isClickable ? "cursor-pointer hover:opacity-80 transition-opacity" : "cursor-default"}`}
+                        >
+                          {stage.complete ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : <Circle className="h-4 w-4 shrink-0 text-muted-foreground" />}
+                          <span className={`text-[10px] font-mono uppercase tracking-wider ${stage.complete ? "text-foreground font-bold" : "text-muted-foreground"} ${isClickable ? "underline decoration-dotted underline-offset-2" : ""}`}>
+                            {stage.label}
+                          </span>
+                          {isClickable && <Zap className="h-2.5 w-2.5 text-muted-foreground" />}
+                        </button>
+                        {i < mission.stages.length - 1 && <div className="h-px w-4 mx-1 bg-foreground/30" />}
                       </div>
-                      {i < mission.stages.length - 1 && <div className="h-px w-4 mx-1 bg-foreground/30" />}
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
                 <div className="h-5 neu-border overflow-hidden bg-muted">
                   <div className="h-full bg-foreground transition-all duration-1000" style={{ width: `${mission.progress}%` }} />
@@ -261,6 +279,15 @@ export const MissionQuest = () => {
       </div>
 
       <ActionCenter />
+
+      {activeStageConfig && (
+        <StageActionDialog
+          open={stageDialogOpen}
+          onOpenChange={setStageDialogOpen}
+          stageConfig={activeStageConfig}
+          missionId={mission?.id || "water"}
+        />
+      )}
     </div>
   );
 };
