@@ -10,6 +10,7 @@ type Profile = {
   total_xp: number;
   impact_score: number;
   missions_completed: number;
+  selected_character: string | null;
 };
 
 type AuthContextType = {
@@ -22,6 +23,7 @@ type AuthContextType = {
   signOut: () => Promise<void>;
   addXP: (actionType: string, missionId: string, xp: number) => Promise<void>;
   refreshProfile: () => Promise<void>;
+  setCharacter: (characterId: string) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -105,8 +107,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (user) await fetchProfile(user.id);
   };
 
+  const setCharacter = async (characterId: string) => {
+    if (!user) return;
+    localStorage.setItem("selectedCharacter", characterId);
+    await supabase
+      .from("profiles")
+      .update({ selected_character: characterId } as any)
+      .eq("id", user.id);
+    await fetchProfile(user.id);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, session, profile, loading, signUp, signIn, signOut, addXP, refreshProfile }}>
+    <AuthContext.Provider value={{ user, session, profile, loading, signUp, signIn, signOut, addXP, refreshProfile, setCharacter }}>
       {children}
     </AuthContext.Provider>
   );
