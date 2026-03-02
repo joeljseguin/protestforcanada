@@ -3,6 +3,9 @@ import { characterMap } from "@/data/characters";
 import { stepSound, collectKey, hitEnemy, questComplete, getCharacterSfx } from "@/lib/retroSfx";
 import { Sword, Wand2, Target, Rocket, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PixelCharacter } from "@/components/maze/PixelCharacter";
+import { PixelTree } from "@/components/maze/PixelTree";
+import { PixelChest } from "@/components/maze/PixelChest";
 
 // ── Maze map (16×12 for fullscreen feel) ──
 // 0=grass, 1=tree, 2=key, 3=enemy, 4=start, 5=path-dirt, 6=treasure chest
@@ -42,7 +45,7 @@ const ENEMY_CONFIG = {
 const ENEMY_TYPES: Array<"lobbyist" | "bureaucrat" | "billionaire"> = ["lobbyist", "bureaucrat", "billionaire"];
 
 // Pixel tree variations for visual interest
-const TREE_VARIANTS = ["🌲", "🌳", "🌲"];
+const TREE_VARIANTS_IDX = [0, 1, 2];
 
 interface MazeGameProps {
   characterId: string;
@@ -82,6 +85,8 @@ export const MazeGame = ({ characterId, onComplete, onXP }: MazeGameProps) => {
   const [attackPos, setAttackPos] = useState<{ x: number; y: number } | null>(null);
   const [message, setMessage] = useState("Find the 🔑 KEY in the forest!");
   const [score, setScore] = useState(0);
+  const [isMoving, setIsMoving] = useState(false);
+  const moveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Auto-focus
   useEffect(() => {
@@ -157,6 +162,11 @@ export const MazeGame = ({ characterId, onComplete, onXP }: MazeGameProps) => {
     if (gameMap[ny][nx] === 1) return;
 
     stepSound();
+    
+    // Trigger walking animation
+    setIsMoving(true);
+    if (moveTimeoutRef.current) clearTimeout(moveTimeoutRef.current);
+    moveTimeoutRef.current = setTimeout(() => setIsMoving(false), 250);
 
     // Treasure chest
     if (gameMap[ny][nx] === 6) {
@@ -354,9 +364,9 @@ export const MazeGame = ({ characterId, onComplete, onXP }: MazeGameProps) => {
                     lineHeight: 1,
                   }}
                 >
-                  {isTree && TREE_VARIANTS[(x * 3 + y * 7) % TREE_VARIANTS.length]}
+                  {isTree && <PixelTree size={tileSize * 0.85} variant={(x * 3 + y * 7) % 3} />}
                   {isKey && <span className="animate-pulse-gold">🔑</span>}
-                  {isChest && <span className="animate-float">📦</span>}
+                  {isChest && <PixelChest size={tileSize * 0.85} />}
                 </div>
               );
             })
@@ -438,19 +448,21 @@ export const MazeGame = ({ characterId, onComplete, onXP }: MazeGameProps) => {
             }}
           >
             {character ? (
-              <img
-                src={character.image}
-                alt={character.title}
-                className="object-contain drop-shadow-[0_0_6px_hsl(var(--accent)/0.7)]"
-                style={{
-                  imageRendering: "pixelated",
-                  width: tileSize * 0.8,
-                  height: tileSize * 0.8,
-                  transform: playerDir === "left" ? "scaleX(-1)" : undefined,
-                }}
+              <PixelCharacter
+                characterId={characterId}
+                direction={playerDir}
+                isMoving={isMoving}
+                isAttacking={attacking}
+                size={tileSize * 0.9}
               />
             ) : (
-              <span style={{ fontSize: tileSize * 0.6 }}>⚔️</span>
+              <PixelCharacter
+                characterId="swordsmaster"
+                direction={playerDir}
+                isMoving={isMoving}
+                isAttacking={attacking}
+                size={tileSize * 0.9}
+              />
             )}
           </div>
         </div>
