@@ -13,7 +13,7 @@ export type Mission = {
   humanCostLinks?: string[];
   progress: number;
   stages: { label: string; complete: boolean }[];
-  stats: { label: string; value: string; source: string; sourceUrl: string }[];
+  stats: { label: string; value: string; description: string; source: string; sourceUrl: string }[];
   links: { label: string; url: string }[];
   truthTab?: {
     title: string;
@@ -57,9 +57,9 @@ export const missions: Mission[] = [
       { label: "Resolved", complete: false },
     ],
     stats: [
-      { label: "Long-Term Advisories", value: "28", source: "ISC", sourceUrl: "https://www.sac-isc.gc.ca" },
-      { label: "Communities Affected", value: "34", source: "ISC Feb 2026", sourceUrl: "https://www.sac-isc.gc.ca" },
-      { label: "Delayed Grants", value: "$890M", source: "Budget 2024/25", sourceUrl: "https://open.canada.ca" },
+      { label: "Long-Term Advisories", value: "28", description: "First Nations communities under long-term drinking water advisories with no safe tap water", source: "ISC", sourceUrl: "https://www.sac-isc.gc.ca" },
+      { label: "Communities Affected", value: "34", description: "Indigenous communities still waiting for clean water despite federal promises since 2015", source: "ISC Feb 2026", sourceUrl: "https://www.sac-isc.gc.ca" },
+      { label: "Delayed Grants", value: "$890M", description: "Federal infrastructure funding promised but delayed or unspent for water treatment projects", source: "Budget 2024/25", sourceUrl: "https://open.canada.ca" },
     ],
     links: [
       { label: "ISC Water Dashboard", url: "https://www.sac-isc.gc.ca/eng/1506514143353/1533317130660" },
@@ -112,9 +112,9 @@ export const missions: Mission[] = [
       { label: "Resolved", complete: false },
     ],
     stats: [
-      { label: "Food Insecurity", value: "25.5%", source: "StatsCan 2026", sourceUrl: "https://www.statcan.gc.ca" },
-      { label: "Grocery Inflation", value: "5.8%", source: "Food Price Report", sourceUrl: "https://www.dal.ca/sites/agri-food/research/canada-s-food-price-report.html" },
-      { label: "Lobbyist Meetings", value: "67", source: "Commissioner of Lobbying", sourceUrl: "https://lobbycanada.gc.ca" },
+      { label: "Food Insecurity", value: "25.5%", description: "of Canadian households cannot afford enough food — up from 16% in 2021", source: "StatsCan 2026", sourceUrl: "https://www.statcan.gc.ca" },
+      { label: "Grocery Inflation", value: "5.8%", description: "annual grocery price increase while corporate grocery profits hit record highs", source: "Food Price Report", sourceUrl: "https://www.dal.ca/sites/agri-food/research/canada-s-food-price-report.html" },
+      { label: "Lobbyist Meetings", value: "67", description: "registered lobbying meetings by grocery corporations with MPs in the last year", source: "Commissioner of Lobbying", sourceUrl: "https://lobbycanada.gc.ca" },
     ],
     links: [
       { label: "Food Price Report 2026", url: "https://www.dal.ca/sites/agri-food/research/canada-s-food-price-report.html" },
@@ -159,9 +159,9 @@ export const missions: Mission[] = [
       { label: "Legislation", complete: false },
     ],
     stats: [
-      { label: "Signatures Needed", value: "500K", source: "ourcommons.ca", sourceUrl: "https://petitions.ourcommons.ca" },
-      { label: "Estimated Revenue", value: "$5.6B/yr", source: "PBO", sourceUrl: "https://www.pbo-dpb.ca" },
-      { label: "Billionaires in Canada", value: "87", source: "Forbes 2025", sourceUrl: "https://www.forbes.com" },
+      { label: "Signatures Needed", value: "500K", description: "petition signatures required to trigger a Parliamentary debate on wealth taxation", source: "ourcommons.ca", sourceUrl: "https://petitions.ourcommons.ca" },
+      { label: "Estimated Revenue", value: "$5.6B/yr", description: "projected annual revenue from a 1% tax on wealth over $20M — enough to fund housing", source: "PBO", sourceUrl: "https://www.pbo-dpb.ca" },
+      { label: "Billionaires in Canada", value: "87", description: "Canadian billionaires whose combined wealth exceeds the bottom 12 million Canadians", source: "Forbes 2025", sourceUrl: "https://www.forbes.com" },
     ],
     links: [
       { label: "Sign Petition e-6806", url: "https://petitions.ourcommons.ca" },
@@ -204,9 +204,9 @@ export const missions: Mission[] = [
       { label: "Resolved", complete: false },
     ],
     stats: [
-      { label: "Military Exports", value: "$18.9M", source: "Ploughshares", sourceUrl: "https://ploughshares.ca" },
-      { label: "Active Legacy Permits", value: "12", source: "Global Affairs", sourceUrl: "https://open.canada.ca" },
-      { label: "Companies Flagged", value: "3", source: "CBC 2026", sourceUrl: "https://www.cbc.ca" },
+      { label: "Military Exports", value: "$18.9M", description: "in Canadian military components exported via the US loophole bypassing the arms embargo", source: "Ploughshares", sourceUrl: "https://ploughshares.ca" },
+      { label: "Active Legacy Permits", value: "12", description: "pre-existing export permits still active, allowing continued arms shipments through the US", source: "Global Affairs", sourceUrl: "https://open.canada.ca" },
+      { label: "Companies Flagged", value: "3", description: "Canadian defence companies identified as routing arms through US intermediaries", source: "CBC 2026", sourceUrl: "https://www.cbc.ca" },
     ],
     links: [
       { label: "Project Ploughshares Report", url: "https://ploughshares.ca" },
@@ -252,9 +252,9 @@ export const missions: Mission[] = [
       { label: "Resolved", complete: false },
     ],
     stats: [
-      { label: "Avg Home Price", value: "$716K", source: "CMHC", sourceUrl: "https://www.cmhc-schl.gc.ca" },
-      { label: "Core Housing Need", value: "1.87M", source: "StatsCan", sourceUrl: "https://www.statcan.gc.ca" },
-      { label: "Vacancy Rate", value: "1.5%", source: "CMHC 2025", sourceUrl: "https://www.cmhc-schl.gc.ca" },
+      { label: "Avg Home Price", value: "$716K", description: "national average home price — 10x the median household income, locking out a generation", source: "CMHC", sourceUrl: "https://www.cmhc-schl.gc.ca" },
+      { label: "Core Housing Need", value: "1.87M", description: "Canadian households in core housing need — spending over 30% of income on inadequate housing", source: "StatsCan", sourceUrl: "https://www.statcan.gc.ca" },
+      { label: "Vacancy Rate", value: "1.5%", description: "national rental vacancy rate — anything below 3% indicates a severe housing supply crisis", source: "CMHC 2025", sourceUrl: "https://www.cmhc-schl.gc.ca" },
     ],
     links: [{ label: "CMHC Housing Data", url: "https://www.cmhc-schl.gc.ca" }],
   },
@@ -285,9 +285,9 @@ export const missions: Mission[] = [
       { label: "Resolved", complete: false },
     ],
     stats: [
-      { label: "Without Family Doctor", value: "6.5M", source: "CIHI", sourceUrl: "https://www.cihi.ca" },
-      { label: "Canada Health Transfer", value: "$49.4B", source: "Dept of Finance", sourceUrl: "https://www.canada.ca/en/department-finance.html" },
-      { label: "Nursing Vacancies", value: "14K+", source: "StatsCan", sourceUrl: "https://www.statcan.gc.ca" },
+      { label: "Without Family Doctor", value: "6.5M", description: "Canadians without a family doctor — forced to rely on overcrowded ERs for basic care", source: "CIHI", sourceUrl: "https://www.cihi.ca" },
+      { label: "Canada Health Transfer", value: "$49.4B", description: "federal health transfer — increased but still not enough to address crumbling provincial systems", source: "Dept of Finance", sourceUrl: "https://www.canada.ca/en/department-finance.html" },
+      { label: "Nursing Vacancies", value: "14K+", description: "unfilled nursing positions nationwide — driving burnout and record ER wait times of 4.1 hours", source: "StatsCan", sourceUrl: "https://www.statcan.gc.ca" },
     ],
     links: [{ label: "CIHI Health Data", url: "https://www.cihi.ca" }],
   },
@@ -318,9 +318,9 @@ export const missions: Mission[] = [
       { label: "Resolved", complete: false },
     ],
     stats: [
-      { label: "Total Cost", value: "$2.4B", source: "PSPC", sourceUrl: "https://www.canada.ca/en/public-services-procurement.html" },
-      { label: "Affected Workers", value: "150K+", source: "PSAC", sourceUrl: "https://psacunion.ca" },
-      { label: "Years Broken", value: "10", source: "CBC", sourceUrl: "https://www.cbc.ca" },
+      { label: "Total Cost", value: "$2.4B", description: "taxpayer dollars spent on a pay system that still doesn't work after a decade of failures", source: "PSPC", sourceUrl: "https://www.canada.ca/en/public-services-procurement.html" },
+      { label: "Affected Workers", value: "150K+", description: "federal employees underpaid, overpaid, or not paid at all — some for years at a time", source: "PSAC", sourceUrl: "https://psacunion.ca" },
+      { label: "Years Broken", value: "10", description: "years the Phoenix system has been failing with no replacement plan announced by government", source: "CBC", sourceUrl: "https://www.cbc.ca" },
     ],
     links: [],
   },
@@ -351,9 +351,9 @@ export const missions: Mission[] = [
       { label: "Resolved", complete: false },
     ],
     stats: [
-      { label: "Fossil Fuel Subsidies", value: "$18.5B", source: "IISD", sourceUrl: "https://www.iisd.org" },
-      { label: "Emissions Gap", value: "-22%", source: "ECCC", sourceUrl: "https://www.canada.ca/en/environment-climate-change.html" },
-      { label: "Wildfire Displaced", value: "230K+", source: "Red Cross", sourceUrl: "https://www.redcross.ca" },
+      { label: "Fossil Fuel Subsidies", value: "$18.5B", description: "annual public subsidies to oil and gas companies while Canada misses every climate target", source: "IISD", sourceUrl: "https://www.iisd.org" },
+      { label: "Emissions Gap", value: "-22%", description: "below the reduction needed to meet 2030 Paris Agreement commitments — falling further behind", source: "ECCC", sourceUrl: "https://www.canada.ca/en/environment-climate-change.html" },
+      { label: "Wildfire Displaced", value: "230K+", description: "Canadians displaced by wildfires in 2024-25 — climate impacts accelerating faster than policy", source: "Red Cross", sourceUrl: "https://www.redcross.ca" },
     ],
     links: [],
   },
@@ -384,9 +384,9 @@ export const missions: Mission[] = [
       { label: "Resolved", complete: false },
     ],
     stats: [
-      { label: "Bill Status", value: "Committee", source: "LEGISinfo", sourceUrl: "https://www.parl.ca/legisinfo" },
-      { label: "Budget", value: "$210M", source: "PBO", sourceUrl: "https://www.pbo-dpb.ca" },
-      { label: "Public Comments", value: "12K+", source: "Parl Canada", sourceUrl: "https://www.parl.ca" },
+      { label: "Bill Status", value: "Committee", description: "Bill C-63 currently in committee stage — could enable government pre-crime speech regulation", source: "LEGISinfo", sourceUrl: "https://www.parl.ca/legisinfo" },
+      { label: "Budget", value: "$210M", description: "proposed budget for the new Digital Safety Commission with broad censorship powers", source: "PBO", sourceUrl: "https://www.pbo-dpb.ca" },
+      { label: "Public Comments", value: "12K+", description: "public submissions opposing key provisions — most expressing free expression concerns", source: "Parl Canada", sourceUrl: "https://www.parl.ca" },
     ],
     links: [],
   },
@@ -417,9 +417,9 @@ export const missions: Mission[] = [
       { label: "Accountability", complete: false },
     ],
     stats: [
-      { label: "Cost Overrun", value: "$59.5M", source: "AG Report", sourceUrl: "https://www.oag-bvg.gc.ca" },
-      { label: "Subcontractors", value: "76", source: "OGGO", sourceUrl: "https://www.parl.ca" },
-      { label: "RCMP Status", value: "Active", source: "CBC", sourceUrl: "https://www.cbc.ca" },
+      { label: "Cost Overrun", value: "$59.5M", description: "final cost of an app originally budgeted at $80K — a 74,000% cost overrun with no accountability", source: "AG Report", sourceUrl: "https://www.oag-bvg.gc.ca" },
+      { label: "Subcontractors", value: "76", description: "subcontractors involved in a single app project — many with no clear deliverables or oversight", source: "OGGO", sourceUrl: "https://www.parl.ca" },
+      { label: "RCMP Status", value: "Active", description: "RCMP criminal investigation still ongoing — but no charges filed despite Auditor General findings", source: "CBC", sourceUrl: "https://www.cbc.ca" },
     ],
     links: [],
   },
