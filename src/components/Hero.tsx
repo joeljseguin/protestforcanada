@@ -14,7 +14,7 @@ export const Hero = () => {
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[0.95] mb-6 animate-fade-in uppercase" style={{ animationDelay: "100ms" }}>
             Follow the
             <br />
-            money, hold
+            <span className="text-mission-green">money</span>, hold
             <br />
             <span className="inline-block neu-border px-4 py-1 bg-secondary -rotate-1">power</span>
             {" "}accountable.
