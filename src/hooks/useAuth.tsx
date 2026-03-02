@@ -134,6 +134,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       password,
       options: {
         data: { postal_code: postalCode },
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
     return { error: error?.message ?? null };
