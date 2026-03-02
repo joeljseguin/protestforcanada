@@ -1,17 +1,17 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { characterMap } from "@/data/characters";
 import { stepSound, collectKey, hitEnemy, questComplete, getCharacterSfx } from "@/lib/retroSfx";
-import { Sword, Wand2, Target, Rocket, LogOut } from "lucide-react";
+import { Sword, Wand2, Target, Rocket, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // ── Maze map (16×12 for fullscreen feel) ──
-// 0=grass, 1=tree, 2=key, 3=enemy, 4=start, 5=path-dirt
+// 0=grass, 1=tree, 2=key, 3=enemy, 4=start, 5=path-dirt, 6=treasure chest
 const COLS = 16;
 const ROWS = 12;
 
 const BASE_MAP: number[][] = [
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-  [1,4,5,0,1,0,0,5,1,0,5,0,0,1,0,1],
+  [1,4,5,0,1,6,0,5,1,0,5,0,0,1,0,1],
   [1,0,1,0,1,0,1,0,0,0,1,1,0,1,5,1],
   [1,5,1,0,5,0,1,5,1,0,0,0,5,0,0,1],
   [1,0,1,1,1,0,1,0,1,1,0,1,1,1,0,1],
@@ -19,7 +19,7 @@ const BASE_MAP: number[][] = [
   [1,1,1,0,1,1,1,5,1,1,1,0,1,1,0,1],
   [1,0,5,0,0,0,1,0,0,0,5,0,1,0,5,1],
   [1,0,1,1,1,0,1,0,1,1,1,0,0,0,1,1],
-  [1,0,0,0,1,0,5,0,0,3,1,0,1,0,0,1],
+  [1,6,0,0,1,0,5,0,0,3,1,0,1,0,6,1],
   [1,5,1,0,0,0,1,1,1,0,0,0,1,5,2,1],
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 ];
@@ -47,6 +47,7 @@ const TREE_VARIANTS = ["🌲", "🌳", "🌲"];
 interface MazeGameProps {
   characterId: string;
   onComplete: () => void;
+  onXP?: (xp: number) => void;
 }
 
 const ATTACK_ICONS: Record<string, React.ReactNode> = {
@@ -63,7 +64,7 @@ const ATTACK_LABELS: Record<string, string> = {
   astronaut: "BLAST",
 };
 
-export const MazeGame = ({ characterId, onComplete }: MazeGameProps) => {
+export const MazeGame = ({ characterId, onComplete, onXP }: MazeGameProps) => {
   const character = characterMap[characterId];
   const charSfx = getCharacterSfx(characterId);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -157,6 +158,18 @@ export const MazeGame = ({ characterId, onComplete }: MazeGameProps) => {
 
     stepSound();
 
+    // Treasure chest
+    if (gameMap[ny][nx] === 6) {
+      collectKey();
+      setScore(s => s + 10);
+      setMessage("💰 Treasure chest! +10 XP");
+      onXP?.(10);
+      const newMap = gameMap.map(r => [...r]);
+      newMap[ny][nx] = 0;
+      setGameMap(newMap);
+    }
+
+    // Key
     if (gameMap[ny][nx] === 2) {
       collectKey();
       setHasKey(true);
@@ -289,11 +302,17 @@ export const MazeGame = ({ characterId, onComplete }: MazeGameProps) => {
           <div className="font-body text-[9px] text-accent uppercase">
             {score} pts
           </div>
-          <Link to="/quest" className="ff-panel px-2 py-0.5 font-heading text-[7px] uppercase text-muted-foreground hover:text-destructive hover:border-destructive transition-colors flex items-center gap-1">
-            <LogOut className="h-3 w-3" /> Quit
-          </Link>
         </div>
       </div>
+
+      {/* Back button — centered */}
+      <Link
+        to="/quest"
+        className="shrink-0 flex items-center justify-center gap-2 py-2 bg-muted/40 border-b border-border text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        <span className="font-heading text-[9px] uppercase">Back to Missions</span>
+      </Link>
 
       {/* Message Bar */}
       <div className={`shrink-0 px-3 py-1.5 text-center font-body text-[10px] border-b border-border ${won ? "text-accent bg-accent/10" : gameOver ? "text-destructive bg-destructive/10" : "text-muted-foreground bg-muted/30"}`}>
@@ -312,10 +331,11 @@ export const MazeGame = ({ characterId, onComplete }: MazeGameProps) => {
           {/* Tiles */}
           {gameMap.map((row, y) =>
             row.map((cell, x) => {
-              const isGrass = cell === 0 || cell === 3 || cell === 4;
+              const isGrass = cell === 0 || cell === 3 || cell === 4 || cell === 6;
               const isDirt = cell === 5;
               const isTree = cell === 1;
               const isKey = cell === 2;
+              const isChest = cell === 6;
               // Checkerboard grass
               const grassShade = (x + y) % 2 === 0 ? "hsl(120 30% 18%)" : "hsl(120 25% 15%)";
               const dirtShade = (x + y) % 2 === 0 ? "hsl(35 30% 22%)" : "hsl(35 25% 19%)";
@@ -336,6 +356,7 @@ export const MazeGame = ({ characterId, onComplete }: MazeGameProps) => {
                 >
                   {isTree && TREE_VARIANTS[(x * 3 + y * 7) % TREE_VARIANTS.length]}
                   {isKey && <span className="animate-pulse-gold">🔑</span>}
+                  {isChest && <span className="animate-float">📦</span>}
                 </div>
               );
             })
