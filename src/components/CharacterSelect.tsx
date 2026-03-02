@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sword, Wand2, Target, Rocket, Shield, Zap, Heart, Star } from "lucide-react";
+import { characterMap } from "@/data/characters";
+import { useAuth } from "@/hooks/useAuth";
+
 import charSwordsmaster from "@/assets/char-swordsmaster.png";
 import charWizard from "@/assets/char-wizard.png";
 import charArcher from "@/assets/char-archer.png";
 import charAstronaut from "@/assets/char-astronaut.png";
 
-interface CharacterData {
+interface FullCharacter {
   id: string;
   name: string;
   title: string;
@@ -17,7 +20,7 @@ interface CharacterData {
   ability: string;
 }
 
-const characters: CharacterData[] = [
+const characters: FullCharacter[] = [
   {
     id: "swordsmaster",
     name: "Cedric",
@@ -84,13 +87,19 @@ export const CharacterSelect = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
   const navigate = useNavigate();
+  const { user, setCharacter } = useAuth();
 
   const selected = characters.find((c) => c.id === selectedId);
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!selectedId) return;
     setConfirmed(true);
-    localStorage.setItem("selectedCharacter", selectedId);
+    // Persist to DB if logged in, otherwise just localStorage
+    if (user) {
+      await setCharacter(selectedId);
+    } else {
+      localStorage.setItem("selectedCharacter", selectedId);
+    }
     setTimeout(() => navigate("/quest"), 800);
   };
 
@@ -123,24 +132,19 @@ export const CharacterSelect = () => {
                 borderColor: selectedId === char.id ? "hsl(var(--accent))" : undefined,
               }}
             >
-              {/* Cursor indicator */}
               <div className={`font-heading text-xs text-accent mb-2 h-4 transition-opacity ${selectedId === char.id ? "opacity-100" : "opacity-0"}`}>
                 ▶
               </div>
-
-              {/* Avatar */}
               <div className="relative mx-auto w-24 h-24 md:w-32 md:h-32 mb-3">
                 <img
                   src={char.image}
                   alt={char.title}
-                  className={`w-full h-full object-contain pixelated transition-all duration-300 ${
+                  className={`w-full h-full object-contain transition-all duration-300 ${
                     selectedId === char.id ? "drop-shadow-[0_0_12px_hsl(var(--accent)/0.6)]" : "grayscale-[30%] group-hover:grayscale-0"
                   }`}
                   style={{ imageRendering: "pixelated" }}
                 />
               </div>
-
-              {/* Name */}
               <div className="font-heading text-[8px] md:text-[9px] uppercase text-foreground mb-0.5">
                 {char.name}
               </div>
@@ -148,8 +152,6 @@ export const CharacterSelect = () => {
                 {char.icon}
                 <span className="font-body text-xs uppercase">{char.title}</span>
               </div>
-
-              {/* Mini stat bars */}
               <div className="mt-3 space-y-1">
                 {char.stats.map((stat) => (
                   <div key={stat.label} className="flex items-center gap-1.5">
@@ -157,7 +159,7 @@ export const CharacterSelect = () => {
                     <div className="flex-1 h-1.5 bg-muted rounded-sm overflow-hidden">
                       <div
                         className="h-full hp-bar rounded-sm transition-all duration-700"
-                        style={{ width: `${stat.value * 10}%`, animationDelay: `${i * 100}ms` }}
+                        style={{ width: `${stat.value * 10}%` }}
                       />
                     </div>
                   </div>
@@ -189,8 +191,6 @@ export const CharacterSelect = () => {
                 </div>
               </div>
             </div>
-
-            {/* Confirm Button */}
             <button
               onClick={handleConfirm}
               disabled={confirmed}

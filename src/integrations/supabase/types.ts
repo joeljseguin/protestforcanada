@@ -62,6 +62,7 @@ export type Database = {
           impact_score: number
           missions_completed: number
           postal_code: string | null
+          selected_character: string | null
           total_xp: number
           updated_at: string
         }
@@ -73,6 +74,7 @@ export type Database = {
           impact_score?: number
           missions_completed?: number
           postal_code?: string | null
+          selected_character?: string | null
           total_xp?: number
           updated_at?: string
         }
@@ -84,6 +86,7 @@ export type Database = {
           impact_score?: number
           missions_completed?: number
           postal_code?: string | null
+          selected_character?: string | null
           total_xp?: number
           updated_at?: string
         }

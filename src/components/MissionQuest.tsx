@@ -3,12 +3,14 @@ import { missions, calendarEvents, threatColors } from "@/data/gameData";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Zap, Phone, Pen, Calendar, MapPin, Users, AlertTriangle, CheckCircle2, Circle, FileText, Clock } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { ActionCenter } from "./ActionCenter";
 import { ProtestMap } from "./ProtestMap";
 import { StageActionDialog } from "./StageActionDialog";
 import { getStageActions } from "@/data/stageActions";
 import type { StageConfig } from "@/data/stageActions";
+import { useAuth } from "@/hooks/useAuth";
+import { characterMap, getSelectedCharacter } from "@/data/characters";
 
 export const MissionQuest = () => {
   const [searchParams] = useSearchParams();
@@ -17,18 +19,48 @@ export const MissionQuest = () => {
   const [activeTab, setActiveTab] = useState<"overview" | "truth">("overview");
   const [stageDialogOpen, setStageDialogOpen] = useState(false);
   const [activeStageConfig, setActiveStageConfig] = useState<StageConfig | null>(null);
+  const { profile } = useAuth();
+
+  // Resolve character: DB profile > localStorage fallback
+  const charId = profile?.selected_character || localStorage.getItem("selectedCharacter");
+  const character = charId ? characterMap[charId] ?? null : null;
 
   const mission = missions.find((m) => m.id === expandedMission) || missions[0];
 
   return (
     <div className="py-12 md:py-20">
       <div className="container">
-        <h2 className="font-heading text-sm md:text-base uppercase tracking-tight text-primary mb-2">
-          📜 Mission Quest
-        </h2>
-        <p className="text-muted-foreground font-body text-sm mb-8 max-w-2xl">
-          Select a mission. See the human cost. Read the truth. Take action. Earn XP.
-        </p>
+        <div className="flex items-start justify-between gap-4 flex-wrap mb-8">
+          <div>
+            <h2 className="font-heading text-sm md:text-base uppercase tracking-tight text-primary mb-2">
+              📜 Mission Quest
+            </h2>
+            <p className="text-muted-foreground font-body text-sm max-w-2xl">
+              Select a mission. See the human cost. Read the truth. Take action. Earn XP.
+            </p>
+          </div>
+          {character ? (
+            <Link to="/select-character" className="ff-panel px-4 py-3 flex items-center gap-3 hover:border-accent transition-colors group">
+              <img
+                src={character.image}
+                alt={character.title}
+                className="w-10 h-10 object-contain group-hover:drop-shadow-[0_0_8px_hsl(var(--accent)/0.5)]"
+                style={{ imageRendering: "pixelated" }}
+              />
+              <div>
+                <div className="font-heading text-[8px] uppercase text-foreground">{character.name}</div>
+                <div className="font-body text-[10px] text-primary uppercase">{character.title}</div>
+              </div>
+            </Link>
+          ) : (
+            <Link
+              to="/select-character"
+              className="ff-panel px-4 py-3 font-heading text-[9px] uppercase text-accent hover:border-accent transition-colors animate-pulse"
+            >
+              ▶ Choose Hero
+            </Link>
+          )}
+        </div>
 
         {/* Mission Selector — FF4 command menu */}
         <div className="flex flex-wrap gap-2 mb-8">
