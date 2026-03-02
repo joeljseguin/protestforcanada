@@ -13,44 +13,44 @@ import { influenceNodes, influenceEdges } from "@/data/gameData";
 import { nodeTypes } from "@/components/influence/NodeTypes";
 import { DossierPanel } from "@/components/influence/DossierPanel";
 
-// Hierarchical positions — 4 tiers
+// Wider layout for uniform 200px cards with breathing room
 const tierPositions: Record<string, { x: number; y: number }> = {
   // TIER 0: Executive (y=0)
-  pmo: { x: 500, y: 0 },
-  treasury: { x: 800, y: 0 },
+  pmo: { x: 550, y: 0 },
+  treasury: { x: 900, y: 0 },
 
-  // TIER 1: Ministers (y=200)
-  anand: { x: 0, y: 200 },
-  hajdu: { x: 200, y: 200 },
-  champagne: { x: 400, y: 200 },
-  freeland: { x: 600, y: 200 },
-  miller: { x: 800, y: 200 },
-  leblanc: { x: 1000, y: 200 },
-  blair: { x: 1200, y: 200 },
+  // TIER 1: Ministers (y=220)
+  anand: { x: -30, y: 220 },
+  hajdu: { x: 210, y: 220 },
+  champagne: { x: 450, y: 220 },
+  freeland: { x: 690, y: 220 },
+  miller: { x: 930, y: 220 },
+  leblanc: { x: 1170, y: 220 },
+  blair: { x: 1410, y: 220 },
 
-  // TIER 2: Corporations & Banks (y=440)
-  gdls: { x: -50, y: 440 },
-  elbit: { x: 130, y: 440 },
-  "water-backlog": { x: 300, y: 440 },
-  loblaws: { x: 460, y: 440 },
-  metro: { x: 620, y: 440 },
-  empire: { x: 780, y: 440 },
-  snc: { x: 940, y: 440 },
-  irving: { x: 1100, y: 440 },
-  "td-bank": { x: 460, y: 580 },
-  rbc: { x: 620, y: 580 },
-  cibc: { x: 780, y: 580 },
-  bmo: { x: 940, y: 580 },
+  // TIER 2: Corporations & Banks (y=480)
+  gdls: { x: -60, y: 480 },
+  elbit: { x: 160, y: 480 },
+  "water-backlog": { x: 360, y: 480 },
+  loblaws: { x: 560, y: 480 },
+  metro: { x: 760, y: 480 },
+  empire: { x: 960, y: 480 },
+  snc: { x: 1160, y: 480 },
+  irving: { x: 1360, y: 480 },
+  "td-bank": { x: 460, y: 630 },
+  rbc: { x: 660, y: 630 },
+  cibc: { x: 860, y: 630 },
+  bmo: { x: 1060, y: 630 },
 
-  // TIER 3: Lobbyists (y=720)
-  "lob-gdls": { x: -50, y: 720 },
-  "lob-elbit": { x: 130, y: 720 },
-  "lob-loblaws": { x: 310, y: 720 },
-  "lob-fleishman": { x: 490, y: 720 },
-  "lob-banks": { x: 670, y: 720 },
-  "lob-mcmillan": { x: 850, y: 720 },
-  "lob-prospectus": { x: 1030, y: 720 },
-  "lob-earnscliffe": { x: 1200, y: 720 },
+  // TIER 3: Lobbyists (y=820)
+  "lob-gdls": { x: -60, y: 820 },
+  "lob-elbit": { x: 160, y: 820 },
+  "lob-loblaws": { x: 360, y: 820 },
+  "lob-fleishman": { x: 560, y: 820 },
+  "lob-banks": { x: 760, y: 820 },
+  "lob-mcmillan": { x: 960, y: 820 },
+  "lob-prospectus": { x: 1160, y: 820 },
+  "lob-earnscliffe": { x: 1360, y: 820 },
 };
 
 export const InfluenceNetwork = () => {
@@ -74,20 +74,43 @@ export const InfluenceNetwork = () => {
     () =>
       influenceEdges.map((e) => {
         const isCrisis = !!e.grantAmount;
+        const isLobbyUp = e.id.startsWith("e-lob-");
         return {
           id: e.id,
           source: e.source,
           target: e.target,
           label: e.label,
           type: "smoothstep",
-          animated: isCrisis,
-          markerEnd: { type: MarkerType.ArrowClosed, color: isCrisis ? "hsl(0 84% 50%)" : "hsl(0 0% 60%)" },
-          style: {
-            stroke: isCrisis ? "hsl(0 84% 50%)" : "hsl(0 0% 70%)",
-            strokeWidth: isCrisis ? 3 : 2,
+          animated: isCrisis || isLobbyUp,
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            color: isCrisis
+              ? "hsl(0 84% 50%)"
+              : isLobbyUp
+              ? "hsl(38 92% 45%)"
+              : "hsl(0 0% 50%)",
           },
-          labelStyle: { fill: "hsl(0 0% 0%)", fontSize: 9, fontFamily: "JetBrains Mono", fontWeight: 600 },
-          labelBgStyle: { fill: "hsl(0 0% 100%)", fillOpacity: 1, stroke: "hsl(0 0% 0%)", strokeWidth: 2 },
+          style: {
+            stroke: isCrisis
+              ? "hsl(0 84% 50%)"
+              : isLobbyUp
+              ? "hsl(38 92% 45%)"
+              : "hsl(0 0% 65%)",
+            strokeWidth: isCrisis ? 3 : isLobbyUp ? 2.5 : 2,
+            strokeDasharray: isLobbyUp ? "6 3" : undefined,
+          },
+          labelStyle: {
+            fill: "hsl(0 0% 0%)",
+            fontSize: 9,
+            fontFamily: "Space Grotesk, sans-serif",
+            fontWeight: 700,
+          },
+          labelBgStyle: {
+            fill: "hsl(0 0% 100%)",
+            fillOpacity: 1,
+            stroke: isCrisis ? "hsl(0 84% 50%)" : isLobbyUp ? "hsl(38 92% 45%)" : "hsl(0 0% 0%)",
+            strokeWidth: 2,
+          },
           labelBgPadding: [6, 4] as [number, number],
         };
       }),
@@ -108,22 +131,24 @@ export const InfluenceNetwork = () => {
         <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight uppercase mb-2">
           Who Has the Power?
         </h2>
-        <p className="text-muted-foreground font-mono text-sm max-w-2xl">
-          Power Hierarchy — PMO at top, Ministers, Corporations, Banks, Lobbyists.
+        <p className="text-muted-foreground font-mono text-sm max-w-3xl">
+          Power flows down from the PMO through Ministers to Corporations.
+          <span className="font-bold text-foreground"> Lobbyists push influence back UP</span> (dashed gold lines).
+          <span className="font-bold" style={{ color: "hsl(0 84% 50%)" }}> Red lines</span> = crisis-linked money.
           <span className="font-bold text-foreground"> Click any node</span> for dossier + XP actions.
-          <span className="font-bold text-foreground"> Red lines</span> = crisis-linked influence.
+          <span className="font-bold" style={{ color: "hsl(0 84% 50%)" }}> Red badges</span> on MPs show crisis accountability.
         </p>
       </div>
       <div className="container">
-        <div className="neu-border overflow-hidden bg-background relative" style={{ height: 900 }}>
+        <div className="neu-border overflow-hidden bg-background relative" style={{ height: 1050 }}>
           <ReactFlow
             nodes={nodes}
             edges={edges}
             nodeTypes={nodeTypes}
             fitView
-            fitViewOptions={{ padding: 0.15 }}
+            fitViewOptions={{ padding: 0.12 }}
             proOptions={{ hideAttribution: true }}
-            minZoom={0.2}
+            minZoom={0.15}
             maxZoom={1.5}
             onEdgeMouseEnter={(_, edge) => setHoveredEdge(edge.id)}
             onEdgeMouseLeave={() => setHoveredEdge(null)}
@@ -143,18 +168,41 @@ export const InfluenceNetwork = () => {
         </div>
         {edgeInfo && (
           <div className="mt-4 neu-border p-4 bg-secondary font-mono text-sm animate-fade-in">
-            <span className="font-bold uppercase text-xs tracking-wider">Lobbying Intel: </span>
+            <span className="font-extrabold uppercase text-xs tracking-wider">Lobbying Intel: </span>
             {edgeInfo.lobbying}
-            {edgeInfo.grant && <span className="ml-3 neu-border px-2 py-0.5 bg-muted text-xs">Grant/Revenue: {edgeInfo.grant}</span>}
+            {edgeInfo.grant && (
+              <span className="ml-3 neu-border px-2 py-0.5 bg-muted text-xs font-bold">
+                Grant/Revenue: {edgeInfo.grant}
+              </span>
+            )}
           </div>
         )}
-        <div className="flex flex-wrap gap-4 mt-4 text-xs font-mono">
-          <span className="flex items-center gap-2 neu-border px-3 py-1.5"><span className="w-4 h-4 rounded-full bg-background neu-border" /> PMO / Minister</span>
-          <span className="flex items-center gap-2 neu-border px-3 py-1.5"><span className="w-4 h-4 bg-background neu-border" /> Corporation</span>
-          <span className="flex items-center gap-2 neu-border px-3 py-1.5"><span className="w-4 h-4 bg-secondary neu-border" /> Lobbyist</span>
-          <span className="flex items-center gap-2 neu-border px-3 py-1.5"><span className="w-4 h-4 neu-border" style={{ background: "hsl(45 100% 95%)" }} /> Bank</span>
-          <span className="flex items-center gap-2 neu-border px-3 py-1.5"><span className="w-4 h-0.5 bg-threat-red inline-block" style={{ width: 16 }} /> Crisis Link</span>
-          <span className="flex items-center gap-2 neu-border px-3 py-1.5"><span className="w-4 h-0.5 inline-block" style={{ width: 16, background: "hsl(0 0% 70%)" }} /> Standard Link</span>
+        <div className="flex flex-wrap gap-4 mt-4 text-xs font-mono font-bold">
+          <span className="flex items-center gap-2 neu-border px-3 py-1.5">
+            <span className="w-4 h-4 rounded bg-background neu-border" /> PMO / Minister
+          </span>
+          <span className="flex items-center gap-2 neu-border px-3 py-1.5">
+            <span className="w-4 h-4 bg-background neu-border" /> Corporation
+          </span>
+          <span className="flex items-center gap-2 neu-border px-3 py-1.5">
+            <span className="w-4 h-4 bg-secondary neu-border" /> Lobbyist
+          </span>
+          <span className="flex items-center gap-2 neu-border px-3 py-1.5">
+            <span className="w-4 h-4 neu-border" style={{ background: "hsl(45 100% 95%)" }} /> Bank
+          </span>
+          <span className="flex items-center gap-2 neu-border px-3 py-1.5">
+            <span className="w-4 h-0.5 inline-block" style={{ width: 20, background: "hsl(0 84% 50%)" }} /> Crisis Link
+          </span>
+          <span className="flex items-center gap-2 neu-border px-3 py-1.5">
+            <span
+              className="inline-block"
+              style={{ width: 20, height: 2, background: "hsl(38 92% 45%)", borderTop: "2px dashed hsl(38 92% 45%)" }}
+            />{" "}
+            Lobbyist → Minister
+          </span>
+          <span className="flex items-center gap-2 neu-border px-3 py-1.5">
+            <span className="w-4 h-0.5 inline-block" style={{ width: 20, background: "hsl(0 0% 65%)" }} /> Standard Link
+          </span>
         </div>
       </div>
     </section>
