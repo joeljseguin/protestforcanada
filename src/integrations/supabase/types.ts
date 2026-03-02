@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      event_registrations: {
+        Row: {
+          created_at: string
+          event_id: string
+          event_title: string
+          id: string
+          message: string | null
+          organizer_email: string
+          organizer_name: string
+          registrant_email: string
+          registrant_name: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          event_title: string
+          id?: string
+          message?: string | null
+          organizer_email: string
+          organizer_name: string
+          registrant_email: string
+          registrant_name: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          event_title?: string
+          id?: string
+          message?: string | null
+          organizer_email?: string
+          organizer_name?: string
+          registrant_email?: string
+          registrant_name?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string

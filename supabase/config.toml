@@ -1,1 +1,4 @@
 project_id = "jrgmptkhqolsnowukchd"
+
+[functions.notify-organizer]
+verify_jwt = false

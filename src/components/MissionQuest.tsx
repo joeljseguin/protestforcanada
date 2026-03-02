@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Zap, Phone, Pen, Calendar, MapPin, Users, AlertTriangle, CheckCircle2, Circle, FileText, Clock } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import { ActionCenter } from "./ActionCenter";
+import { ProtestMap } from "./ProtestMap";
 import { StageActionDialog } from "./StageActionDialog";
 import { getStageActions } from "@/data/stageActions";
 import type { StageConfig } from "@/data/stageActions";
@@ -188,35 +189,46 @@ export const MissionQuest = () => {
                   </div>
                 </div>
 
-                {/* Calendar */}
-                <div className="neu-border neu-shadow p-6 bg-card">
-                  <h4 className="font-heading font-extrabold text-xl uppercase mb-6 flex items-center gap-2">
-                    <Calendar className="h-5 w-5" /> Protest Calendar
-                  </h4>
-                  <div className="space-y-3">
-                    {calendarEvents.map((event) => (
-                      <div key={event.id} className="neu-border p-4 flex items-center gap-4 bg-card hover:bg-secondary transition-colors">
-                        <div className="shrink-0 text-center neu-border px-3 py-2 bg-muted">
-                          <div className="font-mono text-xs text-muted-foreground">{new Date(event.date).toLocaleDateString("en-CA", { month: "short" })}</div>
-                          <div className="font-extrabold text-lg font-heading">{new Date(event.date).getDate()}</div>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-bold text-sm uppercase font-heading truncate">{event.title}</div>
-                          <div className="flex items-center gap-3 text-xs text-muted-foreground font-mono mt-1">
-                            <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {event.location}</span>
-                            <span>{event.time}</span>
+                {/* Calendar + Map */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Calendar */}
+                  <div className="neu-border neu-shadow p-6 bg-card">
+                    <h4 className="font-heading font-extrabold text-xl uppercase mb-6 flex items-center gap-2">
+                      <Calendar className="h-5 w-5" /> Protest Calendar
+                    </h4>
+                    <div className="space-y-3 max-h-[400px] overflow-y-auto">
+                      {calendarEvents.map((event) => (
+                        <div key={event.id} className="neu-border p-4 flex items-center gap-4 bg-card hover:bg-secondary transition-colors">
+                          <div className="shrink-0 text-center neu-border px-3 py-2 bg-muted">
+                            <div className="font-mono text-xs text-muted-foreground">{new Date(event.date).toLocaleDateString("en-CA", { month: "short" })}</div>
+                            <div className="font-extrabold text-lg font-heading">{new Date(event.date).getDate()}</div>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-bold text-sm uppercase font-heading truncate">{event.title}</div>
+                            <div className="flex items-center gap-3 text-xs text-muted-foreground font-mono mt-1 flex-wrap">
+                              <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {event.location}</span>
+                              <span>{event.time}</span>
+                            </div>
+                            {event.verified && (
+                              <div className="flex items-center gap-1 mt-1 text-[10px] font-mono text-green-600">
+                                <CheckCircle2 className="h-2.5 w-2.5" /> Verified · {event.source}
+                              </div>
+                            )}
+                          </div>
+                          <div className="shrink-0 flex flex-col items-end gap-1">
+                            <span className="text-xs font-mono text-muted-foreground flex items-center gap-1"><Users className="h-3 w-3" /> {event.attendees.toLocaleString()}</span>
+                            <div className="neu-border px-2 py-1 bg-secondary font-mono text-xs font-bold flex items-center gap-1"><Zap className="h-3 w-3" /> +{event.xpReward}</div>
                           </div>
                         </div>
-                        <div className="shrink-0 flex items-center gap-3">
-                          <span className="text-xs font-mono text-muted-foreground flex items-center gap-1"><Users className="h-3 w-3" /> {event.attendees.toLocaleString()}</span>
-                          <div className="neu-border px-2 py-1 bg-secondary font-mono text-xs font-bold flex items-center gap-1"><Zap className="h-3 w-3" /> +{event.xpReward}</div>
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                    <Button variant="outline" className="w-full mt-4 neu-border font-mono uppercase tracking-wider text-xs">
+                      + Propose New Event
+                    </Button>
                   </div>
-                  <Button variant="outline" className="w-full mt-4 neu-border font-mono uppercase tracking-wider text-xs">
-                    + Propose New Event
-                  </Button>
+
+                  {/* Map */}
+                  <ProtestMap />
                 </div>
 
                 {/* Source Links */}
