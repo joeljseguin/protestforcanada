@@ -1,9 +1,11 @@
-import { missions, threatColors } from "@/data/gameData";
+import { missions as rawMissions, threatColors } from "@/data/gameData";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Zap, Trophy, Target } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const MissionHub = () => {
+  const missions = [...rawMissions].sort((a, b) => a.rank - b.rank);
+
   return (
     <section id="missions" className="py-16 md:py-24">
       <div className="container">
@@ -42,6 +44,7 @@ export const MissionHub = () => {
                     </Badge>
                   </div>
                   <p className="text-muted-foreground text-xs font-mono truncate">{mission.subtitle}</p>
+                  <p className="text-muted-foreground text-xs mt-1.5 line-clamp-2 leading-relaxed hidden md:block">{mission.whatYouNeedToKnow}</p>
                 </div>
 
                 {/* Progress */}
