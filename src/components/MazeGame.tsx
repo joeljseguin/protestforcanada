@@ -90,7 +90,7 @@ export const MazeGame = ({ characterId, onComplete }: MazeGameProps) => {
   useEffect(() => {
     const e: Enemy[] = [];
     BASE_MAP.forEach((row, y) => row.forEach((cell, x) => {
-      if (cell === 3) e.push({ x, y, dir: Math.floor(Math.random() * 4), type: ENEMY_TYPES[e.length % 3], hp: 2, stunned: 0 });
+      if (cell === 3) e.push({ x, y, dir: Math.floor(Math.random() * 4), type: ENEMY_TYPES[e.length % 3], hp: 3, stunned: 0 });
     }));
     setEnemies(e);
   }, []);
@@ -238,7 +238,7 @@ export const MazeGame = ({ characterId, onComplete }: MazeGameProps) => {
     setMessage("Find the 🔑 KEY in the forest!");
     const e: Enemy[] = [];
     BASE_MAP.forEach((row, y) => row.forEach((cell, x) => {
-      if (cell === 3) e.push({ x, y, dir: Math.floor(Math.random() * 4), type: ENEMY_TYPES[e.length % 3], hp: 2, stunned: 0 });
+      if (cell === 3) e.push({ x, y, dir: Math.floor(Math.random() * 4), type: ENEMY_TYPES[e.length % 3], hp: 3, stunned: 0 });
     }));
     setEnemies(e);
   };
@@ -374,7 +374,7 @@ export const MazeGame = ({ characterId, onComplete }: MazeGameProps) => {
                 <span style={{ fontSize: tileSize * 0.55 }}>{cfg.emoji}</span>
                 {/* HP pips */}
                 <div className="flex gap-px mt-px">
-                  {Array.from({ length: 2 }).map((_, j) => (
+                  {Array.from({ length: 3 }).map((_, j) => (
                     <div
                       key={j}
                       className="rounded-full"
