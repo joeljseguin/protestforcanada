@@ -44,23 +44,13 @@ export const Header = () => {
           </nav>
           <div className="hidden md:flex items-center gap-2">
             {user && profile ? (
-              <>
-                <div className="font-mono text-xs neu-border px-3 py-1.5 bg-secondary font-bold flex items-center gap-1">
-                  <Zap className="h-3 w-3" /> {profile.total_xp} XP
-                </div>
-                <Button size="sm" variant="outline" onClick={signOut} className="font-mono text-xs h-8 neu-border uppercase tracking-wider">
-                  Sign Out
-                </Button>
-              </>
+              <Button size="sm" variant="outline" onClick={signOut} className="font-mono text-xs h-8 neu-border uppercase tracking-wider">
+                Sign Out
+              </Button>
             ) : (
-              <>
-                <div className="font-mono text-xs neu-border px-3 py-1.5 bg-secondary font-bold">
-                  🏆 0 XP
-                </div>
-                <Button size="sm" onClick={() => setAuthOpen(true)} className="font-mono text-xs h-8 neu-border neu-shadow-sm uppercase tracking-wider">
-                  Join the Resistance
-                </Button>
-              </>
+              <Button size="sm" onClick={() => setAuthOpen(true)} className="font-mono text-xs h-8 neu-border neu-shadow-sm uppercase tracking-wider">
+                Join the Resistance
+              </Button>
             )}
           </div>
           <button className="md:hidden p-2 neu-border" onClick={() => setMobileOpen(!mobileOpen)}>
