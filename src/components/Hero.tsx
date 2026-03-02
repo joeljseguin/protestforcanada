@@ -13,14 +13,24 @@ export const Hero = () => {
             <span className="text-primary">10 Active Missions</span>
           </div>
 
-          <h1 className="font-heading text-xl md:text-2xl lg:text-3xl tracking-tight leading-relaxed mb-6 animate-fade-in text-foreground" style={{ animationDelay: "100ms" }}>
-            Follow the{" "}
-            <span className="text-accent">money</span>,
-            <br />
-            hold{" "}
-            <span className="inline-block ff-panel px-3 py-1 text-primary">power</span>
-            {" "}accountable.
-          </h1>
+          <div className="relative">
+            <h1 className="font-heading text-xl md:text-2xl lg:text-3xl tracking-tight leading-relaxed mb-6 animate-fade-in text-foreground" style={{ animationDelay: "100ms" }}>
+              Follow the{" "}
+              <span className="text-accent">money</span>,
+              <br />
+              hold{" "}
+              <span className="inline-block ff-panel px-3 py-1 text-primary">power</span>
+              {" "}accountable.
+            </h1>
+            <span
+              className="block mt-2 md:mt-0 md:absolute md:-right-48 md:top-1/2 md:-translate-y-1/2 md:-rotate-3 font-mono italic text-lg md:text-xl animate-fade-in bg-gradient-to-b from-[hsl(45,100%,85%)] via-[hsl(45,100%,60%)] to-[hsl(30,80%,35%)] bg-clip-text text-transparent drop-shadow-[0_0_8px_hsl(45,100%,60%/0.4)]"
+              style={{ animationDelay: "150ms" }}
+            >
+              The Game that
+              <br />
+              fixes democracy
+            </span>
+          </div>
 
           <p className="text-base md:text-lg text-muted-foreground mb-10 max-w-xl leading-relaxed font-body animate-fade-in" style={{ animationDelay: "200ms" }}>
             Complete missions. Earn XP. Change Canada.
