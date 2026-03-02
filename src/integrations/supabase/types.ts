@@ -14,7 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          impact_score: number
+          missions_completed: number
+          postal_code: string | null
+          total_xp: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+          impact_score?: number
+          missions_completed?: number
+          postal_code?: string | null
+          total_xp?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          impact_score?: number
+          missions_completed?: number
+          postal_code?: string | null
+          total_xp?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      xp_actions: {
+        Row: {
+          action_type: string
+          created_at: string
+          id: string
+          mission_id: string | null
+          user_id: string
+          xp_earned: number
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          id?: string
+          mission_id?: string | null
+          user_id: string
+          xp_earned?: number
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          id?: string
+          mission_id?: string | null
+          user_id?: string
+          xp_earned?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
