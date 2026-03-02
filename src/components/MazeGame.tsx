@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { characterMap } from "@/data/characters";
 import { stepSound, collectKey, hitEnemy, questComplete, getCharacterSfx } from "@/lib/retroSfx";
-import { Sword, Wand2, Target, Rocket } from "lucide-react";
+import { Sword, Wand2, Target, Rocket, LogOut } from "lucide-react";
+import { Link } from "react-router-dom";
 
 // ── Maze map (16×12 for fullscreen feel) ──
 // 0=grass, 1=tree, 2=key, 3=enemy, 4=start, 5=path-dirt
@@ -288,6 +289,9 @@ export const MazeGame = ({ characterId, onComplete }: MazeGameProps) => {
           <div className="font-body text-[9px] text-accent uppercase">
             {score} pts
           </div>
+          <Link to="/quest" className="ff-panel px-2 py-0.5 font-heading text-[7px] uppercase text-muted-foreground hover:text-destructive hover:border-destructive transition-colors flex items-center gap-1">
+            <LogOut className="h-3 w-3" /> Quit
+          </Link>
         </div>
       </div>
 
