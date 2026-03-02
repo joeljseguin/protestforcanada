@@ -53,6 +53,33 @@ export type Database = {
         }
         Relationships: []
       }
+      petition_signatures: {
+        Row: {
+          anonymous_id: string | null
+          created_at: string
+          id: string
+          mission_id: string
+          petition_url: string
+          user_id: string | null
+        }
+        Insert: {
+          anonymous_id?: string | null
+          created_at?: string
+          id?: string
+          mission_id: string
+          petition_url: string
+          user_id?: string | null
+        }
+        Update: {
+          anonymous_id?: string | null
+          created_at?: string
+          id?: string
+          mission_id?: string
+          petition_url?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
