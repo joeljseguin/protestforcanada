@@ -22,9 +22,9 @@ export const Header = () => {
     <>
       <header className="sticky top-0 z-50 neu-border border-t-0 border-x-0 bg-background">
         <div className="container flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2 font-heading font-extrabold text-xl tracking-tight uppercase">
-            <div className="w-8 h-8 neu-border flex items-center justify-center bg-foreground">
-              <Swords className="h-4 w-4 text-background" />
+          <Link to="/" className="flex items-center gap-3 font-heading font-extrabold text-3xl tracking-tight uppercase">
+            <div className="w-14 h-14 neu-border flex items-center justify-center bg-foreground">
+              <Swords className="h-7 w-7 text-background" />
             </div>
             <span>PROTEST</span>
           </Link>
