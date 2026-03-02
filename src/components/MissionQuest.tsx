@@ -129,12 +129,27 @@ export const MissionQuest = () => {
                     <AlertTriangle className="h-4 w-4" /> Level Up Your XP to Complete the Missions
                   </h4>
                   <ul className="space-y-3">
-                    {mission.humanCost.map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 font-body text-sm text-foreground">
-                        <span className="shrink-0 w-6 h-6 ff-panel flex items-center justify-center text-[10px] font-bold text-accent">{i + 1}</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
+                    {mission.humanCost.map((item, i) => {
+                      const link = mission.humanCostLinks?.[i];
+                      return (
+                        <li key={i} className="flex items-start gap-3 font-body text-sm text-foreground">
+                          {link ? (
+                            <a href={link} target="_blank" rel="noopener noreferrer" className="shrink-0 w-6 h-6 ff-panel flex items-center justify-center text-[10px] font-bold text-accent hover:bg-accent hover:text-background transition-colors" title="Read source article">
+                              {i + 1}
+                            </a>
+                          ) : (
+                            <span className="shrink-0 w-6 h-6 ff-panel flex items-center justify-center text-[10px] font-bold text-accent">{i + 1}</span>
+                          )}
+                          {link ? (
+                            <a href={link} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors underline decoration-border hover:decoration-accent">
+                              {item}
+                            </a>
+                          ) : (
+                            <span>{item}</span>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
 
@@ -142,7 +157,7 @@ export const MissionQuest = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {mission.stats.map((stat) => (
                     <div key={stat.label} className="ff-panel p-4">
-                      <div className="text-xl font-heading text-accent">{stat.value}</div>
+                      <div className="text-4xl md:text-5xl font-heading text-accent">{stat.value}</div>
                       <div className="text-xs text-muted-foreground mt-1 font-body">{stat.label}</div>
                       <a href={stat.sourceUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 mt-3 text-[10px] font-body text-muted-foreground hover:text-primary ff-panel px-2 py-0.5">
                         <ExternalLink className="h-2.5 w-2.5" /> {stat.source}
