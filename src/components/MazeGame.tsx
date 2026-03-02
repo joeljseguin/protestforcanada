@@ -88,11 +88,24 @@ export const MazeGame = ({ characterId, onComplete, onXP }: MazeGameProps) => {
   const [score, setScore] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
   const moveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [musicOn, setMusicOn] = useState(false);
+  const [musicOn, setMusicOn] = useState(true);
+  const musicStartedRef = useRef(false);
 
-  // Music lifecycle
+  // Auto-start music on first user interaction (browser requires user gesture for audio)
   useEffect(() => {
-    return () => { stopGameMusic(); };
+    const startOnInteraction = () => {
+      if (!musicStartedRef.current) {
+        musicStartedRef.current = true;
+        startGameMusic();
+      }
+    };
+    window.addEventListener("keydown", startOnInteraction, { once: true });
+    window.addEventListener("pointerdown", startOnInteraction, { once: true });
+    return () => {
+      stopGameMusic();
+      window.removeEventListener("keydown", startOnInteraction);
+      window.removeEventListener("pointerdown", startOnInteraction);
+    };
   }, []);
 
   // Enemy proximity → mood change
