@@ -394,7 +394,7 @@ export type PersonDossier = {
 
 export type InfluenceNode = {
   id: string;
-  type: "pmo" | "minister" | "corporation" | "lobbyist" | "bank";
+  type: "pmo" | "minister" | "corporation" | "lobbyist" | "bank" | "factory" | "intermediary" | "solution";
   label: string;
   role?: string;
   detail?: string;
@@ -403,6 +403,8 @@ export type InfluenceNode = {
   sourceUrl?: string;
   dossier?: PersonDossier;
   crisisLinks?: string[];
+  location?: string;
+  solutionType?: "petition" | "committee" | "senate" | "action";
 };
 
 export type InfluenceEdge = {
@@ -874,6 +876,160 @@ export const influenceNodes: InfluenceNode[] = [
       lobbyingActivity: "25 communications across Finance, Innovation, and DND. Clients include SNC-Lavalin.",
     },
   },
+
+  // ===== TIER 4: FACTORIES & INTERMEDIARIES =====
+  {
+    id: "gdls-factory",
+    type: "factory",
+    label: "GDLS London Plant",
+    detail: "LAV turrets · artillery propellant · 2,500 employees",
+    location: "1 General Dynamics Blvd, London, Ontario",
+    alertRed: true,
+    dossier: {
+      name: "GDLS London Manufacturing Facility",
+      title: "Primary Canadian Arms Manufacturing Site",
+      phone: "519-964-2251",
+      website: "https://www.gdls.com",
+      lobbyingActivity: "Produces Light Armoured Vehicles (LAVs), turret components, and artillery propellant. 2,500 employees. Products exported via CCC to US, then re-exported to conflict zones.",
+    },
+  },
+  {
+    id: "elbit-factory",
+    type: "factory",
+    label: "Elbit Kanata Facility",
+    detail: "UAV systems · defence electronics",
+    location: "340 Legget Dr, Kanata, Ontario",
+    alertRed: true,
+    dossier: {
+      name: "Elbit Systems of Canada",
+      title: "Defence Electronics & UAV Systems",
+      phone: "613-599-5000",
+      website: "https://elbitsystems.com",
+      lobbyingActivity: "Produces unmanned aerial vehicle (UAV) systems, electro-optic sensors, and electronic warfare systems. Components integrated into weapons platforms used in conflict zones.",
+    },
+  },
+  {
+    id: "ccc",
+    type: "intermediary",
+    label: "Canadian Commercial Corp",
+    detail: "Crown Corp · Govt-to-Govt exports",
+    dossier: {
+      name: "Canadian Commercial Corporation",
+      title: "Crown Corporation — Defence Export Intermediary",
+      phone: "613-996-0034",
+      email: "info@ccc.ca",
+      website: "https://www.ccc.ca",
+      lobbyingActivity: "Facilitates government-to-government sales of Canadian military goods. Key intermediary allowing GDLS and Elbit to export via 'government channel' — bypassing direct commercial export scrutiny.",
+    },
+  },
+  {
+    id: "gac-export",
+    type: "intermediary",
+    label: "Global Affairs — Export Controls",
+    detail: "Permit processing division",
+    dossier: {
+      name: "Export Controls Division, Global Affairs Canada",
+      title: "Processes Military Export Permits under EIPA",
+      phone: "343-203-4331",
+      email: "exportcontrols@international.gc.ca",
+      website: "https://www.international.gc.ca",
+      lobbyingActivity: "Processes export permit applications under the Export and Import Permits Act. Minister Anand has final sign-off authority. 12 legacy permits remain active despite 'pause'.",
+    },
+  },
+  {
+    id: "us-dod",
+    type: "intermediary",
+    label: "US Dept of Defense",
+    detail: "Re-integrates Canadian components",
+    alertRed: true,
+    dossier: {
+      name: "United States Department of Defense",
+      title: "The 'American Loophole' Endpoint",
+      website: "https://www.defense.gov",
+      lobbyingActivity: "Receives Canadian-made military components (LAV turrets, electronics, propellant). Integrates into US weapons systems. Re-exports completed systems — Canada has NO tracking mechanism after US transfer.",
+    },
+  },
+  {
+    id: "conflict-zone",
+    type: "intermediary",
+    label: "CONFLICT ZONE",
+    detail: "438 documented shipments · $18.9M",
+    alertRed: true,
+    dossier: {
+      name: "End-Use: Active Conflict Zones",
+      title: "Where Canadian Arms End Up",
+      lobbyingActivity: "Project Ploughshares documented 438+ shipments to conflict zones in 2025-26. Canadian-made LAV components, artillery propellant, and electronic warfare systems deployed. The EIPA has NO mechanism to track end-use after US transfer.",
+    },
+  },
+
+  // ===== TIER 5: SOLUTION PATHWAY =====
+  {
+    id: "sol-petition",
+    type: "solution",
+    label: "📋 E-PETITION",
+    detail: "500 signatures → tabled in Parliament",
+    solutionType: "petition",
+    dossier: {
+      name: "House of Commons E-Petition System",
+      title: "Your First Legal Tool",
+      website: "https://petitions.ourcommons.ca",
+      lobbyingActivity: "ANY Canadian citizen or resident can create/sign an e-petition. At 500 signatures it MUST be tabled in the House of Commons. The government MUST respond within 120 days. At 2,500+ signatures, it triggers Standing Committee review.",
+    },
+  },
+  {
+    id: "sol-committee",
+    type: "solution",
+    label: "🏛️ STANDING COMMITTEE",
+    detail: "Foreign Affairs & Int'l Development",
+    solutionType: "committee",
+    dossier: {
+      name: "Standing Committee on Foreign Affairs (FAAE)",
+      title: "Parliamentary Oversight Body",
+      phone: "613-996-1540",
+      website: "https://www.ourcommons.ca/Committees/en/FAAE",
+      lobbyingActivity: "The FAAE committee can subpoena witnesses, demand documents, and issue binding recommendations. They can call Minister Anand, GDLS CEO Danny Deep, and CCC officials to testify. Committee reports require government response.",
+    },
+  },
+  {
+    id: "sol-house",
+    type: "solution",
+    label: "🏛️ HOUSE OF COMMONS",
+    detail: "338 MPs · 3 readings required",
+    solutionType: "committee",
+    dossier: {
+      name: "House of Commons — Bill Process",
+      title: "Where Laws Are Made",
+      phone: "613-992-4793",
+      website: "https://www.ourcommons.ca",
+      lobbyingActivity: "A Private Member's Bill or Government Bill to revoke legacy permits must pass 3 readings. Your MP can introduce a bill. The NDP and Bloc have supported arms export restrictions. Contact YOUR MP to demand action.",
+    },
+  },
+  {
+    id: "sol-senate",
+    type: "solution",
+    label: "🏛️ SENATE",
+    detail: "105 Senators · Final review",
+    solutionType: "senate",
+    dossier: {
+      name: "Senate of Canada",
+      title: "Chamber of Sober Second Thought",
+      phone: "613-992-1149",
+      website: "https://sencanada.ca",
+      lobbyingActivity: "After House passage, the Senate reviews and votes. Several Independent senators have spoken against arms exports. Senator Marilou McPhedran has been vocal on human rights and arms control.",
+    },
+  },
+  {
+    id: "sol-revoke",
+    type: "solution",
+    label: "✅ REVOKE ALL PERMITS",
+    detail: "Royal Assent → Crisis Ends",
+    solutionType: "action",
+    dossier: {
+      name: "The Goal: Revoke All Legacy Permits",
+      title: "End Canadian Complicity in the Humanitarian Crisis",
+      lobbyingActivity: "With Royal Assent, ALL 12 legacy permits are revoked. GDLS and Elbit can no longer export military goods through the American Loophole. The EIPA is amended to include end-use tracking. Canada complies with the Arms Trade Treaty. THE CRISIS CAN BE STOPPED.",
+    },
+  },
 ];
 
 export const influenceEdges: InfluenceEdge[] = [
@@ -925,6 +1081,26 @@ export const influenceEdges: InfluenceEdge[] = [
   { id: "e-lob-mcm-freeland", source: "lob-mcmillan", target: "freeland", label: "18 Comms → Finance", lobbyingFrequency: "McMillan Vantage banking regulation lobbying" },
   { id: "e-lob-prosp-blair", source: "lob-prospectus", target: "blair", label: "20 Comms → Defence", lobbyingFrequency: "Prospectus Associates for Irving" },
   { id: "e-lob-earn-champ", source: "lob-earnscliffe", target: "champagne", label: "25 Comms → Innovation", lobbyingFrequency: "Earnscliffe cross-sector lobbying" },
+
+  // ===== ARMS PIPELINE: Factories & Intermediaries =====
+  // GDLS Factory → CCC → US DoD → Conflict Zone
+  { id: "e-gdls-factory", source: "gdls", target: "gdls-factory", label: "Produces LAVs", lobbyingFrequency: "2,500 employees. LAV turrets, artillery propellant, armoured vehicles" },
+  { id: "e-elbit-factory", source: "elbit", target: "elbit-factory", label: "Produces UAV Tech", lobbyingFrequency: "Defence electronics, drone systems, surveillance tech" },
+  { id: "e-gdls-ccc", source: "gdls", target: "ccc", label: "Govt-to-Govt Export", lobbyingFrequency: "CCC facilitates government-to-government sales bypassing direct oversight", grantAmount: "$30M" },
+  { id: "e-elbit-ccc", source: "elbit", target: "ccc", label: "Export Channel", lobbyingFrequency: "Defence procurement via Crown corporation" },
+  { id: "e-anand-ccc", source: "anand", target: "ccc", label: "Issues Permits", lobbyingFrequency: "Foreign Affairs authorizes export permits through CCC", grantAmount: "12 Active Permits" },
+  { id: "e-ccc-usdod", source: "ccc", target: "us-dod", label: "Ships to US", lobbyingFrequency: "The 'American Loophole' — components shipped to US, then re-exported", grantAmount: "$18.9M" },
+  { id: "e-usdod-conflict", source: "us-dod", target: "conflict-zone", label: "Re-Exports to Conflict", lobbyingFrequency: "438 shipments documented by Project Ploughshares. No Canadian end-use tracking.", grantAmount: "438 Shipments" },
+  { id: "e-blair-ccc", source: "blair", target: "ccc", label: "Defence Oversight", lobbyingFrequency: "Minister of Defence oversees military procurement and CCC operations" },
+  { id: "e-gac-ccc", source: "gac-export", target: "ccc", label: "Processes Permits", lobbyingFrequency: "Export Controls Division processes applications, Minister signs off" },
+  { id: "e-anand-gac", source: "anand", target: "gac-export", label: "Directs Division", lobbyingFrequency: "Minister Anand oversees Global Affairs export controls" },
+
+  // ===== SOLUTION PATHWAY =====
+  { id: "e-solution-petition", source: "conflict-zone", target: "sol-petition", label: "YOU CAN STOP THIS", lobbyingFrequency: "Citizens have legal tools to force Parliamentary action" },
+  { id: "e-petition-committee", source: "sol-petition", target: "sol-committee", label: "2,500+ Signatures", lobbyingFrequency: "E-petitions with 500+ signatures get tabled. Standing Committee review at 2,500+" },
+  { id: "e-committee-house", source: "sol-committee", target: "sol-house", label: "Committee Report", lobbyingFrequency: "Standing Committee on Foreign Affairs must respond within 120 days" },
+  { id: "e-house-senate", source: "sol-house", target: "sol-senate", label: "Bill Passage", lobbyingFrequency: "Must pass 3 readings in House of Commons, then Senate" },
+  { id: "e-senate-revoke", source: "sol-senate", target: "sol-revoke", label: "Royal Assent", lobbyingFrequency: "Law enacted → all legacy permits revoked → arms exports halted" },
 ];
 
 // ============================
