@@ -8,6 +8,7 @@ export type Mission = {
   xpBounty: number;
   threatLevel: ThreatLevel;
   description: string;
+  whatYouNeedToKnow: string;
   humanCost: string[];
   progress: number;
   stages: { label: string; complete: boolean }[];
@@ -36,6 +37,7 @@ export const missions: Mission[] = [
     xpBounty: 500,
     threatLevel: "CRITICAL",
     description: "First Nations communities under long-term drinking water advisories. Seine River First Nation classified 'Long Term' as of Feb 10, 2026.",
+    whatYouNeedToKnow: "28 First Nations communities still lack clean drinking water in 2026. The government promised to fix this by 2021 — they failed. $890M in funding sits unspent while families boil water to survive.",
     humanCost: [
       "28 long-term drinking water advisories remain active.",
       "34 First Nations communities affected — basic water access denied.",
@@ -78,13 +80,14 @@ export const missions: Mission[] = [
     },
   },
   {
-    rank: 2,
+    rank: 3,
     id: "food",
     name: "Food Crisis",
     subtitle: "25.5% National Insecurity — 12M Canadians",
     xpBounty: 500,
     threatLevel: "CRITICAL",
     description: "1 in 4 Canadian households now food insecure. Grocery industry consolidation and unchecked lobbying fuel the crisis.",
+    whatYouNeedToKnow: "1 in 4 Canadians can't afford to eat properly. Meanwhile, Loblaws, Sobeys, and Metro reported record billion-dollar profits. 67 lobbying meetings with government — zero price controls.",
     humanCost: [
       "1 in 4 Canadians are hungry. Average food cost up $994 this year.",
       "12 million Canadians affected by food insecurity.",
@@ -119,13 +122,14 @@ export const missions: Mission[] = [
     },
   },
   {
-    rank: 3,
+    rank: 4,
     id: "tax",
     name: "Tax the Rich",
     subtitle: "Petition e-6806 — 1% Wealth Tax",
     xpBounty: 500,
     threatLevel: "HIGH",
     description: "Parliamentary petition for a 1% annual wealth tax on net wealth over $20 million.",
+    whatYouNeedToKnow: "87 billionaires hold more wealth than 12 million Canadians combined. A 1% wealth tax on fortunes over $20M would raise $5.6B/year — enough to end the water crisis 10 times over.",
     humanCost: [
       "87 Canadian billionaires hold more wealth than the bottom 12 million Canadians combined.",
       "A 1% wealth tax would raise an estimated $5.6B annually for public services.",
@@ -158,13 +162,14 @@ export const missions: Mission[] = [
     },
   },
   {
-    rank: 4,
+    rank: 2,
     id: "gaza",
     name: "Gaza/Palestine Accountability",
     subtitle: "Legacy Permits & Indirect Transfers",
     xpBounty: 500,
     threatLevel: "CRITICAL",
     description: "Tracking Canadian military exports despite the announced 'pause'. $18.9M exported via legacy permits.",
+    whatYouNeedToKnow: "Canada officially 'paused' arms exports — but $18.9M in military goods still shipped through a loophole. Canadian-made components go to the US, get integrated into weapons, then sent to conflict zones. 438 shipments documented.",
     humanCost: [
       "438+ shipments to conflict zones documented by Project Ploughshares.",
       "$18.9M in military goods exported despite official 'pause'.",
@@ -207,6 +212,7 @@ export const missions: Mission[] = [
     xpBounty: 500,
     threatLevel: "CRITICAL",
     description: "Average home prices remain 7x median household income.",
+    whatYouNeedToKnow: "The average Canadian home costs $716K — 7x the median income. 1.87 million households are in 'core housing need,' meaning they can't afford adequate shelter. Vacancy rates are at 1.5%, the worst in decades.",
     humanCost: [
       "Average home price: $716,000 — unaffordable for most families.",
       "1.87M households in core housing need across Canada.",
@@ -234,6 +240,7 @@ export const missions: Mission[] = [
     xpBounty: 500,
     threatLevel: "HIGH",
     description: "Canada Health Transfer increased to $49.4B but wait times remain at historic highs.",
+    whatYouNeedToKnow: "6.5 million Canadians don't have a family doctor. ER waits average 4.1 hours — a record. 14,000 nursing positions sit vacant while the system hemorrhages workers to burnout and better-paying US jobs.",
     humanCost: [
       "6.5 million Canadians lack a family doctor.",
       "Median ER wait time: 4.1 hours — record high.",
@@ -261,6 +268,7 @@ export const missions: Mission[] = [
     xpBounty: 500,
     threatLevel: "HIGH",
     description: "The failed Phoenix pay system continues to cost taxpayers billions.",
+    whatYouNeedToKnow: "The government spent $2.4 BILLION on a pay system that doesn't work. 150,000+ federal workers have been underpaid, overpaid, or not paid at all — for 10 years. There's still no replacement plan.",
     humanCost: [
       "$2.4 billion spent on a system that doesn't work.",
       "Thousands of federal employees underpaid or not paid at all.",
@@ -288,6 +296,7 @@ export const missions: Mission[] = [
     xpBounty: 500,
     threatLevel: "ELEVATED",
     description: "Canada continues fossil fuel subsidies while missing emission reduction targets.",
+    whatYouNeedToKnow: "Canada hands $18.5 billion per year to fossil fuel companies while missing every climate target it sets. 230,000 Canadians were displaced by wildfires in 2024-25 alone. The subsidies continue.",
     humanCost: [
       "$18.5 billion in fossil fuel subsidies annually.",
       "Canada on track to miss 2030 Paris Agreement targets.",
@@ -315,6 +324,7 @@ export const missions: Mission[] = [
     xpBounty: 500,
     threatLevel: "ELEVATED",
     description: "Online Harms Act (Bill C-63) advancing with implications for free expression.",
+    whatYouNeedToKnow: "Bill C-63 could let the government regulate speech before it happens — 'pre-crime' censorship. There's no independent oversight body proposed. Digital privacy is eroding under expanded surveillance powers.",
     humanCost: [
       "Bill C-63 could enable pre-crime speech regulation.",
       "Digital privacy eroding under expanded surveillance powers.",
@@ -342,6 +352,7 @@ export const missions: Mission[] = [
     xpBounty: 500,
     threatLevel: "MODERATE",
     description: "The ArriveCAN app ballooned from $80K to $59.5M with questionable subcontracting.",
+    whatYouNeedToKnow: "A travel app budgeted at $80,000 ended up costing taxpayers $59.5 MILLION. 76 subcontractors, sole-source contracts, and an active RCMP criminal investigation. Nobody has been held accountable.",
     humanCost: [
       "Original budget: $80,000. Final cost: $59.5 million.",
       "Questionable sole-source contracts to GC Strategies.",
