@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import PowerMap from "./pages/PowerMap";
 import Quest from "./pages/Quest";
 import TruthVaultPage from "./pages/TruthVaultPage";
+import SelectCharacter from "./pages/SelectCharacter";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/power-map" element={<PowerMap />} />
             <Route path="/quest" element={<Quest />} />
             <Route path="/truth-vault" element={<TruthVaultPage />} />
+            <Route path="/select-character" element={<SelectCharacter />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
