@@ -24,11 +24,15 @@ export const Header = () => {
         {/* Top bar: logo + version + CTA */}
         <div className="container flex items-center justify-between h-14">
           <Link to="/" className="flex items-center gap-3 font-heading font-extrabold text-2xl tracking-tight uppercase">
-            <div className="w-10 h-10 bg-foreground flex items-center justify-center">
+            <div className="w-10 h-10 bg-foreground flex items-center justify-center shrink-0">
               <Swords className="h-5 w-5 text-background" />
             </div>
             <span>PROTEST</span>
           </Link>
+          <div className="hidden lg:flex flex-col ml-4 border-l-2 border-foreground/20 pl-4">
+            <span className="font-heading text-[10px] uppercase tracking-wider font-bold leading-tight">The humanitarian quest game like no other</span>
+            <span className="font-mono text-[9px] text-muted-foreground leading-tight">Win XP by taking action, win the missions in order to advance!</span>
+          </div>
 
           <div className="hidden md:flex items-center gap-3">
             <span className="text-[9px] font-mono text-muted-foreground tracking-widest border border-muted-foreground/30 px-2 py-0.5">
