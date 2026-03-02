@@ -29,7 +29,7 @@ export const Header = () => {
             <span>PROTEST</span>
           </Link>
           <span className="text-[9px] font-mono text-muted-foreground tracking-widest neu-border px-1.5 py-0.5">v3.5</span>
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-2">
             {navItems.map((item) => (
               <Link
                 key={item.href}
