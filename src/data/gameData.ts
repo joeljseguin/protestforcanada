@@ -13,6 +13,11 @@ export type Mission = {
   stages: { label: string; complete: boolean }[];
   stats: { label: string; value: string; source: string; sourceUrl: string }[];
   links: { label: string; url: string }[];
+  truthTab?: {
+    title: string;
+    timeline?: { year: string; event: string }[];
+    details: string[];
+  };
 };
 
 export const threatColors: Record<ThreatLevel, string> = {
@@ -51,6 +56,26 @@ export const missions: Mission[] = [
     links: [
       { label: "ISC Water Dashboard", url: "https://www.sac-isc.gc.ca/eng/1506514143353/1533317130660" },
     ],
+    truthTab: {
+      title: "Seine River LTDWA — 10-Year Timeline of Neglect",
+      timeline: [
+        { year: "2016", event: "Federal government pledges to end all LTDWAs by 2021." },
+        { year: "2017", event: "Seine River First Nation water plant flagged for aging infrastructure." },
+        { year: "2019", event: "ISC allocates $1.5B for water infrastructure — Seine River not prioritized." },
+        { year: "2020", event: "COVID-19 delays construction across 14 First Nations sites." },
+        { year: "2021", event: "Original deadline missed. 52 LTDWAs still active nationally." },
+        { year: "2022", event: "Revised target set for 2024. Seine River advisory continues." },
+        { year: "2023", event: "Auditor General report criticizes ISC for 'systemic delays'." },
+        { year: "2024", event: "Budget 2024/25 allocates $890M — funds not yet disbursed." },
+        { year: "2025", event: "Seine River advisory surpasses 365 days. Still classified 'short-term'." },
+        { year: "Feb 2026", event: "ISC reclassifies Seine River as 'Long-Term Drinking Water Advisory'." },
+      ],
+      details: [
+        "Jordan's Principle ensures First Nations children receive services without jurisdictional delays — yet water remains unresolved.",
+        "The government lifted 144 advisories since 2015 but 28 remain, many in remote fly-in communities.",
+        "Infrastructure costs are 3-5x higher in remote communities due to transportation and labour shortages.",
+      ],
+    },
   },
   {
     rank: 2,
@@ -81,6 +106,17 @@ export const missions: Mission[] = [
       { label: "Food Price Report 2026", url: "https://www.dal.ca/sites/agri-food/research/canada-s-food-price-report.html" },
       { label: "Competition Bureau", url: "https://www.competitionbureau.gc.ca" },
     ],
+    truthTab: {
+      title: "Corporate Profit vs. Family Food Inflation",
+      details: [
+        "Loblaws reported $1.2B net earnings in 2025 — up 12% while families pay $994 more per year on groceries.",
+        "Empire (Sobeys) reported $780M net earnings — up 8% in same period.",
+        "Metro Inc. reported $920M net earnings — dividend payouts increased 15%.",
+        "The 'Grocery Code of Conduct' has been delayed 3 times since 2023 due to industry lobbying.",
+        "67 registered lobbying communications between grocery executives and Innovation Ministry in 2025.",
+        "Food bank usage hit record 2M visits/month — up 32% from 2023.",
+      ],
+    },
   },
   {
     rank: 3,
@@ -89,7 +125,7 @@ export const missions: Mission[] = [
     subtitle: "Petition e-6806 — 1% Wealth Tax",
     xpBounty: 500,
     threatLevel: "HIGH",
-    description: "Parliamentary petition for a 1% annual wealth tax on net wealth over $20 million. Sign at ourcommons.ca.",
+    description: "Parliamentary petition for a 1% annual wealth tax on net wealth over $20 million.",
     humanCost: [
       "87 Canadian billionaires hold more wealth than the bottom 12 million Canadians combined.",
       "A 1% wealth tax would raise an estimated $5.6B annually for public services.",
@@ -110,6 +146,16 @@ export const missions: Mission[] = [
     links: [
       { label: "Sign Petition e-6806", url: "https://petitions.ourcommons.ca" },
     ],
+    truthTab: {
+      title: "The Wealth Gap — Who Benefits?",
+      details: [
+        "TD Bank revenue target: $10.4B (2026) — CEO compensation: $15.2M.",
+        "RBC revenue target: $12.1B (2026) — CEO compensation: $16.8M.",
+        "Top 87 billionaires combined wealth: $270B — bottom 12M Canadians: $260B.",
+        "A 1% tax on wealth over $20M would affect ~13,000 families and raise $5.6B annually.",
+        "Revenue could fund: 56,000 affordable housing units OR eliminate all 28 LTDWAs 10x over.",
+      ],
+    },
   },
   {
     rank: 4,
@@ -140,6 +186,18 @@ export const missions: Mission[] = [
       { label: "Project Ploughshares Report", url: "https://ploughshares.ca" },
       { label: "CBC Investigation", url: "https://www.cbc.ca" },
     ],
+    truthTab: {
+      title: "The American Loophole — How It Works",
+      details: [
+        "Step 1: Canadian companies (GDLS, Elbit) receive export permits to ship to the United States.",
+        "Step 2: US Department of Defense integrates Canadian components into weapons systems.",
+        "Step 3: US exports completed systems to Israel — bypassing Canada's 'pause' entirely.",
+        "438 shipments documented by Project Ploughshares in their 2025/26 annual report.",
+        "GDLS London, Ontario plant produces LAV turret components and artillery propellant.",
+        "General Dynamics CEO Danny Deep met with Minister Anand 4 times in Q4 2025.",
+        "The Export and Import Permits Act (EIPA) has no mechanism to track end-use after US transfer.",
+      ],
+    },
   },
   {
     rank: 5,
@@ -148,7 +206,7 @@ export const missions: Mission[] = [
     subtitle: "7x Income-to-Price Ratio",
     xpBounty: 500,
     threatLevel: "CRITICAL",
-    description: "Average home prices remain 7x median household income. Federal housing accelerator fund under scrutiny.",
+    description: "Average home prices remain 7x median household income.",
     humanCost: [
       "Average home price: $716,000 — unaffordable for most families.",
       "1.87M households in core housing need across Canada.",
@@ -166,9 +224,7 @@ export const missions: Mission[] = [
       { label: "Core Housing Need", value: "1.87M", source: "StatsCan", sourceUrl: "https://www.statcan.gc.ca" },
       { label: "Vacancy Rate", value: "1.5%", source: "CMHC 2025", sourceUrl: "https://www.cmhc-schl.gc.ca" },
     ],
-    links: [
-      { label: "CMHC Housing Data", url: "https://www.cmhc-schl.gc.ca" },
-    ],
+    links: [{ label: "CMHC Housing Data", url: "https://www.cmhc-schl.gc.ca" }],
   },
   {
     rank: 6,
@@ -195,9 +251,7 @@ export const missions: Mission[] = [
       { label: "Canada Health Transfer", value: "$49.4B", source: "Dept of Finance", sourceUrl: "https://www.canada.ca/en/department-finance.html" },
       { label: "Nursing Vacancies", value: "14K+", source: "StatsCan", sourceUrl: "https://www.statcan.gc.ca" },
     ],
-    links: [
-      { label: "CIHI Health Data", url: "https://www.cihi.ca" },
-    ],
+    links: [{ label: "CIHI Health Data", url: "https://www.cihi.ca" }],
   },
   {
     rank: 7,
@@ -206,7 +260,7 @@ export const missions: Mission[] = [
     subtitle: "$2.4B Wasted — No Fix in Sight",
     xpBounty: 500,
     threatLevel: "HIGH",
-    description: "The failed Phoenix pay system continues to cost taxpayers billions with no replacement timeline.",
+    description: "The failed Phoenix pay system continues to cost taxpayers billions.",
     humanCost: [
       "$2.4 billion spent on a system that doesn't work.",
       "Thousands of federal employees underpaid or not paid at all.",
@@ -233,7 +287,7 @@ export const missions: Mission[] = [
     subtitle: "Oil & Gas Subsidies vs Paris Targets",
     xpBounty: 500,
     threatLevel: "ELEVATED",
-    description: "Canada continues fossil fuel subsidies while missing emission reduction targets under the Paris Agreement.",
+    description: "Canada continues fossil fuel subsidies while missing emission reduction targets.",
     humanCost: [
       "$18.5 billion in fossil fuel subsidies annually.",
       "Canada on track to miss 2030 Paris Agreement targets.",
@@ -260,7 +314,7 @@ export const missions: Mission[] = [
     subtitle: "Bill C-63 — Free Expression Under Threat",
     xpBounty: 500,
     threatLevel: "ELEVATED",
-    description: "Online Harms Act (Bill C-63) advancing through Parliament with implications for free expression.",
+    description: "Online Harms Act (Bill C-63) advancing with implications for free expression.",
     humanCost: [
       "Bill C-63 could enable pre-crime speech regulation.",
       "Digital privacy eroding under expanded surveillance powers.",
@@ -287,7 +341,7 @@ export const missions: Mission[] = [
     subtitle: "$80K Budget → $59.5M Final Cost",
     xpBounty: 500,
     threatLevel: "MODERATE",
-    description: "The ArriveCAN app ballooned from $80K to $59.5M with questionable subcontracting. Accountability demanded.",
+    description: "The ArriveCAN app ballooned from $80K to $59.5M with questionable subcontracting.",
     humanCost: [
       "Original budget: $80,000. Final cost: $59.5 million.",
       "Questionable sole-source contracts to GC Strategies.",
@@ -309,15 +363,34 @@ export const missions: Mission[] = [
   },
 ];
 
+// ============================
+// INFLUENCE NETWORK — SPIDER WEB
+// ============================
+
+export type PersonDossier = {
+  name: string;
+  title: string;
+  phone?: string;
+  email?: string;
+  assistant?: string;
+  assistantEmail?: string;
+  reportsTo?: string;
+  website?: string;
+  lobbyingActivity?: string;
+  netWorth?: string;
+  salary?: string;
+};
+
 export type InfluenceNode = {
   id: string;
-  type: "minister" | "corporation" | "lobbyist";
+  type: "pmo" | "minister" | "corporation" | "lobbyist" | "bank";
   label: string;
   role?: string;
   detail?: string;
   avatarInitials?: string;
   alertRed?: boolean;
   sourceUrl?: string;
+  dossier?: PersonDossier;
 };
 
 export type InfluenceEdge = {
@@ -326,48 +399,401 @@ export type InfluenceEdge = {
   target: string;
   label?: string;
   lobbyingFrequency?: string;
+  grantAmount?: string;
 };
 
 export const influenceNodes: InfluenceNode[] = [
-  { id: "anand", type: "minister", label: "Anita Anand", role: "Minister of Foreign Affairs", avatarInitials: "AA", sourceUrl: "https://www.canada.ca/en/global-affairs.html" },
-  { id: "gull-masty", type: "minister", label: "Mandy Gull-Masty", role: "Minister of Indigenous Services", avatarInitials: "MG", sourceUrl: "https://www.sac-isc.gc.ca" },
-  { id: "champagne", type: "minister", label: "François-Philippe Champagne", role: "Minister of Innovation", avatarInitials: "FC", sourceUrl: "https://ised-isde.canada.ca" },
-  { id: "gdls", type: "corporation", label: "General Dynamics", detail: "CEO: Danny Deep", alertRed: true, sourceUrl: "https://www.gd.com" },
-  { id: "water-backlog", type: "corporation", label: "Water Infrastructure Backlogs", detail: "28 LTDWAs Active", alertRed: true },
-  { id: "loblaws", type: "corporation", label: "Loblaws / Weston", detail: "30% grocery market share", sourceUrl: "https://www.loblaw.ca" },
-  { id: "elbit", type: "corporation", label: "Elbit Systems", detail: "Defence electronics & UAVs", alertRed: true },
-  { id: "lob-gdls", type: "lobbyist", label: "Hill+Knowlton", detail: "Lobbying for GDLS", sourceUrl: "https://lobbycanada.gc.ca" },
-  { id: "lob-loblaws", type: "lobbyist", label: "Counsel Public Affairs", detail: "Lobbying for Loblaws", sourceUrl: "https://lobbycanada.gc.ca" },
+  // CENTER HUB
+  {
+    id: "pmo",
+    type: "pmo",
+    label: "Prime Minister's Office",
+    role: "Executive Power Center",
+    avatarInitials: "PMO",
+    dossier: {
+      name: "Prime Minister Mark Carney",
+      title: "Prime Minister of Canada",
+      phone: "613-992-4211",
+      email: "pm@pm.gc.ca",
+      assistant: "Katie Telford (Chief of Staff)",
+      assistantEmail: "katie.telford@pmo-bpm.gc.ca",
+      website: "https://pm.gc.ca",
+    },
+  },
+  {
+    id: "treasury",
+    type: "pmo",
+    label: "Treasury Board",
+    role: "Federal Spending Authority",
+    avatarInitials: "TB",
+    dossier: {
+      name: "Treasury Board Secretariat",
+      title: "Government Spending Oversight",
+      phone: "613-957-2400",
+      email: "questions@tbs-sct.gc.ca",
+      website: "https://www.canada.ca/en/treasury-board-secretariat.html",
+    },
+  },
+
+  // PRIMARY MINISTERS
+  {
+    id: "anand",
+    type: "minister",
+    label: "Anita Anand",
+    role: "Minister of Foreign Affairs",
+    avatarInitials: "AA",
+    sourceUrl: "https://www.canada.ca/en/global-affairs.html",
+    dossier: {
+      name: "Anita Anand",
+      title: "Minister of Foreign Affairs",
+      phone: "613-995-7749",
+      email: "anita.anand@parl.gc.ca",
+      assistant: "Parliamentary Assistant — TBD",
+      reportsTo: "Prime Minister (PMO)",
+      website: "https://www.ourcommons.ca/Members/en/anita-anand(105689)",
+      lobbyingActivity: "Met with GDLS CEO Danny Deep 4x in Q4 2025. Met with Elbit reps 3x re: defence procurement.",
+    },
+  },
+  {
+    id: "hajdu",
+    type: "minister",
+    label: "Patty Hajdu",
+    role: "Minister of Indigenous Services",
+    avatarInitials: "PH",
+    sourceUrl: "https://www.sac-isc.gc.ca",
+    dossier: {
+      name: "Patty Hajdu",
+      title: "Minister of Indigenous Services",
+      phone: "613-996-4792",
+      email: "patty.hajdu@parl.gc.ca",
+      assistant: "Ministerial Office: 819-997-0002",
+      reportsTo: "Prime Minister (PMO)",
+      website: "https://www.ourcommons.ca/Members/en/patty-hajdu(72029)",
+      lobbyingActivity: "Budget delays: $890M infrastructure grants pending for water systems.",
+    },
+  },
+  {
+    id: "champagne",
+    type: "minister",
+    label: "François-Philippe Champagne",
+    role: "Minister of Innovation, Science & Industry",
+    avatarInitials: "FC",
+    sourceUrl: "https://ised-isde.canada.ca",
+    dossier: {
+      name: "François-Philippe Champagne",
+      title: "Minister of Innovation, Science & Economic Development",
+      phone: "613-995-4895",
+      email: "francois-philippe.champagne@parl.gc.ca",
+      assistant: "Ministerial Office: 343-291-2700",
+      reportsTo: "Prime Minister (PMO)",
+      website: "https://www.ourcommons.ca/Members/en/francois-philippe-champagne(88633)",
+      lobbyingActivity: "67 meetings with grocery lobbyists in 2025. Overseeing Grocery Code of Conduct delays.",
+    },
+  },
+
+  // CORPORATIONS
+  {
+    id: "gdls",
+    type: "corporation",
+    label: "General Dynamics / CCC",
+    detail: "$30M Legacy Arms Permits",
+    alertRed: true,
+    sourceUrl: "https://www.gd.com",
+    dossier: {
+      name: "Danny Deep",
+      title: "CEO, General Dynamics Land Systems Canada",
+      phone: "519-964-2251",
+      email: "media@gdls.com",
+      reportsTo: "Phebe Novakovic (CEO, General Dynamics Corp)",
+      website: "https://www.gdls.com",
+      lobbyingActivity: "42 communications filed in 2025-26. Met with Minister Anand 4x Q4 2025.",
+      salary: "$1.2M base + performance bonuses",
+    },
+  },
+  {
+    id: "loblaws",
+    type: "corporation",
+    label: "Loblaws / Weston",
+    detail: "$1.2B profits · 30% market share",
+    alertRed: false,
+    sourceUrl: "https://www.loblaw.ca",
+    dossier: {
+      name: "Per Bank",
+      title: "President, Loblaw Companies Ltd",
+      phone: "905-459-2500",
+      email: "investor.relations@loblaw.ca",
+      reportsTo: "Galen Weston Jr. (Chairman, George Weston Ltd)",
+      website: "https://www.loblaw.ca",
+      lobbyingActivity: "28 meetings with Ministry of Innovation via Counsel Public Affairs.",
+      salary: "$5.8M total compensation (2025 proxy)",
+      netWorth: "Galen Weston family net worth: $8.7B (Forbes 2025)",
+    },
+  },
+  {
+    id: "elbit",
+    type: "corporation",
+    label: "Elbit Systems",
+    detail: "Defence electronics & UAVs",
+    alertRed: true,
+    dossier: {
+      name: "Bezhalel Machlis",
+      title: "CEO, Elbit Systems Ltd",
+      phone: "+972-4-831-5315",
+      email: "info@elbitsystems.com",
+      website: "https://elbitsystems.com",
+      lobbyingActivity: "15 communications re: defence procurement via GCI Group.",
+    },
+  },
+  {
+    id: "td-bank",
+    type: "bank",
+    label: "TD Bank",
+    detail: "Revenue target: $10.4B",
+    dossier: {
+      name: "Bharat Masrani",
+      title: "Group President & CEO, TD Bank Group",
+      phone: "416-982-8222",
+      email: "td.investor.relations@td.com",
+      reportsTo: "Board of Directors",
+      website: "https://www.td.com",
+      salary: "$15.2M total compensation",
+      lobbyingActivity: "Lobbying against wealth tax provisions.",
+    },
+  },
+  {
+    id: "rbc",
+    type: "bank",
+    label: "RBC",
+    detail: "Revenue target: $12.1B",
+    dossier: {
+      name: "Dave McKay",
+      title: "President & CEO, Royal Bank of Canada",
+      phone: "416-974-5151",
+      email: "investor.relations@rbc.com",
+      reportsTo: "Board of Directors",
+      website: "https://www.rbc.com",
+      salary: "$16.8M total compensation",
+      lobbyingActivity: "Active lobbying on capital gains and wealth tax legislation.",
+    },
+  },
+  {
+    id: "water-backlog",
+    type: "corporation",
+    label: "Water Infrastructure Backlogs",
+    detail: "28 LTDWAs Active · $890M delayed",
+    alertRed: true,
+  },
+
+  // LOBBYISTS
+  {
+    id: "lob-gdls",
+    type: "lobbyist",
+    label: "Hill+Knowlton Strategies",
+    detail: "Lobbying for GDLS — 42 comms filed",
+    sourceUrl: "https://lobbycanada.gc.ca",
+    dossier: {
+      name: "Hill+Knowlton Strategies",
+      title: "Government Relations Firm",
+      phone: "613-786-9930",
+      email: "ottawa@hillandknowlton.ca",
+      website: "https://hillandknowlton.ca",
+      lobbyingActivity: "42 communications with Global Affairs and DND in 2025-26.",
+    },
+  },
+  {
+    id: "lob-loblaws",
+    type: "lobbyist",
+    label: "Counsel Public Affairs",
+    detail: "Lobbying for Loblaws — 28 meetings",
+    sourceUrl: "https://lobbycanada.gc.ca",
+    dossier: {
+      name: "Counsel Public Affairs",
+      title: "Government Relations & Advocacy",
+      phone: "613-235-8444",
+      email: "info@counselpa.com",
+      website: "https://counselpa.com",
+      lobbyingActivity: "28 meetings with Ministry of Innovation on Grocery Code of Conduct.",
+    },
+  },
+  {
+    id: "lob-elbit",
+    type: "lobbyist",
+    label: "GCI Group",
+    detail: "Lobbying for Elbit — 15 comms",
+    dossier: {
+      name: "GCI Group",
+      title: "Public Affairs & Communications",
+      lobbyingActivity: "15 communications re: defence procurement contracts.",
+    },
+  },
+  {
+    id: "lob-banks",
+    type: "lobbyist",
+    label: "Canadian Bankers Association",
+    detail: "Lobbying against Wealth Tax",
+    sourceUrl: "https://cba.ca",
+    dossier: {
+      name: "Canadian Bankers Association",
+      title: "Industry Association",
+      phone: "416-362-6092",
+      email: "info@cba.ca",
+      website: "https://cba.ca",
+      lobbyingActivity: "34 meetings with Finance Ministry opposing Petition e-6806 provisions.",
+    },
+  },
 ];
 
 export const influenceEdges: InfluenceEdge[] = [
-  { id: "e1", source: "anand", target: "gdls", label: "Export Permits", lobbyingFrequency: "CEO Danny Deep met with Minister 4 times in Q4 2025" },
-  { id: "e2", source: "anand", target: "elbit", label: "Legacy Permits", lobbyingFrequency: "3 meetings in Q4 2025 re: defence procurement" },
-  { id: "e3", source: "gull-masty", target: "water-backlog", label: "Administers", lobbyingFrequency: "Budget delays: $890M infrastructure grants pending" },
-  { id: "e4", source: "champagne", target: "loblaws", label: "Competition Review", lobbyingFrequency: "CEO Per Bank met with Minister 4 times in Q4" },
-  { id: "e5", source: "gdls", target: "lob-gdls", label: "Retains", lobbyingFrequency: "42 communications filed in 2025-26" },
-  { id: "e6", source: "loblaws", target: "lob-loblaws", label: "Retains", lobbyingFrequency: "28 meetings with Ministry of Innovation" },
+  // PMO → Ministers
+  { id: "e-pmo-anand", source: "pmo", target: "anand", label: "Directs Foreign Policy", lobbyingFrequency: "Daily briefings on export policy" },
+  { id: "e-pmo-hajdu", source: "pmo", target: "hajdu", label: "Directs Indigenous Policy", lobbyingFrequency: "Water crisis updates weekly" },
+  { id: "e-pmo-champagne", source: "pmo", target: "champagne", label: "Directs Innovation", lobbyingFrequency: "Grocery Code delays reported to PMO" },
+  { id: "e-treasury-pmo", source: "treasury", target: "pmo", label: "Budget Authority" },
+
+  // Ministers → Corporations
+  { id: "e-anand-gdls", source: "anand", target: "gdls", label: "Export Permits", lobbyingFrequency: "CEO Danny Deep met with Minister 4 times in Q4 2025", grantAmount: "$30M" },
+  { id: "e-anand-elbit", source: "anand", target: "elbit", label: "Legacy Permits", lobbyingFrequency: "3 meetings in Q4 2025 re: defence procurement" },
+  { id: "e-hajdu-water", source: "hajdu", target: "water-backlog", label: "Administers", lobbyingFrequency: "Budget delays: $890M infrastructure grants pending", grantAmount: "$890M" },
+  { id: "e-champagne-loblaws", source: "champagne", target: "loblaws", label: "Competition Review", lobbyingFrequency: "CEO Per Bank met with Minister 4 times in Q4", grantAmount: "$1.2B profits" },
+
+  // Corporations → Lobbyists
+  { id: "e-gdls-lob", source: "gdls", target: "lob-gdls", label: "Retains", lobbyingFrequency: "42 communications filed in 2025-26" },
+  { id: "e-loblaws-lob", source: "loblaws", target: "lob-loblaws", label: "Retains", lobbyingFrequency: "28 meetings with Ministry of Innovation" },
+  { id: "e-elbit-lob", source: "elbit", target: "lob-elbit", label: "Retains", lobbyingFrequency: "15 communications re: defence procurement" },
+
+  // Banks → Wealth Tax connection
+  { id: "e-td-lob", source: "td-bank", target: "lob-banks", label: "Retains", lobbyingFrequency: "Active lobbying against wealth tax" },
+  { id: "e-rbc-lob", source: "rbc", target: "lob-banks", label: "Retains", lobbyingFrequency: "34 meetings opposing Petition e-6806" },
+  { id: "e-treasury-banks", source: "treasury", target: "td-bank", label: "Revenue Target", grantAmount: "$10.4B target" },
+  { id: "e-treasury-rbc", source: "treasury", target: "rbc", label: "Revenue Target", grantAmount: "$12.1B target" },
 ];
+
+// ============================
+// TRUTH VAULT / DOSSIERS
+// ============================
 
 export type DossierEntry = {
   id: string;
   term: string;
-  category: "terminology" | "organization" | "special";
+  category: "terminology" | "organization" | "person" | "special";
   definition: string;
   details?: string;
   sourceUrl?: string;
+  contactInfo?: {
+    phone?: string;
+    email?: string;
+    website?: string;
+    assistant?: string;
+    reportsTo?: string;
+  };
 };
 
 export const dossierEntries: DossierEntry[] = [
-  { id: "legacy-permit", term: "Legacy Permit", category: "terminology", definition: "An export permit approved before a policy change takes effect. Allows shipments to continue under old rules even after new restrictions are announced.", details: "Key loophole in the Export and Import Permits Act (EIPA). Canada's 'pause' on arms exports to Israel did not revoke existing legacy permits, allowing $18.9M in continued shipments." },
-  { id: "oic", term: "Order-in-Council", category: "terminology", definition: "A legal instrument made by the Governor in Council (Cabinet). Used to enact regulations, make appointments, or implement policy without full Parliamentary debate.", details: "Often used for arms export decisions. Critics argue it bypasses democratic oversight." },
-  { id: "ltdwa", term: "Long-Term Drinking Water Advisory (LTDWA)", category: "terminology", definition: "A drinking water advisory that has been in place for more than one year. Indicates systemic failure in water infrastructure.", details: "As of Feb 2026, 28 LTDWAs remain active across 34 First Nations communities. Seine River First Nation added Feb 10, 2026." },
-  { id: "eipa", term: "Export and Import Permits Act (EIPA)", category: "terminology", definition: "Federal legislation controlling the export and import of goods designated on Canada's export control list, including military goods and technology." },
-  { id: "sif", term: "Strategic Innovation Fund (SIF)", category: "terminology", definition: "A $7.2B federal fund administered by ISED to support business innovation. Criticized for grants to defence companies during humanitarian crises.", details: "$18.9M granted to General Dynamics, $4.2M to Elbit Systems." },
-  { id: "ploughshares", term: "Project Ploughshares", category: "organization", definition: "An operating program of the Canadian Council of Churches based at the University of Waterloo. Canada's leading peace research institute.", details: "Primary researcher exposing the 'American Loophole' — Canadian military goods exported to the US, then re-exported to conflict zones like Israel. Their 2025/26 report documented 438+ shipments.", sourceUrl: "https://ploughshares.ca" },
-  { id: "competition-bureau", term: "Competition Bureau of Canada", category: "organization", definition: "Independent law enforcement agency ensuring Canadian businesses and consumers prosper in a competitive and innovative marketplace.", details: "Currently reviewing grocery sector consolidation. Loblaws (30% market share) and Metro (12%) under scrutiny." },
-  { id: "lobbyist-registry", term: "Office of the Commissioner of Lobbying", category: "organization", definition: "Federal body maintaining the Registry of Lobbyists. All paid lobbying activity must be registered and disclosed.", sourceUrl: "https://lobbycanada.gc.ca" },
-  { id: "human-machine", term: "The Human & The Machine", category: "special", definition: "How this platform was built: A Canadian citizen and AI (working together in February 2026) bypassed corporate bureaucracy to map government accountability data that should be public by default.", details: "The founder used AI tools to cross-reference open government data, lobbying registries, military export reports, and Indigenous Services records — work that would normally require a team of researchers and months of ATIP requests. Built in days, not years. This is what civic technology looks like when the barriers are removed." },
+  // TERMINOLOGY
+  { id: "legacy-permit", term: "Legacy Permit", category: "terminology", definition: "An export permit approved before a policy change takes effect. Allows shipments to continue under old rules.", details: "Key loophole in the EIPA. Canada's 'pause' on arms exports to Israel did not revoke existing legacy permits, allowing $18.9M in continued shipments." },
+  { id: "oic", term: "Order-in-Council", category: "terminology", definition: "A legal instrument made by the Governor in Council (Cabinet). Used to enact regulations without full Parliamentary debate.", details: "Often used for arms export decisions. Critics argue it bypasses democratic oversight." },
+  { id: "ltdwa", term: "Long-Term Drinking Water Advisory (LTDWA)", category: "terminology", definition: "A drinking water advisory in place for more than one year. Indicates systemic failure in water infrastructure.", details: "As of Feb 2026, 28 LTDWAs remain active across 34 First Nations communities. Seine River First Nation added Feb 10, 2026." },
+  { id: "eipa", term: "Export and Import Permits Act (EIPA)", category: "terminology", definition: "Federal legislation controlling the export and import of military goods and technology." },
+  { id: "sif", term: "Strategic Innovation Fund (SIF)", category: "terminology", definition: "A $7.2B federal fund to support business innovation. Criticized for grants to defence companies.", details: "$18.9M to General Dynamics, $4.2M to Elbit Systems." },
+  { id: "lobbying-registry", term: "Lobbying Registry", category: "terminology", definition: "Federal registry maintained by the Commissioner of Lobbying. All paid lobbying must be registered and disclosed.", sourceUrl: "https://lobbycanada.gc.ca" },
+  { id: "jordans-principle", term: "Jordan's Principle", category: "terminology", definition: "A child-first principle ensuring First Nations children receive services without jurisdictional delays.", details: "Named after Jordan River Anderson who died waiting for governments to decide who would pay for his home care. Despite the principle, water infrastructure remains critically underfunded." },
+  { id: "grocery-code", term: "Grocery Code of Conduct", category: "terminology", definition: "Voluntary code governing relationships between grocery retailers and suppliers. Delayed 3 times since 2023.", details: "Loblaws initially refused to sign. The code has no enforcement mechanism. Industry lobbying has weakened every draft." },
+
+  // PEOPLE DOSSIERS
+  {
+    id: "per-bank",
+    term: "Per Bank",
+    category: "person",
+    definition: "President of Loblaw Companies Ltd. Oversees Canada's largest grocery retailer (30% market share).",
+    details: "Under Per Bank, Loblaws reported $1.2B net earnings in 2025 while food insecurity hit 25.5%. Total compensation: $5.8M. Met with Minister Champagne's office 4 times in Q4 2025 via Counsel Public Affairs.",
+    sourceUrl: "https://www.loblaw.ca",
+    contactInfo: {
+      phone: "905-459-2500",
+      email: "investor.relations@loblaw.ca",
+      website: "https://www.loblaw.ca",
+      reportsTo: "Galen Weston Jr. (Chairman, George Weston Ltd)",
+    },
+  },
+  {
+    id: "galen-weston",
+    term: "Galen Weston Jr.",
+    category: "person",
+    definition: "Executive Chairman of George Weston Ltd and Loblaw Companies. Billionaire heir controlling 30% of Canadian grocery market.",
+    details: "Family net worth: $8.7B (Forbes 2025). Controls Loblaw, Shoppers Drug Mart, President's Choice, No Frills, T&T Supermarket. Under scrutiny for bread price-fixing scandal ($500M settlement).",
+    contactInfo: {
+      phone: "416-922-2500",
+      email: "investor.relations@weston.ca",
+      website: "https://www.weston.ca",
+      reportsTo: "Board of Directors, George Weston Ltd",
+    },
+  },
+  {
+    id: "danny-deep",
+    term: "Danny Deep",
+    category: "person",
+    definition: "CEO of General Dynamics Land Systems Canada. Oversees LAV production and military exports from London, Ontario plant.",
+    details: "Met with Minister Anand 4 times in Q4 2025. GDLS received $18.9M in SIF grants while exporting military goods via legacy permits. Retained Hill+Knowlton Strategies for government relations (42 communications filed).",
+    sourceUrl: "https://www.gdls.com",
+    contactInfo: {
+      phone: "519-964-2251",
+      email: "media@gdls.com",
+      website: "https://www.gdls.com",
+      reportsTo: "Phebe Novakovic (CEO, General Dynamics Corporation)",
+    },
+  },
+  {
+    id: "anita-anand",
+    term: "Anita Anand",
+    category: "person",
+    definition: "Minister of Foreign Affairs. Responsible for export permits including military goods under the EIPA.",
+    details: "Authorized continuation of legacy permits despite announced 'pause'. Met with GDLS CEO 4x and Elbit reps 3x in Q4 2025. Previously served as Minister of National Defence and President of the Treasury Board.",
+    sourceUrl: "https://www.ourcommons.ca/Members/en/anita-anand(105689)",
+    contactInfo: {
+      phone: "613-995-7749",
+      email: "anita.anand@parl.gc.ca",
+      website: "https://www.ourcommons.ca/Members/en/anita-anand(105689)",
+      reportsTo: "Prime Minister (PMO)",
+    },
+  },
+  {
+    id: "patty-hajdu",
+    term: "Patty Hajdu",
+    category: "person",
+    definition: "Minister of Indigenous Services. Responsible for water infrastructure and Jordan's Principle implementation.",
+    details: "Overseeing 28 active LTDWAs. $890M in Budget 2024/25 water infrastructure grants remain undisbursed. Seine River LTDWA added under her watch Feb 2026.",
+    sourceUrl: "https://www.ourcommons.ca/Members/en/patty-hajdu(72029)",
+    contactInfo: {
+      phone: "613-996-4792",
+      email: "patty.hajdu@parl.gc.ca",
+      assistant: "Ministerial Office: 819-997-0002",
+      website: "https://www.ourcommons.ca/Members/en/patty-hajdu(72029)",
+      reportsTo: "Prime Minister (PMO)",
+    },
+  },
+  {
+    id: "champagne-dossier",
+    term: "François-Philippe Champagne",
+    category: "person",
+    definition: "Minister of Innovation, Science & Economic Development. Oversees Competition Bureau and Grocery Code of Conduct.",
+    details: "67 lobbying meetings with grocery industry in 2025. Grocery Code of Conduct delayed 3 times under his oversight. Also administers Strategic Innovation Fund grants to defence companies.",
+    sourceUrl: "https://www.ourcommons.ca/Members/en/francois-philippe-champagne(88633)",
+    contactInfo: {
+      phone: "613-995-4895",
+      email: "francois-philippe.champagne@parl.gc.ca",
+      assistant: "Ministerial Office: 343-291-2700",
+      website: "https://www.ourcommons.ca/Members/en/francois-philippe-champagne(88633)",
+      reportsTo: "Prime Minister (PMO)",
+    },
+  },
+
+  // ORGANIZATIONS
+  { id: "ploughshares", term: "Project Ploughshares", category: "organization", definition: "Canada's leading peace research institute, based at University of Waterloo.", details: "Primary researcher exposing the 'American Loophole' — Canadian military goods exported to the US, then re-exported to conflict zones. 2025/26 report documented 438+ shipments.", sourceUrl: "https://ploughshares.ca", contactInfo: { phone: "519-888-6541", email: "plough@ploughshares.ca", website: "https://ploughshares.ca" } },
+  { id: "competition-bureau", term: "Competition Bureau of Canada", category: "organization", definition: "Independent law enforcement agency for competitive marketplace. Currently reviewing grocery sector consolidation.", contactInfo: { phone: "819-997-4282", email: "compbureau@cb-bc.gc.ca", website: "https://www.competitionbureau.gc.ca" } },
+  { id: "lobbyist-commissioner", term: "Office of the Commissioner of Lobbying", category: "organization", definition: "Federal body maintaining the Registry of Lobbyists. All paid lobbying activity must be disclosed.", sourceUrl: "https://lobbycanada.gc.ca", contactInfo: { phone: "613-957-2760", website: "https://lobbycanada.gc.ca" } },
+  { id: "ccc", term: "Canadian Commercial Corporation (CCC)", category: "organization", definition: "Crown corporation facilitating government-to-government defence exports. Key intermediary for GDLS exports.", contactInfo: { phone: "613-996-0034", email: "info@ccc.ca", website: "https://www.ccc.ca" } },
+
+  // SPECIAL
+  { id: "human-machine", term: "The Human & The Machine", category: "special", definition: "How this platform was built: A Canadian citizen and AI bypassed corporate bureaucracy to map government accountability data in February 2026.", details: "Cross-referencing open government data, lobbying registries, military export reports, and ISC records — work that would normally require months of ATIP requests. Built in days, not years." },
 ];
 
 export type CalendarEvent = {

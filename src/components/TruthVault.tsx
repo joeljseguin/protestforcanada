@@ -2,11 +2,12 @@ import { useState } from "react";
 import { dossierEntries } from "@/data/gameData";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, ExternalLink, BookOpen, Building2, Sparkles } from "lucide-react";
+import { Search, ExternalLink, BookOpen, Building2, Sparkles, User, Phone, Mail, Globe } from "lucide-react";
 
-const categoryConfig = {
+const categoryConfig: Record<string, { label: string; icon: any; bg: string }> = {
   terminology: { label: "Terminology", icon: BookOpen, bg: "bg-muted" },
   organization: { label: "Organization", icon: Building2, bg: "bg-secondary" },
+  person: { label: "Person", icon: User, bg: "bg-muted" },
   special: { label: "Special", icon: Sparkles, bg: "bg-secondary" },
 };
 
@@ -27,7 +28,7 @@ export const TruthVault = () => {
           The Truth Vault
         </h2>
         <p className="text-muted-foreground font-mono text-sm mb-8 max-w-2xl">
-          Searchable dossiers on terminology, organizations, and how this platform was built.
+          Searchable dossiers on people, terminology, organizations, and how this platform was built. Includes phone numbers, emails, and chain of command.
         </p>
 
         {/* Search & Filters */}
@@ -35,13 +36,13 @@ export const TruthVault = () => {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search dossiers..."
+              placeholder="Search dossiers... (e.g. Per Bank, LTDWA, Anand)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-10 font-mono neu-border h-12"
             />
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             <button
               onClick={() => setActiveCategory(null)}
               className={`neu-border px-4 py-2 font-mono text-xs uppercase tracking-wider transition-all ${!activeCategory ? "bg-foreground text-background" : "bg-card"}`}
@@ -69,7 +70,7 @@ export const TruthVault = () => {
               <div
                 key={entry.id}
                 className="neu-border p-6 bg-card animate-fade-in"
-                style={{ animationDelay: `${i * 60}ms` }}
+                style={{ animationDelay: `${i * 40}ms` }}
               >
                 <div className="flex items-start gap-4">
                   <div className={`shrink-0 w-10 h-10 neu-border flex items-center justify-center ${config.bg}`}>
@@ -88,6 +89,38 @@ export const TruthVault = () => {
                         {entry.details}
                       </p>
                     )}
+
+                    {/* Contact Info */}
+                    {entry.contactInfo && (
+                      <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {entry.contactInfo.phone && (
+                          <a href={`tel:${entry.contactInfo.phone}`} className="flex items-center gap-2 neu-border px-3 py-2 text-xs font-mono hover:bg-secondary transition-colors">
+                            <Phone className="h-3 w-3 shrink-0" /> {entry.contactInfo.phone}
+                          </a>
+                        )}
+                        {entry.contactInfo.email && (
+                          <a href={`mailto:${entry.contactInfo.email}`} className="flex items-center gap-2 neu-border px-3 py-2 text-xs font-mono hover:bg-secondary transition-colors">
+                            <Mail className="h-3 w-3 shrink-0" /> {entry.contactInfo.email}
+                          </a>
+                        )}
+                        {entry.contactInfo.website && (
+                          <a href={entry.contactInfo.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 neu-border px-3 py-2 text-xs font-mono hover:bg-secondary transition-colors">
+                            <Globe className="h-3 w-3 shrink-0" /> Website
+                          </a>
+                        )}
+                        {entry.contactInfo.assistant && (
+                          <div className="flex items-center gap-2 neu-border px-3 py-2 text-xs font-mono bg-muted">
+                            <User className="h-3 w-3 shrink-0" /> {entry.contactInfo.assistant}
+                          </div>
+                        )}
+                        {entry.contactInfo.reportsTo && (
+                          <div className="flex items-center gap-2 neu-border px-3 py-2 text-xs font-mono bg-muted md:col-span-2">
+                            ↑ Reports to: {entry.contactInfo.reportsTo}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {entry.sourceUrl && (
                       <a
                         href={entry.sourceUrl}
