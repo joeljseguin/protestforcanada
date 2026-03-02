@@ -10,6 +10,7 @@ export type Mission = {
   description: string;
   whatYouNeedToKnow: string;
   humanCost: string[];
+  humanCostLinks?: string[];
   progress: number;
   stages: { label: string; complete: boolean }[];
   stats: { label: string; value: string; source: string; sourceUrl: string }[];
@@ -42,6 +43,11 @@ export const missions: Mission[] = [
       "28 long-term drinking water advisories remain active.",
       "34 First Nations communities affected — basic water access denied.",
       "$890M in infrastructure grants delayed from Budget 2024/25.",
+    ],
+    humanCostLinks: [
+      "https://www.cbc.ca/news/canada/thunder-bay/indigenous-water-9.7002248",
+      "https://www.cbc.ca/news/canada/sudbury/kashechewan-clean-water-crisis-9.7040167",
+      "https://www.cbc.ca/news/indigenous/first-nations-water-bill-9.7001699",
     ],
     progress: 28,
     stages: [
@@ -93,6 +99,11 @@ export const missions: Mission[] = [
       "12 million Canadians affected by food insecurity.",
       "67 lobbyist meetings between grocery giants and Innovation Ministry.",
     ],
+    humanCostLinks: [
+      "https://www.cbc.ca/news/canada/grocery-prices-food-cost-9.6956462",
+      "https://www.cbc.ca/news/canada/toronto/food-banks-poverty-report-1.7635362",
+      "https://www.cbc.ca/news/marketplace/marketplace-cheat-sheet-jan-25-2025-9.7056656",
+    ],
     progress: 72,
     stages: [
       { label: "Awareness", complete: true },
@@ -135,6 +146,11 @@ export const missions: Mission[] = [
       "A 1% wealth tax would raise an estimated $5.6B annually for public services.",
       "Petition e-6806 needs 500,000 signatures to trigger Parliamentary debate.",
     ],
+    humanCostLinks: [
+      "https://www.pbo-dpb.ca",
+      "https://www.pbo-dpb.ca",
+      "https://petitions.ourcommons.ca",
+    ],
     progress: 35,
     stages: [
       { label: "Petition", complete: true },
@@ -174,6 +190,11 @@ export const missions: Mission[] = [
       "438+ shipments to conflict zones documented by Project Ploughshares.",
       "$18.9M in military goods exported despite official 'pause'.",
       "12 legacy permits still active under the Export and Import Permits Act.",
+    ],
+    humanCostLinks: [
+      "https://www.cbc.ca/news/politics/arms-ammunition-shipments-israel-canada-1.7596091",
+      "https://cbc.ca/news/politics/probe-canadian-arms-us-israel-9.7074373",
+      "https://www.cbc.ca/news/politics/canadian-company-pauses-shipments-to-israeli-defence-firm-after-sending-gps-antennas-last-weekend-1.7612913",
     ],
     progress: 50,
     stages: [
@@ -218,6 +239,11 @@ export const missions: Mission[] = [
       "1.87M households in core housing need across Canada.",
       "Rental vacancy rate at 1.5% — worst in decades.",
     ],
+    humanCostLinks: [
+      "https://www.cbc.ca/news/business/cmhc-housing-starts-october-2025-9.6982821",
+      "https://www.cbc.ca/news/business/cmhc-affordability-homes-1.7565525",
+      "https://www.cbc.ca/news/canada/calgary/rents-easing-major-markets-tenants-no-relief-cmhc-1.7579759",
+    ],
     progress: 40,
     stages: [
       { label: "Awareness", complete: true },
@@ -245,6 +271,11 @@ export const missions: Mission[] = [
       "6.5 million Canadians lack a family doctor.",
       "Median ER wait time: 4.1 hours — record high.",
       "14,000+ nursing vacancies across Canada.",
+    ],
+    humanCostLinks: [
+      "https://www.cbc.ca/news/canada/the-cure-solutions-for-canadian-doctor-shortage-1.7465633",
+      "https://www.cbc.ca/news/marketplace/hospital-wait-times-9.6983849",
+      "https://www.cbc.ca/news/canada/newfoundland-labrador/emergency-wait-times-9.7001473",
     ],
     progress: 30,
     stages: [
@@ -274,6 +305,11 @@ export const missions: Mission[] = [
       "Thousands of federal employees underpaid or not paid at all.",
       "No replacement timeline announced.",
     ],
+    humanCostLinks: [
+      "https://www.cbc.ca/news/canada/ottawa/federal-phoenix-pay-system-10-year-anniversary-9.7093933",
+      "https://www.cbc.ca/news/canada/ottawa/former-public-servant-says-phoenix-ruined-his-20s-and-haunts-him-still-9.7103932",
+      "https://www.cbc.ca/news/canada/ottawa/government-demanding-public-servants-reimburse-years-old-phoenix-overpayments-9.6995231",
+    ],
     progress: 20,
     stages: [
       { label: "Awareness", complete: true },
@@ -301,6 +337,11 @@ export const missions: Mission[] = [
       "$18.5 billion in fossil fuel subsidies annually.",
       "Canada on track to miss 2030 Paris Agreement targets.",
       "Wildfires displaced 230,000+ Canadians in 2024-25.",
+    ],
+    humanCostLinks: [
+      "https://thenarwhal.ca/oil-and-gas-subsidies-canada/",
+      "https://thenarwhal.ca/build-canada-list-requests-carney/",
+      "https://thenarwhal.ca/2025-federal-election-platforms/",
     ],
     progress: 25,
     stages: [
@@ -330,6 +371,11 @@ export const missions: Mission[] = [
       "Digital privacy eroding under expanded surveillance powers.",
       "No independent oversight body proposed.",
     ],
+    humanCostLinks: [
+      "https://www.canadaland.com/podcast/134-is-carneys-bill-c-2-much-worse-than-trump/",
+      "https://www.cbc.ca/news/politics/online-harms-bill-c63-1.7150427",
+      "https://www.parl.ca/legisinfo",
+    ],
     progress: 45,
     stages: [
       { label: "Awareness", complete: true },
@@ -357,6 +403,11 @@ export const missions: Mission[] = [
       "Original budget: $80,000. Final cost: $59.5 million.",
       "Questionable sole-source contracts to GC Strategies.",
       "RCMP criminal investigation launched.",
+    ],
+    humanCostLinks: [
+      "https://www.cbc.ca/news/politics/arrivecan-gc-strategies-banned-contracts-1.7555239",
+      "https://www.cbc.ca/news/politics/auditor-general-audit-all-gc-strategies-contracts-1.7359418",
+      "https://www.cbc.ca/news/politics/contractor-companies-sued-billing-practices-1.7457657",
     ],
     progress: 60,
     stages: [
