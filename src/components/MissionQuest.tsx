@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { missions, calendarEvents, threatColors } from "@/data/gameData";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Zap, Phone, Pen, Calendar, MapPin, Users, AlertTriangle, CheckCircle2, Circle, FileText, Clock, Gamepad2 } from "lucide-react";
+import { ExternalLink, Zap, Phone, Pen, Calendar, MapPin, Users, AlertTriangle, CheckCircle2, Circle, FileText, Clock, Gamepad2, Mail, Share2, Megaphone, Copy } from "lucide-react";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { getCharacterSfx, menuSelect } from "@/lib/retroSfx";
@@ -21,7 +21,7 @@ export const MissionQuest = () => {
   const navigate = useNavigate();
   const activeMissionId = searchParams.get("mission") || missions[0].id;
   const [expandedMission, setExpandedMission] = useState<string | null>(activeMissionId);
-  const [activeTab, setActiveTab] = useState<"overview" | "truth">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "truth" | "action">("overview");
   const [stageDialogOpen, setStageDialogOpen] = useState(false);
   const [activeStageConfig, setActiveStageConfig] = useState<StageConfig | null>(null);
   const [petitionDialog, setPetitionDialog] = useState<{
@@ -194,19 +194,11 @@ export const MissionQuest = () => {
                 </button>
               )}
               <button
-                onClick={() => {
-                  playSfx();
-                  setPetitionDialog({
-                    url: "https://petitions.ourcommons.ca",
-                    missionId: mission.id,
-                    missionName: mission.name,
-                    petitionLabel: `${mission.name} Petition`,
-                    xp: 500,
-                  });
-                }}
-                className="ff-panel px-5 py-2.5 font-body text-xs uppercase tracking-wider transition-all text-muted-foreground hover:text-foreground hover:border-accent"
+                onClick={() => { playSfx(); setActiveTab("action"); }}
+                className={`ff-panel px-5 py-2.5 font-body text-xs uppercase tracking-wider transition-all ${activeTab === "action" ? "text-accent" : "text-muted-foreground hover:text-foreground"}`}
+                style={activeTab === "action" ? { borderColor: "hsl(45 100% 60%)" } : {}}
               >
-                <Pen className="h-3 w-3 inline mr-1.5" /> Add Your Voice
+                {activeTab === "action" && "▶ "}<Megaphone className="h-3 w-3 inline mr-1.5" /> Add Your Voice
               </button>
             </div>
 
@@ -368,7 +360,148 @@ export const MissionQuest = () => {
                   </div>
                 )}
               </>
-            ) : mission.truthTab ? (
+            ) : activeTab === "action" ? (
+              <div className="space-y-4 animate-fade-in">
+                <div className="ff-panel p-6">
+                  <h4 className="font-heading text-[9px] uppercase mb-2 flex items-center gap-2 text-accent">
+                    <Megaphone className="h-4 w-4" /> Make Your Voice Heard — {mission.name}
+                  </h4>
+                  <p className="font-body text-xs text-muted-foreground mb-6">Every action counts. Pick one (or all) and earn XP for making a difference.</p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Sign Petition */}
+                    <button
+                      onClick={() => {
+                        playSfx();
+                        setPetitionDialog({
+                          url: "https://petitions.ourcommons.ca",
+                          missionId: mission.id,
+                          missionName: mission.name,
+                          petitionLabel: `${mission.name} Petition`,
+                          xp: 500,
+                        });
+                      }}
+                      className="ff-panel p-5 text-left hover:border-accent transition-colors group"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <Pen className="h-6 w-6 text-accent" />
+                        <span className="flex items-center gap-1 text-[9px] font-bold text-accent"><Zap className="h-3 w-3" />+500 XP</span>
+                      </div>
+                      <div className="font-body text-sm font-bold uppercase text-foreground mb-1">Sign the Petition</div>
+                      <p className="font-body text-[11px] text-muted-foreground leading-relaxed">Add your name to the official House of Commons petition and demand Parliamentary action.</p>
+                    </button>
+
+                    {/* Call Your MP */}
+                    <button
+                      onClick={() => {
+                        playSfx();
+                        window.open("https://www.ourcommons.ca/members/en", "_blank");
+                        if (user) {
+                          addXP("call_mp", `action-call-${mission.id}`, 100);
+                          toast({ title: "+100 XP Earned!", description: "Called your MP's office" });
+                        }
+                      }}
+                      className="ff-panel p-5 text-left hover:border-accent transition-colors group"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <Phone className="h-6 w-6 text-primary" />
+                        <span className="flex items-center gap-1 text-[9px] font-bold text-accent"><Zap className="h-3 w-3" />+100 XP</span>
+                      </div>
+                      <div className="font-body text-sm font-bold uppercase text-foreground mb-1">Call Your MP</div>
+                      <p className="font-body text-[11px] text-muted-foreground leading-relaxed">Find your Member of Parliament and call their office. A 2-minute phone call is the most powerful thing you can do.</p>
+                    </button>
+
+                    {/* Email Your MP */}
+                    <button
+                      onClick={() => {
+                        playSfx();
+                        window.open("https://www.ourcommons.ca/members/en", "_blank");
+                        if (user) {
+                          addXP("email_mp", `action-email-${mission.id}`, 50);
+                          toast({ title: "+50 XP Earned!", description: "Emailed your MP" });
+                        }
+                      }}
+                      className="ff-panel p-5 text-left hover:border-accent transition-colors group"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <Mail className="h-6 w-6 text-primary" />
+                        <span className="flex items-center gap-1 text-[9px] font-bold text-accent"><Zap className="h-3 w-3" />+50 XP</span>
+                      </div>
+                      <div className="font-body text-sm font-bold uppercase text-foreground mb-1">Email Your MP</div>
+                      <p className="font-body text-[11px] text-muted-foreground leading-relaxed">Send a written message to your MP demanding action on {mission.name.toLowerCase()}. Written records create accountability.</p>
+                    </button>
+
+                    {/* Share on Social Media */}
+                    <button
+                      onClick={() => {
+                        playSfx();
+                        const shareText = `I just took action on ${mission.name} at protestforcanada.lovable.app — join the fight! 🇨🇦`;
+                        navigator.clipboard.writeText(shareText);
+                        if (user) {
+                          addXP("share_social", `action-share-${mission.id}`, 25);
+                          toast({ title: "+25 XP Earned!", description: "Message copied — share it everywhere!" });
+                        } else {
+                          toast({ title: "Copied!", description: "Share message copied to clipboard" });
+                        }
+                      }}
+                      className="ff-panel p-5 text-left hover:border-accent transition-colors group"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <Share2 className="h-6 w-6 text-primary" />
+                        <span className="flex items-center gap-1 text-[9px] font-bold text-accent"><Zap className="h-3 w-3" />+25 XP</span>
+                      </div>
+                      <div className="font-body text-sm font-bold uppercase text-foreground mb-1">Spread Awareness</div>
+                      <p className="font-body text-[11px] text-muted-foreground leading-relaxed">Copy a share message and post it on social media. Awareness is the first step to systemic change.</p>
+                    </button>
+
+                    {/* Join a Protest */}
+                    <button
+                      onClick={() => {
+                        playSfx();
+                        setActiveTab("overview");
+                        setTimeout(() => {
+                          document.getElementById("protest-calendar")?.scrollIntoView({ behavior: "smooth" });
+                        }, 100);
+                      }}
+                      className="ff-panel p-5 text-left hover:border-accent transition-colors group"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <Users className="h-6 w-6 text-primary" />
+                        <span className="flex items-center gap-1 text-[9px] font-bold text-accent"><Zap className="h-3 w-3" />+200 XP</span>
+                      </div>
+                      <div className="font-body text-sm font-bold uppercase text-foreground mb-1">Join a Protest</div>
+                      <p className="font-body text-[11px] text-muted-foreground leading-relaxed">Show up in person. Find upcoming rallies, marches, and community events in the protest calendar.</p>
+                    </button>
+
+                    {/* Copy Dossier */}
+                    <button
+                      onClick={() => {
+                        playSfx();
+                        const dossierText = `${mission.name}: ${mission.subtitle}\n\n${mission.whatYouNeedToKnow}\n\nStats:\n${mission.stats.map(s => `• ${s.value} — ${s.label}: ${s.description}`).join("\n")}\n\nSource: protestforcanada.lovable.app`;
+                        navigator.clipboard.writeText(dossierText);
+                        if (user) {
+                          addXP("copy_dossier", `action-dossier-${mission.id}`, 30);
+                          toast({ title: "+30 XP Earned!", description: "Full dossier copied — send it to everyone!" });
+                        } else {
+                          toast({ title: "Copied!", description: "Dossier copied to clipboard" });
+                        }
+                      }}
+                      className="ff-panel p-5 text-left hover:border-accent transition-colors group"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <Copy className="h-6 w-6 text-primary" />
+                        <span className="flex items-center gap-1 text-[9px] font-bold text-accent"><Zap className="h-3 w-3" />+30 XP</span>
+                      </div>
+                      <div className="font-body text-sm font-bold uppercase text-foreground mb-1">Copy Full Dossier</div>
+                      <p className="font-body text-[11px] text-muted-foreground leading-relaxed">Copy all the facts, stats, and sources for this mission. Send it to friends, family, or your MP directly.</p>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Live Petition Ticker */}
+                <PetitionTicker missionId={mission.id} />
+              </div>
+            ) : activeTab === "truth" && mission.truthTab ? (
               <div className="space-y-6 animate-fade-in">
                 <div className="ff-panel p-6">
                   <h4 className="font-heading text-[9px] uppercase mb-4 flex items-center gap-2 text-primary">
