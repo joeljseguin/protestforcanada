@@ -23,7 +23,7 @@ export const Footer = () => {
               PROTEST v3
             </Link>
             <p className="text-xs text-muted-foreground max-w-xs font-mono leading-relaxed">
-              Canadian civic accountability platform. Hero-Game mode. All statistics verified against open government data sources.
+              Canadian civic accountability platform. All statistics verified against open government data sources.
             </p>
           </div>
           <div>
