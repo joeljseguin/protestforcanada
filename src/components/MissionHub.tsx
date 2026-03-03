@@ -1,8 +1,11 @@
 import { missions as rawMissions } from "@/data/gameData";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "@/hooks/use-toast";
 
 export const MissionHub = () => {
   const missions = [...rawMissions].sort((a, b) => a.rank - b.rank);
+  const { addXP } = useAuth();
 
   return (
     <section id="missions" className="py-12 md:py-20">
@@ -46,6 +49,21 @@ export const MissionHub = () => {
               <div className="bg-accent text-accent-foreground py-2.5 px-4 text-center font-black text-sm uppercase tracking-wider border-2 border-foreground">
                 Take Action
               </div>
+
+              {mission.links?.[0]?.url && (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    addXP("join_battle", mission.id, 50);
+                    toast({ title: `+50 XP — Joining the battle for ${mission.name}!` });
+                    window.open(mission.links[0].url, "_blank", "noopener");
+                  }}
+                  className="w-full mt-3 bg-foreground text-background py-2.5 px-4 text-center font-black text-sm uppercase tracking-wider border-2 border-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                >
+                  ⚔️ Join Battle
+                </button>
+              )}
             </Link>
           ))}
         </div>
