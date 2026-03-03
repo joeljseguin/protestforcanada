@@ -10,6 +10,29 @@ export const MissionHub = () => {
   return (
     <section id="missions" className="py-12 md:py-20">
       <div className="container">
+                {/* --- DYNAMIC MISSION COUNTER --- */}
+        <div className="flex justify-between items-end mb-10 border-b-2 border-foreground pb-4">
+          <div className="flex items-baseline gap-4">
+            <span className="font-black text-6xl md:text-8xl tracking-tighter italic text-accent drop-shadow-[4px_4px_0_hsl(var(--foreground))]">
+              {missions.length.toString().padStart(2, '0')}
+            </span>
+            <div className="flex flex-col">
+              <span className="font-black text-xl uppercase tracking-[0.2em]">Active</span>
+              <span className="font-black text-xl uppercase tracking-[0.2em] text-muted-foreground">Missions</span>
+            </div>
+          </div>
+          
+          <div className="hidden md:block text-right">
+            <div className="text-[10px] font-black uppercase tracking-widest mb-1">System Status</div>
+            <div className="flex gap-1 justify-end">
+              {missions.map((_, i) => (
+                <div key={i} className="w-1.5 h-6 bg-accent skew-x-[-15deg]" />
+              ))}
+            </div>
+          </div>
+        </div>
+        {/* --- END MISSION COUNTER --- */}
+
         <div className="mb-8">
           <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight inline-block">
             Active Missions
