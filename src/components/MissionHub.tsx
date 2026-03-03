@@ -11,29 +11,23 @@ export const MissionHub = () => {
     <section id="missions" className="pt-8 pb-12 md:pb-20 bg-background">
       <div className="container px-4 mx-auto flex flex-col items-center">
         
-        {/* --- ARCADE MISSION SELECT HEADER --- */}
-        <div className="w-full max-w-2xl flex flex-col items-center mb-12 border-y-2 border-foreground py-8">
-          <div className="flex flex-col items-center gap-0 mb-4">
-             <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.5em] text-muted-foreground mb-2">
-              System Scan: {missions.length} Battles Detected
-            </span>
-            <div className="flex items-center justify-center gap-4">
-               <div className="h-1 w-8 md:w-16 bg-accent hidden sm:block" />
-               <h2 className="font-black text-6xl md:text-9xl italic text-accent drop-shadow-[6px_6px_0_black] leading-none tracking-tighter">
-                {missions.length.toString().padStart(2, '0')}
-              </h2>
-              <div className="h-1 w-8 md:w-16 bg-accent hidden sm:block" />
-            </div>
-            <span className="font-black text-2xl md:text-4xl uppercase tracking-[0.1em] text-foreground mt-[-10px] italic">
-              Active Missions
+        {/* --- CLEAN CENTERED HEADER --- */}
+        <div className="w-full max-w-xl flex flex-col items-center mb-12 text-center">
+          <div className="inline-block bg-accent/10 border-x-2 border-accent px-4 py-1 mb-4">
+            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-accent">
+              Mission Dossier Loaded
             </span>
           </div>
+
+          <h2 className="font-black text-5xl md:text-6xl uppercase italic tracking-tighter mb-2">
+            <span className="text-accent">{missions.length}</span> Active Battles
+          </h2>
           
-          <div className="bg-accent/10 border border-accent/30 px-6 py-3 rounded-sm">
-            <p className="font-black text-xs md:text-sm uppercase tracking-[0.15em] text-accent animate-pulse">
-              Select your first objective below to start your hero journey
-            </p>
-          </div>
+          <div className="h-1 w-24 bg-foreground mb-6" />
+
+          <p className="font-bold text-sm md:text-base uppercase tracking-tight text-foreground max-w-md leading-relaxed animate-pulse">
+            Click the first mission below to start your hero journey
+          </p>
         </div>
 
         {/* --- GRID OF MISSIONS --- */}
@@ -42,7 +36,7 @@ export const MissionHub = () => {
             <Link
               key={mission.id}
               to={`/quest?mission=${mission.id}`}
-              className="group relative block border-2 border-foreground p-6 bg-background hover:bg-accent/5 transition-all duration-300 animate-fade-in shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-[8px_8px_0_0_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px]"
+              className="group block border-2 border-foreground p-6 bg-background hover:bg-accent/5 transition-all duration-300 animate-fade-in shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-[8px_8px_0_0_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px]"
               style={{ animationDelay: `${idx * 60}ms` }}
             >
               <h3 className="font-black text-xl uppercase tracking-tight mb-4 group-hover:text-accent transition-colors italic">
@@ -54,13 +48,12 @@ export const MissionHub = () => {
                 <div className="text-sm font-black uppercase">{mission.stages?.[0]?.label || "Federal Govt"}</div>
               </div>
 
-              <div className="space-y-3 mb-6">
-                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Status: <span className="text-foreground">{mission.subtitle}</span>
-                </p>
-                <div className="p-3 bg-slate-100 border-l-4 border-foreground text-xs font-bold leading-relaxed">
-                  {mission.description?.slice(0, 90)}...
-                </div>
+              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">
+                Status: <span className="text-foreground">{mission.subtitle}</span>
+              </p>
+
+              <div className="bg-slate-100 p-3 border-l-4 border-foreground text-xs font-bold leading-relaxed mb-6">
+                {mission.description?.slice(0, 90)}...
               </div>
 
               <div className="flex justify-between items-center mt-auto pt-4 border-t border-foreground/10">
@@ -71,6 +64,21 @@ export const MissionHub = () => {
                   Briefing &gt;
                 </div>
               </div>
+
+              {mission.links?.[0]?.url && (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    addXP("join_battle", mission.id, 50);
+                    toast({ title: `+50 XP — Joining the battle for ${mission.name}!` });
+                    window.open(mission.links[0].url, "_blank", "noopener");
+                  }}
+                  className="w-full mt-3 bg-foreground text-background py-2 px-4 text-center font-black text-xs uppercase border-2 border-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                >
+                  ⚔️ Join Battle
+                </button>
+              )}
             </Link>
           ))}
         </div>
