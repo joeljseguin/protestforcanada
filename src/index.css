@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,69 +6,69 @@
 
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 222 47% 11%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 0 0% 0%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 0 0% 0%;
 
-    --primary: 0 78% 55%;
+    --primary: 0 0% 0%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 45 100% 60%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 48 100% 50%;
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 0 78% 55%;
+    --border: 0 0% 0%;
+    --input: 0 0% 85%;
+    --ring: 0 0% 0%;
 
-    --radius: 8px;
+    --radius: 0px;
 
-    /* RPG palette */
-    --xp-gold: 45 100% 60%;
-    --xp-gold-glow: 45 100% 72%;
+    /* Functional colors */
+    --xp-gold: 48 100% 50%;
+    --xp-gold-glow: 48 100% 60%;
     --threat-red: 0 72% 50%;
     --threat-orange: 25 90% 55%;
-    --threat-yellow: 45 90% 55%;
+    --threat-yellow: 48 100% 50%;
     --mission-green: 140 55% 45%;
-    --mission-blue: 210 100% 65%;
+    --mission-blue: 210 100% 45%;
 
     --hp-green: 120 60% 45%;
     --mp-blue: 220 80% 55%;
     --ff-panel: 0 0% 100%;
-    --ff-border-outer: 220 13% 85%;
-    --ff-border-inner: 220 20% 97%;
-    --ff-highlight: 0 78% 55%;
-    --ff-cursor: 0 78% 55%;
+    --ff-border-outer: 0 0% 0%;
+    --ff-border-inner: 0 0% 100%;
+    --ff-highlight: 0 0% 0%;
+    --ff-cursor: 0 0% 0%;
 
-    --navy-deep: 222 47% 11%;
-    --navy-medium: 220 14% 96%;
-    --navy-light: 220 13% 91%;
+    --navy-deep: 0 0% 0%;
+    --navy-medium: 0 0% 96%;
+    --navy-light: 0 0% 90%;
     --red-civic: 0 72% 50%;
-    --red-civic-muted: 0 40% 85%;
+    --red-civic-muted: 0 40% 90%;
     --green-pass: 140 55% 45%;
-    --amber-pending: 45 90% 55%;
+    --amber-pending: 48 100% 50%;
 
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 0 78% 55%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 0 0% 0%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 14% 96%;
-    --sidebar-accent-foreground: 222 47% 11%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 0 78% 55%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 0 0% 0%;
+    --sidebar-ring: 0 0% 0%;
   }
 }
 
@@ -78,7 +78,6 @@
   }
   body {
     @apply bg-background text-foreground font-body antialiased;
-    image-rendering: auto;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
@@ -86,69 +85,50 @@
 }
 
 @layer utilities {
-  /* FF4 panel: rounded dark blue box with double-border effect */
+  /* Panel: clean black-bordered box */
   .ff-panel {
     background: hsl(var(--ff-panel));
-    border: 3px solid hsl(var(--ff-border-outer));
-    border-radius: 12px;
-    box-shadow:
-      inset 0 0 0 2px hsl(var(--ff-border-inner)),
-      0 4px 20px hsl(228 40% 5% / 0.6);
+    border: 2px solid hsl(var(--ff-border-outer));
     position: relative;
   }
   .ff-panel::before {
-    content: '';
-    position: absolute;
-    inset: 2px;
-    border: 1px solid hsl(var(--ff-border-outer) / 0.3);
-    border-radius: 9px;
-    pointer-events: none;
+    display: none;
   }
 
-  /* Pixel cursor arrow indicator */
   .ff-cursor::before {
     content: '▶';
     color: hsl(var(--ff-cursor));
     margin-right: 8px;
     font-size: 10px;
-    animation: cursor-blink 0.8s step-end infinite;
   }
 
-  /* HP/MP bar styling */
   .hp-bar {
     background: hsl(var(--hp-green));
-    box-shadow: 0 0 6px hsl(var(--hp-green) / 0.5);
   }
   .mp-bar {
     background: hsl(var(--mp-blue));
-    box-shadow: 0 0 6px hsl(var(--mp-blue) / 0.5);
   }
   .xp-bar {
-    background: linear-gradient(90deg, hsl(var(--xp-gold)), hsl(var(--xp-gold-glow)));
-    box-shadow: 0 0 8px hsl(var(--xp-gold) / 0.5);
+    background: hsl(var(--accent));
   }
 
   .xp-glow {
-    background: linear-gradient(135deg, hsl(var(--xp-gold)), hsl(var(--xp-gold-glow)));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: hsl(var(--accent));
+    font-weight: 900;
   }
 
   .card-hover {
     @apply transition-all duration-200;
   }
   .card-hover:hover {
-    box-shadow: 0 0 12px hsl(var(--ff-border-outer) / 0.4);
-    transform: translateY(-2px);
+    box-shadow: 4px 4px 0 hsl(var(--border));
+    transform: translate(-2px, -2px);
   }
 
-  /* Legacy compat */
   .neu-border {
     @apply ff-panel;
   }
-  .neu-shadow, .neu-shadow-sm, .neu-shadow-lg {
-    /* absorbed into ff-panel */
-  }
+  .neu-shadow, .neu-shadow-sm, .neu-shadow-lg {}
   .neu-card {
     @apply ff-panel;
   }
@@ -157,24 +137,9 @@
   }
 }
 
-@keyframes cursor-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-@keyframes pulse-gold {
-  0%, 100% { box-shadow: 0 0 4px hsl(var(--xp-gold) / 0.3); }
-  50% { box-shadow: 0 0 16px hsl(var(--xp-gold) / 0.6); }
-}
-
-@keyframes pulse-red {
-  0%, 100% { box-shadow: 0 0 4px hsl(var(--threat-red) / 0.2); }
-  50% { box-shadow: 0 0 12px hsl(var(--threat-red) / 0.5); }
-}
-
-@keyframes pulse-green {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes float {
@@ -182,60 +147,33 @@
   50% { transform: translateY(-6px); }
 }
 
-@keyframes scan-line {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
-}
-
-.animate-pulse-gold {
-  animation: pulse-gold 2s ease-in-out infinite;
-}
-
-.animate-pulse-red {
-  animation: pulse-red 2s ease-in-out infinite;
-}
-
-.animate-pulse-green {
-  animation: pulse-green 2s ease-in-out infinite;
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
 }
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
 
-/* React Flow custom styles - FF4 themed */
-.react-flow__node {
-  font-family: 'Silkscreen', cursive;
+.animate-pulse-gold {
+  animation: pulse 2s ease-in-out infinite;
 }
+
+/* React Flow custom styles */
 .react-flow__edge-path {
   stroke: hsl(var(--threat-red));
-  stroke-width: 3;
+  stroke-width: 2;
 }
 .react-flow__background {
   background-color: hsl(var(--background));
 }
 .react-flow__controls button {
-  background: hsl(var(--ff-panel)) !important;
-  border: 2px solid hsl(var(--ff-border-outer)) !important;
+  background: hsl(var(--background)) !important;
+  border: 2px solid hsl(var(--border)) !important;
   color: hsl(var(--foreground)) !important;
-  border-radius: 4px !important;
 }
 
-/* Pixel scanline overlay for extra retro feel */
+/* Scanline overlay disabled for clean look */
 .scanline-overlay::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    hsl(0 0% 0% / 0.03) 2px,
-    hsl(0 0% 0% / 0.03) 4px
-  );
-  z-index: 40;
+  display: none;
 }
