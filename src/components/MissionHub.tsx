@@ -10,23 +10,25 @@ export const MissionHub = () => {
   return (
     <section id="missions" className="py-12 md:py-20">
       <div className="container">
-                {/* --- DYNAMIC MISSION COUNTER --- */}
-        <div className="flex justify-between items-end mb-10 border-b-2 border-foreground pb-4">
-          <div className="flex items-baseline gap-4">
-            <span className="font-black text-6xl md:text-8xl tracking-tighter italic text-accent drop-shadow-[4px_4px_0_hsl(var(--foreground))]">
+                       {/* --- REFINED MISSION COUNTER --- */}
+        <div className="flex justify-between items-end mb-8 border-b-2 border-foreground pb-4 overflow-hidden">
+          <div className="flex items-baseline gap-3">
+            {/* Reduced from 8xl to 5xl/6xl for better fit */}
+            <span className="font-black text-5xl md:text-7xl italic text-accent drop-shadow-[3px_3px_0_hsl(var(--foreground))] leading-none">
               {missions.length.toString().padStart(2, '0')}
             </span>
-            <div className="flex flex-col">
-              <span className="font-black text-xl uppercase tracking-[0.2em]">Active</span>
-              <span className="font-black text-xl uppercase tracking-[0.2em] text-muted-foreground">Missions</span>
+            <div className="flex flex-col mb-1">
+              <span className="font-black text-sm md:text-lg uppercase tracking-[0.2em] leading-none">Active</span>
+              <span className="font-black text-sm md:text-lg uppercase tracking-[0.2em] text-muted-foreground leading-none">Missions</span>
             </div>
           </div>
           
-          <div className="hidden md:block text-right">
-            <div className="text-[10px] font-black uppercase tracking-widest mb-1">System Status</div>
+          {/* Tactical Pips - hidden on small mobile to save space */}
+          <div className="hidden sm:block text-right">
+            <div className="text-[10px] font-black uppercase tracking-widest mb-1 opacity-70">Sector Status</div>
             <div className="flex gap-1 justify-end">
-              {missions.map((_, i) => (
-                <div key={i} className="w-1.5 h-6 bg-accent skew-x-[-15deg]" />
+              {missions.slice(0, 10).map((_, i) => (
+                <div key={i} className="w-1.5 h-5 bg-accent/80 skew-x-[-15deg]" />
               ))}
             </div>
           </div>
