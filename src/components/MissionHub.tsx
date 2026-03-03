@@ -8,38 +8,26 @@ export const MissionHub = () => {
   const { addXP } = useAuth();
 
   return (
-    <section id="missions" className="py-12 md:py-20">
+    <section id="missions" className="pt-4 pb-12 md:pb-20">
       <div className="container">
-                       {/* --- REFINED MISSION COUNTER --- */}
-        <div className="flex justify-between items-end mb-8 border-b-2 border-foreground pb-4 overflow-hidden">
+        
+        {/* --- REFINED MISSION COUNTER & CTA --- */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 border-b-2 border-foreground pb-4 overflow-hidden">
           <div className="flex items-baseline gap-3">
-            {/* Reduced from 8xl to 5xl/6xl for better fit */}
             <span className="font-black text-5xl md:text-7xl italic text-accent drop-shadow-[3px_3px_0_hsl(var(--foreground))] leading-none">
               {missions.length.toString().padStart(2, '0')}
             </span>
             <div className="flex flex-col mb-1">
-              <span className="font-black text-sm md:text-lg uppercase tracking-[0.2em] leading-none">Active</span>
+              <span className="font-black text-sm md:text-lg uppercase tracking-[0.2em] leading-none text-foreground">Active</span>
               <span className="font-black text-sm md:text-lg uppercase tracking-[0.2em] text-muted-foreground leading-none">Missions</span>
             </div>
           </div>
           
-          {/* Tactical Pips - hidden on small mobile to save space */}
-          <div className="hidden sm:block text-right">
-            <div className="text-[10px] font-black uppercase tracking-widest mb-1 opacity-70">Sector Status</div>
-            <div className="flex gap-1 justify-end">
-              {missions.slice(0, 10).map((_, i) => (
-                <div key={i} className="w-1.5 h-5 bg-accent/80 skew-x-[-15deg]" />
-              ))}
-            </div>
+          <div className="mt-4 md:mt-0 text-left md:text-right">
+            <p className="font-black text-xs md:text-sm uppercase tracking-widest text-accent animate-pulse">
+              Click the first mission below to start your hero journey
+            </p>
           </div>
-        </div>
-        {/* --- END MISSION COUNTER --- */}
-
-        <div className="mb-8">
-          <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight inline-block">
-            Active Missions
-          </h2>
-          <div className="h-1 w-20 bg-accent mt-2" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -50,23 +38,17 @@ export const MissionHub = () => {
               className="block border-2 border-foreground p-5 hover:shadow-[4px_4px_0_hsl(var(--border))] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all animate-fade-in"
               style={{ animationDelay: `${idx * 60}ms` }}
             >
-              <h3 className="font-black text-base uppercase tracking-wide mb-3">
-                {mission.name}
-              </h3>
+              <h3 className="font-black text-base uppercase tracking-wide mb-3">{mission.name}</h3>
 
               <div className="bg-foreground text-background p-3 mb-3">
                 <div className="text-[10px] uppercase tracking-widest opacity-70 mb-1">Current Target</div>
                 <div className="text-sm font-bold uppercase">{mission.stages?.[0]?.label || "Government"}</div>
               </div>
 
-              <p className="text-sm text-muted-foreground mb-4">
-                Status: {mission.subtitle}
-              </p>
+              <p className="text-sm text-muted-foreground mb-4">Status: {mission.subtitle}</p>
 
               <div className="bg-foreground text-background p-2 mb-4">
-                <p className="text-xs font-bold">
-                  Mission Intel: {mission.description?.slice(0, 80)}
-                </p>
+                <p className="text-xs font-bold">Mission Intel: {mission.description?.slice(0, 80)}</p>
               </div>
 
               <div className="text-lg font-black mb-3">+{mission.xpBounty} XP</div>
@@ -96,3 +78,6 @@ export const MissionHub = () => {
     </section>
   );
 };
+
+export default MissionHub;
+ 
