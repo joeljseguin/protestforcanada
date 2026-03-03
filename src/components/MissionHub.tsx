@@ -11,21 +11,21 @@ export const MissionHub = () => {
     <section id="missions" className="pt-8 pb-12 md:pb-20 bg-background">
       <div className="container px-4 mx-auto flex flex-col items-center">
         
-        {/* --- CLEAN CENTERED HEADER --- */}
+        {/* --- CENTERED RED HEADER --- */}
         <div className="w-full max-w-xl flex flex-col items-center mb-12 text-center">
-          <div className="inline-block bg-accent/10 border-x-2 border-accent px-4 py-1 mb-4">
-            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-accent">
+          <div className="inline-block bg-red-600 border-x-2 border-white px-4 py-1 mb-4 shadow-[4px_4px_0_black]">
+            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-white">
               Mission Dossier Loaded
             </span>
           </div>
 
-          <h2 className="font-black text-5xl md:text-6xl uppercase italic tracking-tighter mb-2">
-            <span className="text-accent">{missions.length}</span> Active Battles
+          <h2 className="font-black text-5xl md:text-6xl uppercase italic tracking-tighter mb-2 text-foreground">
+            <span className="text-red-600">{missions.length}</span> Active Battles
           </h2>
           
-          <div className="h-1 w-24 bg-foreground mb-6" />
+          <div className="h-1.5 w-24 bg-red-600 mb-6" />
 
-          <p className="font-bold text-sm md:text-base uppercase tracking-tight text-foreground max-w-md leading-relaxed animate-pulse">
+          <p className="font-black text-sm md:text-base uppercase tracking-tight text-foreground max-w-md leading-relaxed animate-pulse">
             Click the first mission below to start your hero journey
           </p>
         </div>
@@ -36,10 +36,10 @@ export const MissionHub = () => {
             <Link
               key={mission.id}
               to={`/quest?mission=${mission.id}`}
-              className="group block border-2 border-foreground p-6 bg-background hover:bg-accent/5 transition-all duration-300 animate-fade-in shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-[8px_8px_0_0_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px]"
+              className="group block border-2 border-foreground p-6 bg-background hover:border-red-600 transition-all duration-300 animate-fade-in shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-[8px_8px_0_0_red] hover:translate-x-[-2px] hover:translate-y-[-2px]"
               style={{ animationDelay: `${idx * 60}ms` }}
             >
-              <h3 className="font-black text-xl uppercase tracking-tight mb-4 group-hover:text-accent transition-colors italic">
+              <h3 className="font-black text-xl uppercase tracking-tight mb-4 group-hover:text-red-600 transition-colors italic">
                 {mission.name}
               </h3>
 
@@ -52,7 +52,7 @@ export const MissionHub = () => {
                 Status: <span className="text-foreground">{mission.subtitle}</span>
               </p>
 
-              <div className="bg-slate-100 p-3 border-l-4 border-foreground text-xs font-bold leading-relaxed mb-6">
+              <div className="bg-slate-100 p-3 border-l-4 border-red-600 text-xs font-bold leading-relaxed mb-6 text-black">
                 {mission.description?.slice(0, 90)}...
               </div>
 
@@ -60,25 +60,11 @@ export const MissionHub = () => {
                 <div className="text-2xl font-black italic tracking-tighter text-foreground">
                   +{mission.xpBounty} <span className="text-[10px] uppercase tracking-normal not-italic opacity-60">XP</span>
                 </div>
-                <div className="bg-accent text-accent-foreground px-4 py-2 font-black text-xs uppercase border-2 border-foreground group-hover:bg-foreground group-hover:text-background transition-all">
+                {/* Red Action Button */}
+                <div className="bg-red-600 text-white px-4 py-2 font-black text-xs uppercase border-2 border-black group-hover:bg-black group-hover:text-white transition-all">
                   Briefing &gt;
                 </div>
               </div>
-
-              {mission.links?.[0]?.url && (
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    addXP("join_battle", mission.id, 50);
-                    toast({ title: `+50 XP — Joining the battle for ${mission.name}!` });
-                    window.open(mission.links[0].url, "_blank", "noopener");
-                  }}
-                  className="w-full mt-3 bg-foreground text-background py-2 px-4 text-center font-black text-xs uppercase border-2 border-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-                >
-                  ⚔️ Join Battle
-                </button>
-              )}
             </Link>
           ))}
         </div>
