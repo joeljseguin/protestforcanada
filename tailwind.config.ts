@@ -14,9 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['"Press Start 2P"', 'cursive'],
-        body: ['"Silkscreen"', 'cursive'],
-        mono: ['"VT323"', 'monospace'],
+        heading: ['"Inter"', 'sans-serif'],
+        body: ['"Inter"', 'sans-serif'],
+        mono: ['"Space Mono"', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
