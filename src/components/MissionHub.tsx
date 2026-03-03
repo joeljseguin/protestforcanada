@@ -45,6 +45,22 @@ export const MissionHub = () => {
 
   return (
     <div className="container py-12">
+      {/* --- START MISSION COUNTER --- */}
+<div className="w-full flex justify-center mb-12">
+  <div className="bg-black/80 border-2 border-primary/50 px-8 py-3 rounded-sm shadow-[0_0_20px_rgba(139,92,246,0.4)]">
+    <h2 className="font-mono text-3xl md:text-5xl font-black italic tracking-[0.2em] text-white">
+      MISSION <span className="text-primary animate-pulse">{missions.length.toString().padStart(3, '0')}</span>
+    </h2>
+    <div className="w-full h-1 bg-primary/20 mt-2">
+      <div 
+        className="h-full bg-primary shadow-[0_0_10px_#8b5cf6]" 
+        style={{ width: `${(missions.length / 10) * 100}%` }} 
+      />
+    </div>
+  </div>
+</div>
+{/* --- END MISSION COUNTER --- */}
+
       {/* MISSION COUNTER HEADER */}
       <div className="w-full flex flex-col items-center justify-center mb-12 animate-in fade-in duration-700">
         <div className="flex items-center gap-4 bg-black/60 border-2 border-primary/40 px-6 py-2 rounded-full shadow-[0_0_15px_rgba(139,92,246,0.3)]">
