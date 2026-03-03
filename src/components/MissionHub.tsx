@@ -1,74 +1,73 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
-import { Phone, Sword, ShieldCheck, Info } from "lucide-react";
-// Import a Modal/Dialog component from your shadcn library
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { missions as rawMissions } from "@/data/gameData";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "@/hooks/use-toast";
 
 export const MissionHub = () => {
-  const { toast } = useToast();
-
-  const handleCompleteMission = (xp) => {
-    toast({
-      title: "XP ALLOTTED",
-      description: `You've earned ${xp} XP for completing this mission!`,
-    });
-  };
+  const missions = [...rawMissions].sort((a, b) => a.rank - b.rank);
+  const { addXP } = useAuth();
 
   return (
-    <div className="container py-12">
-      <h2 className="text-4xl font-black italic text-white mb-8 tracking-tighter uppercase">Active Battles</h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* GAZA MISSION CARD */}
-        <div className="p-6 border-2 border-primary/20 bg-black/40 rounded-xl group hover:border-red-500 transition-all">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-2xl font-black italic text-white uppercase tracking-tighter">Call for Gaza Ceasefire</h3>
-            <span className="font-mono text-primary text-xl">+500 XP</span>
-          </div>
-          
-          <p className="text-muted-foreground mb-6">Direct pressure on the PMO to demand an immediate and permanent ceasefire.</p>
+    <section id="missions" className="py-12 md:py-20">
+      <div className="container">
+        <div className="mb-8">
+          <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight inline-block">
+            Active Missions
+          </h2>
+          <div className="h-1 w-20 bg-accent mt-2" />
+        </div>
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-6 gap-3 border-b-4 border-red-900 uppercase italic">
-                Join Battle <Sword className="w-5 h-5" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="bg-slate-900 border-2 border-red-500 text-white">
-              <DialogHeader>
-                <DialogTitle className="text-3xl font-black italic uppercase italic">Mission Briefing</DialogTitle>
-              </DialogHeader>
-              
-              <div className="space-y-4 pt-4">
-                <div className="bg-black/50 p-4 border border-white/10 rounded">
-                  <p className="text-red-400 font-bold mb-2 flex items-center gap-2 text-sm uppercase">
-                    <Phone className="w-4 h-4" /> Call the PMO: 613-992-4211
-                  </p>
-                  <p className="text-sm italic text-slate-300">
-                    "My name is [Your Name] from [Your City]. I am calling to demand that Canada calls for an immediate, unconditional, and permanent ceasefire in Gaza and ensures the full restoration of humanitarian aid."
-                  </p>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {missions.slice(0, 9).map((mission, idx) => (
+            <Link
+              key={mission.id}
+              to={`/quest?mission=${mission.id}`}
+              className="block border-2 border-foreground p-5 hover:shadow-[4px_4px_0_hsl(var(--border))] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all animate-fade-in"
+              style={{ animationDelay: `${idx * 60}ms` }}
+            >
+              <h3 className="font-black text-base uppercase tracking-wide mb-3">
+                {mission.name}
+              </h3>
 
-                <div className="bg-blue-900/20 p-3 border border-blue-500/30 rounded">
-                  <p className="text-xs text-blue-200">
-                    <strong>WHY THIS WORKS:</strong> Phone calls are logged by staff and weighted more heavily than emails. 10 calls in an hour can pause an entire office's schedule.
-                  </p>
-                </div>
-
-                <Button 
-                  onClick={() => handleCompleteMission(500)}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4"
-                >
-                  I MADE THE CALL
-                </Button>
+              <div className="bg-foreground text-background p-3 mb-3">
+                <div className="text-[10px] uppercase tracking-widest opacity-70 mb-1">Current Target</div>
+                <div className="text-sm font-bold uppercase">{mission.stages?.[0]?.label || "Government"}</div>
               </div>
-            </DialogContent>
-          </Dialog>
+
+              <p className="text-sm text-muted-foreground mb-4">
+                Status: {mission.subtitle}
+              </p>
+
+              <div className="bg-foreground text-background p-2 mb-4">
+                <p className="text-xs font-bold">
+                  Mission Intel: {mission.description?.slice(0, 80)}
+                </p>
+              </div>
+
+              <div className="text-lg font-black mb-3">+{mission.xpBounty} XP</div>
+
+              <div className="bg-accent text-accent-foreground py-2.5 px-4 text-center font-black text-sm uppercase tracking-wider border-2 border-foreground">
+                Take Action
+              </div>
+
+              {mission.links?.[0]?.url && (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    addXP("join_battle", mission.id, 50);
+                    toast({ title: `+50 XP — Joining the battle for ${mission.name}!` });
+                    window.open(mission.links[0].url, "_blank", "noopener");
+                  }}
+                  className="w-full mt-3 bg-foreground text-background py-2.5 px-4 text-center font-black text-sm uppercase tracking-wider border-2 border-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                >
+                  ⚔️ Join Battle
+                </button>
+              )}
+            </Link>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
-
-export default MissionHub;
