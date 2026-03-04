@@ -11,6 +11,7 @@ import TruthVaultPage from "./pages/TruthVaultPage";
 import SelectCharacter from "./pages/SelectCharacter";
 import MazeQuest from "./pages/MazeQuest";
 import AuthCallback from "./pages/AuthCallback";
+import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/select-character" element={<SelectCharacter />} />
             <Route path="/maze-quest" element={<MazeQuest />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
