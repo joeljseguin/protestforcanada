@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
-import { X, Swords, Zap, MapPin, Mail, Lock, AlertTriangle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { X, Swords, Zap, MapPin, Mail, Lock, AlertTriangle, RefreshCw } from "lucide-react";
 
 type Props = {
   open: boolean;
@@ -10,13 +11,14 @@ type Props = {
 };
 
 export const AuthModal = ({ open, onClose }: Props) => {
-  const [mode, setMode] = useState<"signin" | "signup">("signup");
+  const [mode, setMode] = useState<"signin" | "signup" | "resend">("signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [resendSuccess, setResendSuccess] = useState(false);
   const { signUp, signIn } = useAuth();
 
   if (!open) return null;
@@ -25,6 +27,23 @@ export const AuthModal = ({ open, onClose }: Props) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
+    if (mode === "resend") {
+      const { error } = await supabase.auth.resend({
+        type: "signup",
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) {
+        setError(error.message);
+      } else {
+        setResendSuccess(true);
+      }
+      setLoading(false);
+      return;
+    }
 
     if (mode === "signup") {
       if (!postalCode.trim()) {
@@ -62,20 +81,22 @@ export const AuthModal = ({ open, onClose }: Props) => {
           </div>
           <div>
             <h2 className="font-heading font-extrabold text-xl uppercase">
-              {mode === "signup" ? "Join the Resistance" : "Welcome Back"}
+              {mode === "signup" ? "Join the Resistance" : mode === "signin" ? "Welcome Back" : "Resend Verification"}
             </h2>
             <p className="text-xs font-mono text-muted-foreground">
-              {mode === "signup" ? "Create your civic profile" : "Sign in to continue"}
+              {mode === "signup" ? "Create your civic profile" : mode === "signin" ? "Sign in to continue" : "We'll send a new verification link"}
             </p>
           </div>
         </div>
 
-        {success ? (
+        {success || resendSuccess ? (
           <div className="neu-border p-6 bg-secondary text-center">
             <Mail className="h-8 w-8 mx-auto mb-3" />
             <h3 className="font-heading font-bold text-lg uppercase mb-2">Check Your Email</h3>
             <p className="text-sm font-mono text-muted-foreground">
-              We sent a verification link. Click it to activate your civic profile.
+              {resendSuccess
+                ? "We resent a verification link. Check your inbox (and spam folder)."
+                : "We sent a verification link. Click it to activate your civic profile."}
             </p>
           </div>
         ) : (
@@ -95,26 +116,28 @@ export const AuthModal = ({ open, onClose }: Props) => {
               </div>
             </div>
 
-            <div>
-              <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-1 block">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="pl-10 font-mono neu-border h-12"
-                  required
-                  minLength={6}
-                />
+            {mode !== "resend" && (
+              <div>
+                <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-1 block">Password</label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="pl-10 font-mono neu-border h-12"
+                    required
+                    minLength={6}
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             {mode === "signup" && (
               <div>
                 <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-1 block">
-                  Postal Code <span className="text-threat-red">*</span>
+                  Postal Code <span className="text-destructive">*</span>
                 </label>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -146,15 +169,26 @@ export const AuthModal = ({ open, onClose }: Props) => {
             >
               {loading ? "Processing..." : mode === "signup" ? (
                 <><Zap className="h-4 w-4 mr-2" /> Join & Earn 100 XP</>
+              ) : mode === "resend" ? (
+                <><RefreshCw className="h-4 w-4 mr-2" /> Resend Verification Email</>
               ) : (
                 "Sign In"
               )}
             </Button>
 
-            <div className="text-center">
+            <div className="text-center space-y-1">
+              {mode === "signin" && (
+                <button
+                  type="button"
+                  onClick={() => { setMode("resend"); setError(""); }}
+                  className="block w-full text-xs font-mono text-muted-foreground hover:text-foreground underline"
+                >
+                  Didn't get a verification email? Resend it
+                </button>
+              )}
               <button
                 type="button"
-                onClick={() => { setMode(mode === "signup" ? "signin" : "signup"); setError(""); }}
+                onClick={() => { setMode(mode === "signup" ? "signin" : "signup"); setError(""); setResendSuccess(false); }}
                 className="text-xs font-mono text-muted-foreground hover:text-foreground underline"
               >
                 {mode === "signup" ? "Already have an account? Sign in" : "Need an account? Join the Resistance"}

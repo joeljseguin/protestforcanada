@@ -79,7 +79,7 @@ export function MissionCardGrid({ mission, onQuestClick }: MissionCardGridProps)
                 </p>
                 <Button
                   size="sm"
-                  variant={isCompleted ? "secondary" : "mission"}
+                  variant={isCompleted ? "secondary" : "default"}
                   onClick={() => onQuestClick(mission.id, quest.id)}
                 >
                   {isCompleted ? "View Quest" : "Start Quest"}

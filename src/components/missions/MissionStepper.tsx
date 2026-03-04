@@ -120,7 +120,7 @@ export function MissionStepper({
             {!activeQuest.completed && (
               <Button
                 size="sm"
-                variant="mission"
+                variant="default"
                 onClick={() => onMarkComplete(activeQuest.id)}
               >
                 Mark Quest Complete
@@ -140,7 +140,7 @@ export function MissionStepper({
           Previous Quest
         </Button>
         <Button
-          variant="primary"
+          variant="default"
           size="sm"
           disabled={currentIndex === quests.length - 1}
           onClick={goNext}
