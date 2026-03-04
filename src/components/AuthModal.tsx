@@ -19,6 +19,7 @@ export const AuthModal = ({ open, onClose }: Props) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [resendSuccess, setResendSuccess] = useState(false);
+  const [forgotSent, setForgotSent] = useState(false);
   const { signUp, signIn } = useAuth();
 
   if (!open) return null;
@@ -89,12 +90,14 @@ export const AuthModal = ({ open, onClose }: Props) => {
           </div>
         </div>
 
-        {success || resendSuccess ? (
+        {success || resendSuccess || forgotSent ? (
           <div className="neu-border p-6 bg-secondary text-center">
             <Mail className="h-8 w-8 mx-auto mb-3" />
             <h3 className="font-heading font-bold text-lg uppercase mb-2">Check Your Email</h3>
             <p className="text-sm font-mono text-muted-foreground">
-              {resendSuccess
+              {forgotSent
+                ? "We sent a password reset link. Check your inbox (and spam folder)."
+                : resendSuccess
                 ? "We resent a verification link. Check your inbox (and spam folder)."
                 : "We sent a verification link. Click it to activate your civic profile."}
             </p>
@@ -131,6 +134,24 @@ export const AuthModal = ({ open, onClose }: Props) => {
                     minLength={6}
                   />
                 </div>
+                {mode === "signin" && (
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (!email) { setError("Enter your email first."); return; }
+                      setError(""); setLoading(true);
+                      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                        redirectTo: `${window.location.origin}/reset-password`,
+                      });
+                      setLoading(false);
+                      if (error) { setError(error.message); return; }
+                      setForgotSent(true);
+                    }}
+                    className="text-[10px] font-mono text-muted-foreground hover:text-foreground underline mt-1"
+                  >
+                    Forgot password?
+                  </button>
+                )}
               </div>
             )}
 
