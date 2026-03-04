@@ -17,53 +17,33 @@ type Mission = {
   quests: Quest[];
 };
 
-interface MissionStepperProps {
+interface MissionCardGridProps {
   mission: Mission;
-  activeQuestId?: string;
-  onQuestChange: (questId: string) => void;
-  onMarkComplete: (questId: string) => void;
+  onQuestClick: (missionId: string, questId: string) => void;
 }
 
-export function MissionStepper({
-  mission,
-  activeQuestId,
-  onQuestChange,
-  onMarkComplete,
-}: MissionStepperProps) {
-  const quests = mission.quests.sort((a, b) => a.index - b.index);
-  const activeQuest =
-    quests.find((q) => q.id === activeQuestId) ?? quests[0];
-
-  const completedCount = quests.filter((q) => q.completed).length;
-  const total = quests.length;
+export function MissionCardGrid({ mission, onQuestClick }: MissionCardGridProps) {
+  const completedCount = mission.quests.filter((q) => q.completed).length;
+  const total = mission.quests.length;
   const progress = (completedCount / total) * 100;
 
-  const currentIndex = quests.findIndex((q) => q.id === activeQuest.id);
-
-  const goPrev = () => {
-    if (currentIndex > 0) onQuestChange(quests[currentIndex - 1].id);
-  };
-
-  const goNext = () => {
-    if (currentIndex < quests.length - 1)
-      onQuestChange(quests[currentIndex + 1].id);
-  };
-
   return (
-    <section className="space-y-6 rounded-xl border bg-card p-6 shadow-sm">
-      <header className="space-y-2">
-        <p className="text-xs font-semibold uppercase text-muted-foreground">
-          Mission {mission.index}
-        </p>
-        <h2 className="text-xl font-bold">{mission.title}</h2>
-        {mission.subtitle && (
-          <p className="text-sm text-muted-foreground">{mission.subtitle}</p>
-        )}
-        <div className="mt-2 flex items-center justify-between">
+    <section className="space-y-4 rounded-xl border bg-card p-6 shadow-sm">
+      <header className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase text-muted-foreground">
+            Mission {mission.index}
+          </p>
+          <h2 className="text-xl font-bold">{mission.title}</h2>
+          {mission.subtitle && (
+            <p className="text-sm text-muted-foreground">{mission.subtitle}</p>
+          )}
+        </div>
+        <div className="mt-2 flex flex-col items-start sm:items-end">
           <p className="text-xs font-medium text-muted-foreground">
             {completedCount}/{total} quests complete
           </p>
-          <div className="h-2 w-40 overflow-hidden rounded-full bg-muted">
+          <div className="mt-1 h-2 w-32 overflow-hidden rounded-full bg-muted">
             <div
               className="h-full rounded-full bg-yellow-500 transition-all"
               style={{ width: `${progress}%` }}
@@ -72,82 +52,43 @@ export function MissionStepper({
         </div>
       </header>
 
-      <ol className="flex items-center justify-between gap-2">
-        {quests.map((quest) => {
-          const isActive = quest.id === activeQuest.id;
+      <div className="grid gap-4 md:grid-cols-3">
+        {mission.quests.map((quest) => {
           const isCompleted = quest.completed;
           return (
-            <li
+            <article
               key={quest.id}
-              className="flex flex-1 flex-col items-center text-center"
+              className={cn(
+                "flex flex-col justify-between rounded-lg border bg-background p-4",
+                isCompleted && "border-green-500/70 bg-green-50"
+              )}
             >
-              <button
-                type="button"
-                onClick={() => onQuestChange(quest.id)}
-                className={cn(
-                  "flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold transition-colors",
-                  isCompleted && "border-green-500 bg-green-50 text-green-700",
-                  isActive && "border-yellow-500 bg-yellow-100 text-yellow-900",
-                  !isCompleted && !isActive && "border-muted-foreground/30"
-                )}
-              >
-                {quest.index}
-              </button>
-              <p className="mt-1 line-clamp-2 text-[11px] text-muted-foreground">
-                {quest.title}
-              </p>
-            </li>
+              <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase text-muted-foreground">
+                  Quest {quest.index}
+                </p>
+                <h3 className="text-sm font-semibold">{quest.title}</h3>
+                <p className="text-xs text-muted-foreground">
+                  {quest.description}
+                </p>
+              </div>
+
+              <div className="mt-4 flex items-center justify-between">
+                <p className="text-[11px] font-medium text-muted-foreground">
+                  {isCompleted ? "Completed • XP awarded" : "Incomplete • +50 XP"}
+                </p>
+                <Button
+                  size="sm"
+                  variant={isCompleted ? "secondary" : "mission"}
+                  onClick={() => onQuestClick(mission.id, quest.id)}
+                >
+                  {isCompleted ? "View Quest" : "Start Quest"}
+                </Button>
+              </div>
+            </article>
           );
         })}
-      </ol>
-
-      <article className="space-y-3 rounded-lg border bg-background p-4">
-        <p className="text-xs font-semibold uppercase text-muted-foreground">
-          Quest {activeQuest.index}
-        </p>
-        <h3 className="text-base font-semibold">{activeQuest.title}</h3>
-        <p className="text-sm text-muted-foreground">
-          {activeQuest.description}
-        </p>
-
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
-          <p className="text-[11px] font-medium text-muted-foreground">
-            {activeQuest.completed
-              ? "Completed • XP awarded"
-              : "Complete this quest to earn +50 XP"}
-          </p>
-          <div className="flex gap-2">
-            {!activeQuest.completed && (
-              <Button
-                size="sm"
-                variant="mission"
-                onClick={() => onMarkComplete(activeQuest.id)}
-              >
-                Mark Quest Complete
-              </Button>
-            )}
-          </div>
-        </div>
-      </article>
-
-      <footer className="flex items-center justify-between">
-        <Button
-          variant="secondary"
-          size="sm"
-          disabled={currentIndex === 0}
-          onClick={goPrev}
-        >
-          Previous Quest
-        </Button>
-        <Button
-          variant="primary"
-          size="sm"
-          disabled={currentIndex === quests.length - 1}
-          onClick={goNext}
-        >
-          Next Quest
-        </Button>
-      </footer>
+      </div>
     </section>
   );
 }
