@@ -10,3 +10,11 @@ html, body {
   height: 100%;
   font-family: sans-serif;
 }
+
+footer {
+  color: #1f2937;
+}
+
+footer a {
+  color: #1f2937;
+}
